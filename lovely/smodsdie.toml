@@ -1,0 +1,28 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = -99
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = 'if highest_win >= 2 then'
+position = "at"
+payload = 'if false and "trololol" then'
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = 'if highest_win >= 4 then'
+position = "at"
+payload = 'if false and "trololel" then'
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = 'if highest_win >= 8 then'
+position = "at"
+payload = 'if false and "trolelol" then'
+match_indent = true

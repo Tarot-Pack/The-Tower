@@ -1,0 +1,86 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = -1
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = "    local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)"
+position = "at"
+payload = '''
+    local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5, true)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''  local scale = 0.4
+  local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)'''
+position = "at"
+payload = '''  local scale = 0.4
+  local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5, true)'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''    local scale = 0.4
+    local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)'''
+position = "at"
+payload = '''    local scale = 0.4
+    local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5, true)'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''local extras = nil
+  local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)'''
+position = "at"
+payload = '''local extras = nil
+  local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5, true)'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.4)'''
+position = "at"
+payload = '''local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.4, true)'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)'''
+position = "at"
+payload = '''local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5, true)'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "check_for_unlock({type = 'ante_up', ante = G.GAME.round_resets.ante + 1})"
+position = "after"
+payload = '''
+if G.GAME.modifiers.tower_ultra_scaling then
+    local scalingFactor = G.GAME.round_resets.ante / 32;
+    scalingFactor = scalingFactor * G.GAME.tower_best_score;
+    G.GAME.starting_params.ante_scaling = math.T_pow(G.GAME.tower_best_score, scalingFactor)
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "new_shop_card:juice_up()"
+position = "at"
+payload = '''
+if new_shop_card then
+    new_shop_card:juice_up()
+end
+'''
+match_indent = true

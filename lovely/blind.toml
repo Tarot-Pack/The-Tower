@@ -1,0 +1,179 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 999
+
+#boss system overhaul
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "self.GAME.round_resets.blind_choices.Boss = get_new_boss()"
+position = "before"
+payload = '''
+self.GAME.round_resets.blind_choices.Big = get_new_boss(1)
+self.GAME.round_resets.blind_choices.Small = get_new_boss(0)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "G.GAME.round_resets.blind_choices.Boss = get_new_boss()"
+position = "before"
+payload = '''
+G.GAME.round_resets.blind_choices.Big = get_new_boss(1)
+G.GAME.round_resets.blind_choices.Small = get_new_boss(0)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "if G.GAME.blind:get_type() == 'Boss' then"
+position = "at"
+payload = "if G.GAME.blind_on_deck == 'Boss' then"
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "if G.GAME.round_resets.ante == G.GAME.win_ante and G.GAME.blind_on_deck == 'Boss' then"
+position = "at"
+payload = '''if G.GAME.round_resets.ante >= G.GAME.win_ante and G.GAME.blind_on_deck == 'Boss' then'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "elseif G.GAME.round_resets.blind == G.P_BLINDS.bl_big then"
+position = "at"
+payload = "elseif G.GAME.blind_on_deck == 'Big' then"
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "if G.GAME.round_resets.blind == G.P_BLINDS.bl_small then"
+position = "at"
+payload = "if G.GAME.blind_on_deck == 'Small' then"
+match_indent = true
+
+#the fool
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "            if G.GAME.chips - G.GAME.blind.chips >= 0 then"
+position = "at"
+payload = "            if G.GAME.blind:TowerCheckWin() then"
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''if G.GAME.chips - G.GAME.blind.chips >= 0 then
+        a'''
+position = "at"
+payload = '''if G.GAME.blind:TowerCheckWin() then
+        a'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''if G.GAME.chips - G.GAME.blind.chips >= 0 or G.GAME.current_round.hands_left < 1 then'''
+position = "at"
+payload = '''if G.GAME.blind:TowerCheckRoundEnd() then'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''function Blind:set_blind(blind, reset, silent)'''
+position = "after"
+payload = '''local __tower_bl = self:TowerBeforeBlindSet(blind, reset, silent)
+if not __tower_bl then return end
+if type(__tower_bl) == 'table' then
+        blind = __tower_bl
+end
+if blind and blind.TowerOnSpawn then
+        blind:TowerOnSpawn()
+end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''self.mult = blind and blind.mult or 0'''
+position = "after"
+payload = '''if self.mult == G.tower_unknown then
+        self.mult = 1
+end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''local blind_amt = get_blind_amount(G.GAME.round_resets.blind_ante)*blind_choice.config.mult*G.GAME.starting_params.ante_scaling'''
+position = "after"
+payload = '''if blind_choice.config.mult == G.tower_unknown then
+        blind_amt = "???"
+end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''G.GAME.orbital_choices = G.GAME.orbital_choices or {}'''
+position = "before"
+payload = '''
+--[[if blind_choice.config.TowerOnSpawn then
+        blind_choice.config:TowerOnSpawn()
+end]]'''
+match_indent = true
+
+#blackhole
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''G.E_MANAGER:add_event(Event({
+        trigger = 'after',delay = 0.4,'''
+position = "before"
+payload = '''hand_chips = G.GAME.blind:TowerModFinalScore(hand_chips * mult, G.play.cards, poker_hands, text, scoring_hand, mult, hand_chips)
+mult = 1'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''function mod_chips(_chips)'''
+position = "after"
+payload = '''_chips = G.GAME.blind:TowerModChips(_chips)'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''function mod_mult(_mult)'''
+position = "after"
+payload = '''_mult = G.GAME.blind:TowerModMult(_mult)'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "blind.lua" # deny disable when boss blind is immortal
+pattern = '''function Blind:disable()'''
+position = "after"
+payload = '''
+if G.GAME.tower_boss_blind_immortal then return false end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/overrides.lua"]'''
+pattern = '''disp_text = text'''
+position = "before"
+payload = '''
+text = G.GAME.tower_exploit_override or text
+'''
+match_indent = true
