@@ -1,4 +1,4 @@
-SMODS.Rank {
+Tower.Rank {
     hidden = true,
 
 	hc_atlas = 'rank_hc',
@@ -26,7 +26,7 @@ SMODS.Rank {
     end
 }
 
-SMODS.Rank {
+Tower.Rank {
     hidden = true,
 
 	hc_atlas = 'rank_hc',
@@ -53,11 +53,11 @@ SMODS.Rank {
 }
 
 
-SMODS.Shader {
+Tower.Shader {
 	key = "truenegative",
 	path = "truenegative.fs",
 }
-SMODS.Edition {
+Tower.Edition {
 	key = "truenegative",
 	weight = 0,
 	shader = "truenegative",
@@ -88,7 +88,7 @@ function eval_card(card, context)
     return ret, post
 end
 
-SMODS.Challenge {
+Tower.Challenge {
 	key = "true_negative",
     id = "true_negative",
 	order = 3,

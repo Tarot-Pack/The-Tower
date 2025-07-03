@@ -1,4 +1,4 @@
-SMODS.Stake {
+Tower.Stake {
     name = "tower-base",
     key = "base",
     set = "Book", -- do not absorb
@@ -18,7 +18,7 @@ SMODS.Stake {
     loc_txt = {}
 }
 
-SMODS.Stake {
+Tower.Stake {
     name = "tower-planet",
     key = "planet",
     set = "Book", -- do not absorb
@@ -35,7 +35,7 @@ SMODS.Stake {
     loc_txt = {}
 }
 
-SMODS.Stake {
+Tower.Stake {
     name = "tower-tarot",
     key = "tarot",
     set = "Book", -- do not absorb
@@ -52,7 +52,7 @@ SMODS.Stake {
     loc_txt = {}
 }
 
-SMODS.Stake {
+Tower.Stake {
     name = "tower-sixtyfour",
     key = "sixtyfour",
     set = "Book", -- do not absorb
@@ -69,7 +69,7 @@ SMODS.Stake {
     loc_txt = {}
 }
 
-SMODS.Stake {
+Tower.Stake {
     name = "tower-immortal",
     key = "immortal",
     set = "Book", -- do not absorb
@@ -87,7 +87,7 @@ SMODS.Stake {
     loc_txt = {}
 }
 
-SMODS.Stake {
+Tower.Stake {
     name = "tower-alltarot",
     key = "alltarot",
     set = "Book", -- do not absorb
@@ -105,7 +105,7 @@ SMODS.Stake {
     loc_txt = {}
 }
 
-SMODS.Stake {
+Tower.Stake {
     name = "tower-scaling",
     key = "scaling",
     set = "Book", -- do not absorb
@@ -122,7 +122,7 @@ SMODS.Stake {
     loc_txt = {}
 }
 
-SMODS.Stake {
+Tower.Stake {
     name = "tower-famine",
     key = "famine",
     set = "Book", -- do not absorb
@@ -142,7 +142,7 @@ SMODS.Stake {
     loc_txt = {}
 }
 
-SMODS.Stake {
+Tower.Stake {
     name = "tower-nojokers",
     key = "nojokers",
     set = "Book", -- do not absorb

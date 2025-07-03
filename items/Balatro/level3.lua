@@ -4,7 +4,7 @@ local emperor_selection = {
     suits = {},
 }
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-fool",
 	key = "fool",
@@ -34,7 +34,7 @@ SMODS.Blind({
 })
 emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_fool'
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-wheel",
 	key = "wheel",
@@ -68,7 +68,7 @@ SMODS.Blind({
 })
 emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_wheel'
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-tower",
 	key = "tower",
@@ -110,7 +110,7 @@ SMODS.Blind({
 })
 emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_tower'
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-hermit",
 	key = "hermit",
@@ -142,7 +142,7 @@ emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_hermit'
 
 
 -- suit blinds
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
     name = "tower-sun",
     key = "sun",
@@ -175,7 +175,7 @@ SMODS.Blind({
     end,
 })
 emperor_selection.suits[#emperor_selection.suits+1] = 'bl_tower_sun'
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
     name = "tower-moon",
     key = "moon",
@@ -208,7 +208,7 @@ SMODS.Blind({
     end,
 })
 emperor_selection.suits[#emperor_selection.suits+1] = 'bl_tower_moon'
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
     name = "tower-world",
     key = "world",
@@ -241,7 +241,7 @@ SMODS.Blind({
     end,
 })
 emperor_selection.suits[#emperor_selection.suits+1] = 'bl_tower_world'
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
     name = "tower-star",
     key = "star",
@@ -276,7 +276,7 @@ SMODS.Blind({
 emperor_selection.suits[#emperor_selection.suits+1] = 'bl_tower_star'
 -- all suit blind
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
     name = "tower-lovers",
     key = "lovers",
@@ -345,7 +345,7 @@ SMODS.Blind({
 })
 emperor_selection.suits[#emperor_selection.suits+1] = 'bl_tower_lovers'
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-temperance",
 	key = "temperance",
@@ -378,7 +378,7 @@ SMODS.Blind({
 })
 emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_temperance'
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-magician",
 	key = "magician",
@@ -407,12 +407,12 @@ SMODS.Blind({
         end
         local triggered = false;
 
-        if pseudorandom(pseudoseed("levelminusone")) < (G.GAME.probabilities.normal / 15) then 
+        if pseudorandom(pseudoseed("tower_mag")) < (G.GAME.probabilities.normal / 15) then 
             ease_dollars(-G.GAME.dollars)
             triggered = true
         end
 
-        if pseudorandom(pseudoseed("levelminusone")) < (G.GAME.probabilities.normal / 5) then 
+        if pseudorandom(pseudoseed("tower_mag")) < (G.GAME.probabilities.normal / 5) then 
             mult = 0
             triggered = true
         end
@@ -424,7 +424,7 @@ SMODS.Blind({
 })
 emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_magician'
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-hierophant",
 	key = "hierophant",
@@ -443,7 +443,7 @@ SMODS.Blind({
     end
 })
 emperor_selection.multchips[#emperor_selection.multchips+1] = 'bl_tower_empress'
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-empress",
 	key = "empress",
@@ -464,7 +464,7 @@ SMODS.Blind({
 
 emperor_selection.multchips[#emperor_selection.multchips+1] = 'bl_tower_hierophant'
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-justice",
 	key = "justice",
@@ -492,7 +492,7 @@ SMODS.Blind({
 
 emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_justice'
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-chariot",
 	key = "chariot",
@@ -530,7 +530,7 @@ SMODS.Blind({
 
 emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_chariot'
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-devil",
 	key = "devil",
@@ -554,7 +554,7 @@ SMODS.Blind({
 
 emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_devil'
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-strength",
 	key = "strength",
@@ -579,7 +579,7 @@ SMODS.Blind({
 
 emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_strength'
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-hangedman",
 	key = "hangedman",
@@ -630,7 +630,7 @@ SMODS.Blind({
 
 emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_hangedman'
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-judgement",
 	key = "judgement",
@@ -663,7 +663,7 @@ SMODS.Blind({
 
 emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_judgement'
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-death",
 	key = "death",
@@ -704,7 +704,7 @@ SMODS.Blind({
 
 emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_death'
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-eclipse",
 	key = "eclipse",
@@ -734,7 +734,7 @@ SMODS.Blind({
 
 emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_eclipse'
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-seraph",
 	key = "seraph",
@@ -787,7 +787,7 @@ SMODS.Blind({
 })
 
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-instability",
 	key = "instability",
@@ -825,7 +825,7 @@ SMODS.Blind({
 
 emperor_selection.suits[#emperor_selection.suits+1] = 'bl_tower_instability'
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-blessing",
 	key = "blessing",
@@ -851,7 +851,7 @@ SMODS.Blind({
 -- emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_blessing'
 -- emperor should not select blessing
 
-SMODS.Blind(Tower.ObsidianOrb({
+Tower.Blind(Tower.ObsidianOrb({
 	name = "tower-automaton",
 	key = "automaton",
 	pos = { x = 0, y = 10 },
@@ -879,7 +879,7 @@ SMODS.Blind(Tower.ObsidianOrb({
 
 -- emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_automaton'
 
-SMODS.Blind(Tower.ObsidianOrb({
+Tower.Blind(Tower.ObsidianOrb({
 	name = "tower-emperor",
 	key = "emperor",
 	pos = { x = 0, y = 16 },

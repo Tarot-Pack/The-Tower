@@ -1,4 +1,4 @@
-SMODS.Blind({
+Tower.Blind({
 	name = "tower-blueprint",
 	key = "blueprint",
 	pos = { x = 0, y = 5 },

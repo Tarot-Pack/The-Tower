@@ -18,7 +18,7 @@ for i, v in pairs(planets) do
     local hand = v[2];
     local key = v[1];
     local colour = v[3];
-    SMODS.Blind({
+    Tower.Blind({
 	    tower_is_planet = true,
         name = "tower-" .. key,
         key = key,

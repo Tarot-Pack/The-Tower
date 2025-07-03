@@ -177,3 +177,11 @@ payload = '''
 text = G.GAME.tower_exploit_override or text
 '''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''main.lua'''
+pattern = '''G.FPS_CAP = G.FPS_CAP or 500'''
+position = "after"
+payload = '''G.FPS_CAP = G.GAME.FPS_CAP or G.FPS_CAP'''
+match_indent = true

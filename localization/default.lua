@@ -475,60 +475,60 @@ return {
 			},
 
 			bl_tower_crash = {
-				name = "://CRASH",
+				name = "Crash",
 				text = {
 					"Don't."
 				},
 			},
 			bl_tower_keygen = {
-				name = "://KEYGEN",
+				name = "Keygen",
 				text = {
 					"Adds Perishable and Banana",
 					"stickers to one joker"
 				},
 			},
 			bl_tower_payload = {
-				name = "://PAYLOAD",
+				name = "Payload",
 				text = {
 					"Halves money",
 					"every hand"
 				},
 			},
 			bl_tower_exploit = {
-				name = "://EXPLOIT",
+				name = "Exploit",
 				text = {
 					"All hands count as your worst hand type"
 				},
 			},
 			bl_tower_malware = {
-				name = "://MALWARE",
+				name = "Malware",
 				text = {
 					""
 				},
 			},
 			bl_tower_nperror = {
-				name = "://NPERROR",
+				name = "NPE-Error",
 				text = {
 					"Must play the same",
 					"Ranks and Suits each hand"
 				},
 			},
 			bl_tower_rework = {
-				name = "://REWORK",
+				name = "Rework",
 				text = {
 					"Downgrade all editions",
 					"in played hand"
 				},
 			},
 			bl_tower_merge = {
-				name = "://MERGE",
+				name = "Merge",
 				text = {
 					"Has the effect of the",
 					"next two played blinds"
 				},
 			},
 			bl_tower_commit = {
-				name = "://COMMIT",
+				name = "Commit",
 				text = {
 					"Replace one joker with one",
 					"of the same rarity before",
@@ -536,48 +536,48 @@ return {
 				},
 			},
 			bl_tower_machinecode = {
-				name = "://MACHINECODE",
+				name = "Machine Code",
 				text = {
 					""
 				},
 			},
 			bl_tower_spaghetti = {
-				name = "://SPAGHETTI",
+				name = "Spaghetti",
 				text = {
 					"Applies a Edible sticker",
 					"to one joker"
 				},
 			},
 			bl_tower_seed = {
-				name = "://SEED",
+				name = "Seed",
 				text = {
 					"All probabilities are",
 					"set to zero",
 				},
 			},
 			bl_tower_patch = {
-				name = "://PATCH",
+				name = "Patch",
 				text = {
 					"All jokers, playing cards, and",
 					"consumables are either flipped or debuffed",
 				},
 			},
 			bl_tower_hook = {
-				name = "HOOK://",
+				name = "Hook",
 				text = {
 					"Only one card in",
 					"played hand can trigger",
 				},
 			},
 			bl_tower_oboe = {
-				name = "://OFFBYONE",
+				name = "Off by one",
 				text = {
 					"All card ranks change by",
 					"plus or minus before hand play",
 				},
 			},
 			bl_tower_assemble = {
-				name = "://ASSEMBLE",
+				name = "Assemble",
 				text = {
 					"Subtract base Mult from the",
 					"played hand equal to how",
@@ -585,28 +585,28 @@ return {
 				},
 			},
 			bl_tower_inst = {
-				name = "://INSTANTIATE",
+				name = "Instantiate",
 				text = {
 					"All cards drawn after",
 					"first draw are debuffed",
 				},
 			},
 			bl_tower_revert = {
-				name = "://REVERT",
+				name = "Revert",
 				text = {
 					"#1# in #2# chance to set game",
 					"state to start of this Ante",
 				},
 			},
-			bl_tower_cryfunction = {
-				name = "FUNCTION://",
+			bl_tower_crfunction = {
+				name = "Function",
 				text = {
 					"Copies the effects of the last",
 					"three consumable blinds played",
 				},
 			},
 			bl_tower_run = {
-				name = "://RUN",
+				name = "Run",
 				text = {
 					"Sends you to shop and allows",
 					"you to go into debt one time",
@@ -614,68 +614,68 @@ return {
 				},
 			},
 			bl_tower_class = {
-				name = "://CLASS",
+				name = "Class",
 				text = {
 					"Remove enhancements from all",
 					"played cards"
 				},
 			},
 			bl_tower_global = {
-				name = "://GLOBAL",
+				name = "Global",
 				text = {
 					"Creates Global Blanks",
 					"that fill your hand",
 				},
 			},
 			bl_tower_variable = {
-				name = "://VARIABLE",
+				name = "Variable",
 				text = {
 					"All played cards turn into a",
 					"random rank before hand played",
 				},
 			},
 			bl_tower_divide = {
-				name = "://DIVIDE",
+				name = "Divide",
 				text = {
 					"Halve all joker values",
 				},
 			},
 			bl_tower_multiply = {
-				name = "://MULTIPLY",
+				name = "Multiply",
 				text = {
 					"Double required score after",
 					"every hand played",
 				},
 			},
 			bl_tower_delete = {
-				name = "://DELETE",
+				name = "Delete",
 				text = {
 					"Banish and Destroy one random joker",
 					"it will no longer appear normally this run",
 				},
 			},
 			bl_tower_alttab = {
-				name = "://ALTTAB",
+				name = "Alt+Tab",
 				text = {
 					"#1# in #2# chance to create 1e10",
 					"copies of missed skip tag",
 				},
 			},
 			bl_tower_ctrl_v = {
-				name = "://CTRL+V",
+				name = "Control+V",
 				text = {
 					"Copies the last played blind",
 				},
 			},
 			bl_tower_reboot = {
-				name = "://REBOOT",
+				name = "Reboot",
 				text = {
 					"#1# in #2# chance to",
 					"restart Blind every hand",
 				},
 			},
 			bl_tower_semicolon = {
-				name = ";//",
+				name = "Semicolon",
 				text = {
 					"Ends blind"
 				},
@@ -854,6 +854,7 @@ return {
 			tower_debuff_emperor = "Copies two random Tarots",
 			tower_debuff_automaton = "Copies three random Code Blinds",
 			tower_debuff_merge = "Copies the effects of the next two blinds",
+			tower_debuff_cryfunction = "Copies the effects of the last three consumable blinds played",
 
 			ranks = {
 				tower_0 = '0',
@@ -895,7 +896,7 @@ return {
 			ach_tower_victory = "Victory",
 			ach_tower_will_of_iron = "Will of Iron",
 			ach_tower_antivirus = "Antivirus",
-			ach_tower_imaginary = "Imaginary Card",
+			ach_tower_imaginary = "Imaginary",
 		},
 		achievement_descriptions = {
 			ach_tower_clusterfuck_you = Cryptid_config.family_mode and 'Add the Your Sins sticker to a card which already has Your Sins'

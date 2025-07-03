@@ -28,7 +28,8 @@ function Tower.Achievement(props)
             end
         end
     end
-    return SMODS.Achievement(props)
+    props.object_type = "Achievement"
+    return Tower.Object(props)
 end
 function Tower.achieve(thing)
     if type(thing) == "string" then

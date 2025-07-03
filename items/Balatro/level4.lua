@@ -1,4 +1,4 @@
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-soul",
 	key = "soul",
@@ -35,7 +35,7 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-wraith",
 	key = "wraith",
@@ -68,7 +68,7 @@ SMODS.Blind({
 	end,
 })
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-incantation",
 	key = "incantation",
@@ -103,7 +103,7 @@ SMODS.Blind({
 })
 
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-ankh",
 	key = "ankh",
@@ -161,7 +161,7 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-blackhole",
 	key = "blackhole",
@@ -208,7 +208,7 @@ SMODS.Blind({
     end,
 
 })
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-ectoplasm",
 	key = "ectoplasm",
@@ -241,7 +241,7 @@ SMODS.Blind({
     end
 
 })
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-sigil",
 	key = "sigil",
@@ -314,7 +314,7 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-familiar",
 	key = "familiar",
@@ -350,7 +350,7 @@ SMODS.Blind({
         return bad
     end
 })
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-grim",
 	key = "grim",
@@ -380,7 +380,7 @@ function CardArea:add_to_highlighted(card, silent) -- this is so extremely speci
 end
 
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-talisman",
 	key = "talisman",
@@ -403,7 +403,7 @@ SMODS.Blind({
     end,
 })
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-aura",
 	key = "aura",
@@ -462,7 +462,7 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-ouija",
 	key = "ouija",
@@ -533,7 +533,7 @@ SMODS.Blind({
 })
 
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-immolate",
 	key = "immolate",
@@ -572,7 +572,7 @@ SMODS.Blind({
 })
 
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-dejavu",
 	key = "dejavu",
@@ -629,7 +629,7 @@ SMODS.Blind({
 })
 
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-hex",
 	key = "hex",
@@ -657,7 +657,7 @@ SMODS.Blind({
 })
 
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-trance",
 	key = "trance",
@@ -717,7 +717,7 @@ SMODS.Blind({
 })
 
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-medium",
 	key = "medium",
@@ -756,7 +756,7 @@ SMODS.Blind({
     end
 })
 
-SMODS.Sticker{
+Tower.Sticker{
 	atlas = "stickers",
 	pos = { x = 0, y = 0 },
 	key = "bound",
@@ -813,7 +813,7 @@ function Blind:get_loc_debuff_text()
 end
 
 
-SMODS.Blind({
+Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-cryptid",
 	key = "cryptid",

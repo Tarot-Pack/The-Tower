@@ -1,7 +1,7 @@
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-crash",
-    tower_requires = {"c_cry_crash"},
+    tower_consumable = "cry_crash",
     key = "crash",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -14,11 +14,11 @@ SMODS.Blind({
     dollars = 4,
 
     set_blind = function ()
-        G.FPS_CAP = 15
+        G.GAME.FPS_CAP = 15
         G.GAME.modifiers.tower_crash_infection = true
     end,
     cry_after_play = function ()
-        G.FPS_CAP = math.floor(G.FPS_CAP / 2)
+        G.GAME.FPS_CAP = math.floor(G.GAME.FPS_CAP / 2)
     end,
 
     TowerInPool = function ()
@@ -26,10 +26,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-keygen",
-    tower_requires = {"c_cry_keygen"},
+    tower_consumable = "cry_keygen",
     key = "keygen",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -61,10 +61,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-payload",
-    tower_requires = {"c_cry_payload"},
+    tower_consumable = "cry_payload",
     key = "payload",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -86,10 +86,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-exploit",
-    tower_requires = {"c_cry_exploit"},
+    tower_consumable = "cry_exploit",
     key = "exploit",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -147,10 +147,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-malware",
-    tower_requires = {"c_cry_malware"},
+    tower_consumable = "cry_malware",
     key = "malware",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -186,10 +186,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-nperror",
-    tower_requires = {"c_cry_nperror"},
+    tower_consumable = "cry_nperror",
     key = "nperror",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -250,10 +250,10 @@ SMODS.Blind({
 })
 
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-rework",
-    tower_requires = {"c_cry_rework"},
+    tower_consumable = "cry_rework",
     key = "rework",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -311,10 +311,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind(Tower.ObsidianOrb({
+Tower.Blind(Tower.ObsidianOrb({
     tower_is_code = true,
     name = "tower-merge",
-    tower_requires = {"c_cry_merge"},
+    tower_consumable = "cry_merge",
     key = "merge",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -344,10 +344,10 @@ SMODS.Blind(Tower.ObsidianOrb({
     end
 }))
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-commit",
-    tower_requires = {"c_cry_commit"},
+    tower_consumable = "cry_commit",
     key = "commit",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -404,10 +404,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-machinecode",
-    tower_requires = {"c_cry_machinecode"},
+    tower_consumable = "cry_machinecode",
     key = "machinecode",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -464,10 +464,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-spaghetti",
-    tower_requires = {"c_cry_spaghetti"},
+    tower_consumable = "cry_spaghetti",
     key = "spaghetti",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -496,10 +496,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-seed",
-    tower_requires = {"c_cry_seed"},
+    tower_consumable = "cry_seed",
     key = "seed",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -531,10 +531,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-patch",
-    tower_requires = {"c_cry_patch"},
+    tower_consumable = "cry_patch",
     key = "patch",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -599,7 +599,7 @@ SMODS.Blind({
             v.ability.tower_seed_dbf = nil
         end
 		for i, v in pairs(G.jokers.cards) do
-            vcard.ability.tower_seed_dbf = nil
+            v.ability.tower_seed_dbf = nil
         end
 		for i, v in pairs(G.playing_cards) do
             v.ability.tower_seed_dbf = nil
@@ -612,10 +612,10 @@ SMODS.Blind({
 })
 
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-hook",
-    tower_requires = {"c_cry_hook"},
+    tower_consumable = "cry_hook",
     key = "hook",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -668,10 +668,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-oboe",
-    tower_requires = {"c_cry_oboe"},
+    tower_consumable = "cry_oboe",
     key = "oboe",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -695,10 +695,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-assemble",
-    tower_requires = {"c_cry_assemble"},
+    tower_consumable = "cry_assemble",
     key = "assemble",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -725,10 +725,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-inst",
-    tower_requires = {"c_cry_inst"},
+    tower_consumable = "cry_inst",
     key = "inst",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -753,10 +753,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-revert",
-    tower_requires = {"c_cry_revert"},
+    tower_consumable = "cry_revert",
     key = "revert",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -809,11 +809,11 @@ SMODS.Blind({
 
 
 
-SMODS.Blind(Tower.ObsidianOrb({
+local vsal = Tower.ObsidianOrb({
     tower_is_code = true,
-    name = "tower-cryfunction",
-    tower_requires = {"c_cry_cryfunction"},
-    key = "cryfunction",
+    name = "tower-crfunction",
+    tower_consumable = "cry_cryfunction",
+    key = "crfunction", -- its called crfunction because naming it cryfunction breaks stuff????????
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
     order = 0,
@@ -828,10 +828,12 @@ SMODS.Blind(Tower.ObsidianOrb({
     pick = function ()
         local tbl = {}
         local required = 3;
+        if #(G.GAME.tower_past_blinds or {}) == 0 then return tbl end -- shouldn't even happen but..
         for i = #G.GAME.tower_past_blinds, 1, -1 do
-            local bl = G.GAME.tower_past_blinds[i]
-            if bl.tower_is_code or bl.tower_is_spectral or bl.tower_is_tarot or bl.tower_is_planet then
-                tbl[bl.key] = true
+            local key = G.GAME.tower_past_blinds[i]
+            local bl = G.P_BLINDS[key];
+            if bl and (bl.tower_is_code or bl.tower_is_spectral or bl.tower_is_tarot or bl.tower_is_planet) and key ~= "bl_tower_cryfunction" then
+                tbl[key] = true
                 required = required - 1;
                 if required < 1 then
                     break
@@ -844,12 +846,14 @@ SMODS.Blind(Tower.ObsidianOrb({
     TowerInPool = function ()
         return G.GAME.modifiers.tower_code_enabled and (#(G.GAME.tower_past_blinds or {}) ~= 0)
     end
-}))
+})
+Tower.Blind(vsal)
+print(G.P_BLINDS["bl_tower_cryfunction"])
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-run",
-    tower_requires = {"c_cry_run"},
+    tower_consumable = "cry_run",
     key = "run",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -898,10 +902,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-class",
-    tower_requires = {"c_cry_class"},
+    tower_consumable = "cry_class",
     key = "class",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -914,7 +918,7 @@ SMODS.Blind({
     dollars = 4,
 
 	cry_before_play = function (self)
-		for i, v in ipairs(G.play.cards) do
+		for i, v in ipairs(G.hand.highlighted) do
             v:set_ability(G.P_CENTERS.c_base, true, nil)
         end
     end,
@@ -924,10 +928,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-global",
-    tower_requires = {"c_cry_global"},
+    tower_consumable = "cry_global",
     key = "global",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -941,11 +945,11 @@ SMODS.Blind({
 
 	set_blind = function (self)
 		for i = 1, G.hand.config.card_limit do
-            SMODS.add_card({
-                set = "Playing Card",
-                enhancement = "tower_blank",
-                stickers = { "cry_global_sticker" }
+            local card = SMODS.add_card({
+                set = "Playing Card"
             })
+            card:set_ability(G.P_CENTERS.m_tower_blank, true, nil)
+            card.ability.cry_global_sticker = true
         end
     end,
 
@@ -954,10 +958,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-variable",
-    tower_requires = {"c_cry_variable"},
+    tower_consumable = "cry_variable",
     key = "variable",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -985,10 +989,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-divide",
-    tower_requires = {"c_cry_divide"},
+    tower_consumable = "cry_divide",
     key = "divide",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -1015,10 +1019,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-multiply",
-    tower_requires = {"c_cry_multiply"},
+    tower_consumable = "cry_multiply",
     key = "multiply",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -1040,10 +1044,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-delete",
-    tower_requires = {"c_cry_delete"},
+    tower_consumable = "cry_delete",
     key = "delete",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -1075,10 +1079,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-alttab",
-    tower_requires = {"c_cry_alttab"},
+    tower_consumable = "cry_alttab",
     key = "alttab",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -1142,10 +1146,10 @@ SMODS.Blind({
 })
 
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-ctrl_v",
-    tower_requires = {"c_cry_ctrl_v"},
+    tower_consumable = "cry_ctrl_v",
     key = "ctrl_v",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -1158,7 +1162,7 @@ SMODS.Blind({
     dollars = 4,
 
 	TowerBeforeBlindSet = function (self, blind, reset, silent)
-        self:set_blind(G.GAME.tower_past_blinds[#G.GAME.tower_past_blinds], reset, silent)
+        self:set_blind(G.P_BLINDS[G.GAME.tower_past_blinds[#G.GAME.tower_past_blinds]], reset, silent)
         return false
     end,
 
@@ -1167,10 +1171,10 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-reboot",
-    tower_requires = {"c_cry_reboot"},
+    tower_consumable = "cry_reboot",
     key = "reboot",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",
@@ -1223,7 +1227,7 @@ SMODS.Blind({
 				G.deck:hard_set_T()
 				G.STATE_COMPLETE = false
                 G.GAME.chips = to_big(0)
-                G.FUNCS.chip_UI_set()
+                G.GAME.chips_text = number_format(G.GAME.chips)
 				return true
 			end,
 		}))
@@ -1235,10 +1239,10 @@ SMODS.Blind({
 })
 
 
-SMODS.Blind({
+Tower.Blind({
     tower_is_code = true,
     name = "tower-semicolon",
-    tower_requires = {"c_cry_semicolon"},
+    tower_consumable = "cry_semicolon",
     key = "semicolon",
     pos = { x = 0, y = 0 },
     atlas = "blinds3",

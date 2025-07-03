@@ -1,11 +1,11 @@
-SMODS.Atlas({
+Tower.Atlas({
 	key = "modicon",
 	path = "tower_icon.png",
 	px = 32,
 	py = 32,
 })
 
-SMODS.Atlas({
+Tower.Atlas({
 	key = "blinds",
 	atlas_table = "ANIMATION_ATLAS",
 	path = "tower_blind.png",
@@ -14,7 +14,7 @@ SMODS.Atlas({
 	frames = 21,
 })
 
-SMODS.Atlas({
+Tower.Atlas({
 	key = "blinds2",
 	atlas_table = "ANIMATION_ATLAS",
 	path = "tower_blind2.png",
@@ -23,7 +23,7 @@ SMODS.Atlas({
 	frames = 21,
 })
 
-SMODS.Atlas({
+Tower.Atlas({
 	key = "blinds3",
 	atlas_table = "ANIMATION_ATLAS",
 	path = "tower_blind3.png",
@@ -32,7 +32,7 @@ SMODS.Atlas({
 	frames = 21,
 })
 
-SMODS.Atlas({
+Tower.Atlas({
 	key = "blind_lovers",
 	atlas_table = "ANIMATION_ATLAS",
 	path = "tower_blind_lovers.png",
@@ -41,14 +41,14 @@ SMODS.Atlas({
 	frames = 21,
 })
 
-SMODS.Atlas({
+Tower.Atlas({
 	key = "rank",
 	path = "tower_rank.png",
 	px = 71,
 	py = 95
 })
 
-SMODS.Atlas({
+Tower.Atlas({
 	key = "rank_hc",
 	atlas_table = "ANIMATION_ATLAS",
 	path = "tower_rank_hc.png",
@@ -56,34 +56,30 @@ SMODS.Atlas({
 	py = 95
 })
 
-SMODS.Atlas({
+Tower.Atlas({
 	key = "enhance",
 	path = "tower_enhance.png",
 	px = 71,
 	py = 95
 })
 
-SMODS.Atlas({
+Tower.Atlas({
 	key = "book",
 	path = "tower_book.png",
 	px = 29,
 	py = 29
 })
 
-SMODS.Atlas({
+Tower.Atlas({
 	key = "stickers",
 	path = "tower_stickers.png",
 	px = 71,
 	py = 95
 })
 
-SMODS.Atlas({
+Tower.Atlas({
 	key = "achievements",
 	path = "tower_achievements.png",
 	px = 66,
 	py = 66,
 })
-
-function Tower.post_process(center)
-	
-end

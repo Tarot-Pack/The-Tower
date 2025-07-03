@@ -60,8 +60,8 @@ local start_run = Game.start_run
 function Game:start_run(args)
     local value = start_run(self, args)
     for i, v in pairs(G.P_BLINDS) do 
-        if v.tower_requires then
-            for q, z in ipairs(v.tower_requires) do
+        if v.tower_center_requires then
+            for q, z in ipairs(v.tower_center_requires) do
                 if not G.P_CENTERS[z] then
                     G.GAME.banned_keys[q] = true
                     break
@@ -380,7 +380,7 @@ end
 local old_toggle_shop = G.FUNCS.toggle_shop
 G.FUNCS.toggle_shop = function(e)
     if G.GAME.tower_run_spend_all then
-        if G.GAME.dollars > 0 then
+        if G.GAME.dollars >= to_big(0) then
             return
         end
         G.GAME.tower_run_spend_all = false
@@ -393,7 +393,7 @@ G.FUNCS.can_buy = function(e)
     if not G.GAME.tower_run_spend_all then
         return can_buy(e)
     end
-    if ((G.GAME.dollars - G.GAME.bankrupt_at) < 0) and (e.config.ref_table.cost > 0) then
+    if ((G.GAME.dollars - G.GAME.bankrupt_at) < to_big(0)) and (e.config.ref_table.cost > 0) then
         e.config.colour = G.C.UI.BACKGROUND_INACTIVE
         e.config.button = nil
     else
@@ -414,7 +414,7 @@ G.FUNCS.can_buy_and_use = function(e)
     if not G.GAME.tower_run_spend_all then
         return can_buy_and_use(e)
     end
-    if ((((G.GAME.dollars - G.GAME.bankrupt_at) < 0) and (e.config.ref_table.cost > 0)) or (not e.config.ref_table:can_use_consumeable())) then
+    if ((((G.GAME.dollars - G.GAME.bankrupt_at) < to_big(0)) and (e.config.ref_table.cost > 0)) or (not e.config.ref_table:can_use_consumeable())) then
         e.UIBox.states.visible = false
         e.config.colour = G.C.UI.BACKGROUND_INACTIVE
         e.config.button = nil
@@ -424,6 +424,34 @@ G.FUNCS.can_buy_and_use = function(e)
         end
         e.config.colour = G.C.SECONDARY_SET.Voucher
         e.config.button = 'buy_from_shop'
+    end
+end
+
+local can_reedem = G.FUNCS.can_redeem
+G.FUNCS.can_redeem = function(e)
+    if not G.GAME.tower_run_spend_all then
+        return can_reedem(e)
+    end
+    if ((G.GAME.dollars - G.GAME.bankrupt_at) < to_big(0)) and (e.config.ref_table.cost > 0) then
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+    else
+        e.config.colour = G.C.GREEN
+        e.config.button = 'use_card'
+    end
+end
+
+local can_open = G.FUNCS.can_open
+G.FUNCS.can_open = function(e)
+    if not G.GAME.tower_run_spend_all then
+        return can_open(e)
+    end
+    if ((G.GAME.dollars - G.GAME.bankrupt_at) < to_big(0)) and (e.config.ref_table.cost > 0) then
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+    else
+        e.config.colour = G.C.GREEN
+        e.config.button = 'use_card'
     end
 end
 

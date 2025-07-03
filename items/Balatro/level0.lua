@@ -1,4 +1,4 @@
-SMODS.Blind({
+Tower.Blind({
 	name = "tower-blank",
 	key = "blank",
 	pos = { x = 0, y = 0 },
