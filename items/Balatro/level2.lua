@@ -24,7 +24,7 @@ for i, v in pairs(planets) do
         key = key,
         pos = { x = 0, y = i },
         atlas = "blinds2",
-        order = 0,
+        order = 2,
         mult = 3,
         boss_colour = HEX(colour),
         boss = {

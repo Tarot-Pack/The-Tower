@@ -423,7 +423,7 @@ return {
 				text = {
 					"Discards two played cards",
 					"All discarded cards are destroyed",
-					"Hand must have at least two cards"
+					"Hand must have at least three cards"
 				},
 			},
 			bl_tower_judgement = { -- tbi
@@ -909,7 +909,7 @@ return {
 			ach_tower_old_days = "Reach Ante 8",
 			ach_tower_victory = "Beat The Egg and the Baron or Greater",
 			ach_tower_will_of_iron = "Beat The Eye of God",
-			ach_tower_antivirus = "Prevent Machine Code from infecting your cards by having no cards",
+			ach_tower_antivirus = "Prevent Malware from infecting your cards by having no cards",
 			ach_tower_imaginary = "Index out of bounds",
 		},
 	}

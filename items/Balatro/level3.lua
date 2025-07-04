@@ -4,13 +4,15 @@ local emperor_selection = {
     suits = {},
 }
 
+G.tower_emperor_selection = emperor_selection
+
 Tower.Blind({
 	tower_is_tarot = true,
 	name = "tower-fool",
 	key = "fool",
 	pos = { x = 0, y = 1 },
 	atlas = "blinds",
-	order = 1,
+	order = 3,
     mult = 4,
     boss_colour = HEX("ff9d96"),
     boss = {
@@ -40,7 +42,7 @@ Tower.Blind({
 	key = "wheel",
 	pos = { x = 0, y = 2 },
 	atlas = "blinds",
-	order = 1,
+	order = 3,
     mult = 4,
     boss_colour = HEX("25b900"),
     boss = {
@@ -74,7 +76,7 @@ Tower.Blind({
 	key = "tower",
 	pos = { x = 0, y = 3 },
 	atlas = "blinds",
-	order = 1,
+	order = 3,
     mult = 4 + 1,
     boss_colour = HEX("4061a4"),
     boss = {
@@ -116,7 +118,7 @@ Tower.Blind({
 	key = "hermit",
 	pos = { x = 0, y = 9 },
 	atlas = "blinds",
-	order = 1,
+	order = 3,
     mult = 4,
     boss_colour = HEX("317a20"),
     boss = {
@@ -148,7 +150,7 @@ Tower.Blind({
     key = "sun",
     pos = { x = 0, y = 10 },
     atlas = "blinds",
-    order = 1,
+    order = 3,
     mult = 4,
     boss_colour = HEX('f03463'),
     boss = {
@@ -181,7 +183,7 @@ Tower.Blind({
     key = "moon",
     pos = { x = 0, y = 11 },
     atlas = "blinds",
-    order = 1,
+    order = 3,
     mult = 4,
     boss_colour = HEX('275955'),
     boss = {
@@ -214,7 +216,7 @@ Tower.Blind({
     key = "world",
     pos = { x = 0, y = 12 },
     atlas = "blinds",
-    order = 1,
+    order = 3,
     mult = 4,
     boss_colour = HEX('413995'),
     boss = {
@@ -247,7 +249,7 @@ Tower.Blind({
     key = "star",
     pos = { x = 0, y = 13 },
     atlas = "blinds",
-    order = 1,
+    order = 3,
     mult = 4,
     boss_colour = HEX('f06b3f'),
     boss = {
@@ -282,7 +284,7 @@ Tower.Blind({
     key = "lovers",
     pos = { x = 0, y = 0 },
     atlas = "blind_lovers",
-    order = 1,
+    order = 3,
     mult = 4,
     boss_colour = HEX('ef838b'),
     boss = {
@@ -351,7 +353,7 @@ Tower.Blind({
 	key = "temperance",
 	pos = { x = 0, y = 14 },
 	atlas = "blinds",
-	order = 1,
+	order = 3,
     mult = 4,
     boss_colour = HEX("98258b"),
     boss = {
@@ -384,7 +386,7 @@ Tower.Blind({
 	key = "magician",
 	pos = { x = 0, y = 13 },
 	atlas = "blinds2",
-	order = 1,
+	order = 3,
     mult = 4,
     boss_colour = HEX("77e03a"),
     boss = {
@@ -430,7 +432,7 @@ Tower.Blind({
 	key = "hierophant",
 	pos = { x = 0, y = 14 },
 	atlas = "blinds2",
-	order = 1,
+	order = 3,
     mult = 4,
     boss_colour = HEX("009dff"),
     boss = {
@@ -449,7 +451,7 @@ Tower.Blind({
 	key = "empress",
 	pos = { x = 0, y = 15 },
 	atlas = "blinds2",
-	order = 1,
+	order = 3,
     mult = 4,
     boss_colour = HEX("fe5f55"),
     boss = {
@@ -470,7 +472,7 @@ Tower.Blind({
 	key = "justice",
 	pos = { x = 0, y = 16 },
 	atlas = "blinds2",
-	order = 1,
+	order = 3,
     mult = 4,
     boss_colour = HEX("a0d7ce"),
     boss = {
@@ -498,7 +500,7 @@ Tower.Blind({
 	key = "chariot",
 	pos = { x = 0, y = 17 },
 	atlas = "blinds2",
-	order = 1,
+	order = 3,
     mult = 4,
     boss_colour = HEX("76b1d7"),
     boss = {
@@ -536,7 +538,7 @@ Tower.Blind({
 	key = "devil",
 	pos = { x = 0, y = 18 },
 	atlas = "blinds2",
-	order = 1,
+	order = 3,
     mult = 4,
     boss_colour = HEX("ffb700"),
     boss = {
@@ -560,7 +562,7 @@ Tower.Blind({
 	key = "strength",
 	pos = { x = 0, y = 19 },
 	atlas = "blinds2",
-	order = 1,
+	order = 3,
     mult = 4,
     boss_colour = HEX("ff003b"),
     boss = {
@@ -585,7 +587,7 @@ Tower.Blind({
 	key = "hangedman",
 	pos = { x = 0, y = 20 },
 	atlas = "blinds2",
-	order = 1,
+	order = 3,
     mult = 4,
     boss_colour = HEX("2a1f81"),
     boss = {
@@ -636,7 +638,7 @@ Tower.Blind({
 	key = "judgement",
 	pos = { x = 0, y = 21 },
 	atlas = "blinds2",
-	order = 1,
+	order = 3,
     mult = 4,
     boss_colour = HEX("b26cbb"),
     boss = {
@@ -669,7 +671,7 @@ Tower.Blind({
 	key = "death",
 	pos = { x = 0, y = 22 },
 	atlas = "blinds2",
-	order = 1,
+	order = 3,
     mult = 4,
     boss_colour = HEX("b593ff"),
     boss = {
@@ -704,187 +706,13 @@ Tower.Blind({
 
 emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_death'
 
-Tower.Blind({
-	tower_is_tarot = true,
-	name = "tower-eclipse",
-	key = "eclipse",
-	pos = { x = 0, y = 6 },
-	atlas = "blinds3",
-	order = 1,
-    mult = 4,
-    boss_colour = HEX("4f00bf"),
-    boss = {
-        level = 3
-    },
-    dollars = 8,
-    
-    set_blind = function (self, reset)
-        if reset then return end
-        if G.GAME.blind.disabled then return end
-        G.GAME.tower_eclipse_no_trigger = true
-    end,
-    defeat = function ()
-        G.GAME.tower_eclipse_no_trigger = false
-    end,
-    disable = function ()
-        G.GAME.tower_eclipse_no_trigger = false
-    end,
-})
-
-
-emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_eclipse'
-
-Tower.Blind({
-	tower_is_tarot = true,
-	name = "tower-seraph",
-	key = "seraph",
-	pos = { x = 0, y = 7 },
-	atlas = "blinds3",
-	order = 1,
-    mult = 4,
-    boss_colour = HEX("b593ff"),
-    boss = {
-        level = 3
-    },
-    dollars = 8,
-    loc_vars = function(self, info_queue, card)
-		return { vars = { 
-            G.GAME.tower_seraph_play_cards or 5,
-            0.25 * get_blind_amount(G.GAME.round_resets.ante) * 4 * G.GAME.starting_params.ante_scaling
-        } }
-	end,
-    collection_loc_vars = function(self, info_queue, card)
-		return { vars = { 
-            "5",
-            localize("tower_seraph_place")
-        } }
-	end,
-
-	TowerModFinalScore = function(self, score)
-        if G.GAME.blind.disabled then return score end
-		return math.floor(math.min(0.25 * G.GAME.blind.chips, score) + 0.5)
-	end,
-    set_blind = function (self, reset)
-        if G.GAME.blind.disabled then return end
-        if reset then return end
-        G.GAME.tower_seraph_play_cards = 5
-    end,
-    cry_after_play = function (self)
-        G.GAME.tower_seraph_play_cards = G.GAME.tower_seraph_play_cards + 1
-        G.GAME.blind:set_text()
-    end,
-
-	debuff_hand = function(self, cards, hand, handname, check)
-		if
-			#cards ~= (G.GAME.tower_seraph_play_cards or 5)
-			and not G.GAME.blind.disabled
-		then
-			G.GAME.blind.triggered = true
-			return true
-		end
-		return false
-	end
-})
-
-
-Tower.Blind({
-	tower_is_tarot = true,
-	name = "tower-instability",
-	key = "instability",
-	pos = { x = 0, y = 8 },
-	atlas = "blinds3",
-	order = 1,
-    mult = 4,
-    boss_colour = HEX("b593ff"),
-    boss = {
-        level = 3
-    },
-    dollars = 8,
-
-
-    debuff_hand = function(self, cards, hand, handname, check)
-        local bad = false;
-        if G.GAME.blind.disabled then return false end
-        for i = 1, #cards do
-            if not SMODS.has_enhancement(cards[i], "m_cry_abstract") then
-                bad = true
-                break;
-            end
-        end
-        if bad then
-			G.GAME.blind.triggered = true
-        end
-        return bad
-    end,
-
-    get_loc_debuff_text = function(self)
-        return localize("tower_debuff_instability")
-    end,
-})
-
-
-emperor_selection.suits[#emperor_selection.suits+1] = 'bl_tower_instability'
-
-Tower.Blind({
-	tower_is_tarot = true,
-	name = "tower-blessing",
-	key = "blessing",
-	pos = { x = 0, y = 9 },
-	atlas = "blinds3",
-	order = 1,
-    mult = 4,
-    boss_colour = HEX("b593ff"),
-    boss = {
-        level = 3
-    },
-    dollars = 8,
-
-    TowerBeforeBlindSet = function (self, blind, reset, silent)
-        self:set_blind(Tower.getBlinds(function (blind) 
-            return blind.tower_is_spectral or blind.tower_is_tarot
-        end, 1, pseudoseed('tower_blessing'))[1], reset, silent)
-        return false
-    end,
-})
-
-
--- emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_blessing'
--- emperor should not select blessing
-
-Tower.Blind(Tower.ObsidianOrb({
-	name = "tower-automaton",
-	key = "automaton",
-	pos = { x = 0, y = 10 },
-	atlas = "blinds3",
-	order = 1,
-    mult = 4,
-    boss_colour = HEX("dc7920"),
-    boss = {
-        level = 3
-    },
-    dollars = 8,
-    pick = function()
-        local blinds = {}
-        for i, v in ipairs(Tower.getBlinds(function (blind) 
-            return blind.tower_is_code
-        end, 1, pseudoseed('tower_automaton'))) do
-            blinds[v.key] = true
-        end
-        return blinds
-    end,
-
-    debuff_text = 'tower_debuff_automaton'
-}))
-
-
--- emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_automaton'
 
 Tower.Blind(Tower.ObsidianOrb({
 	name = "tower-emperor",
 	key = "emperor",
 	pos = { x = 0, y = 16 },
 	atlas = "blinds",
-	order = 1,
+	order = 3,
     mult = 4,
     boss_colour = HEX("dc7920"),
     boss = {

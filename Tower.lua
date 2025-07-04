@@ -12,6 +12,8 @@ SMODS.current_mod.optional_features = {
 	}
 }
 
+Tower.object_queue = {}
+Tower._is_lib = true
 function Tower.Object(bl)
 	bl.tower_center_requires = bl.tower_center_requires or {}
 	bl.dependencies = bl.dependencies or {}
@@ -24,7 +26,18 @@ function Tower.Object(bl)
 	if current ~= nil then
 		bl.dependencies[#bl.dependencies+1] = current
 	end
-	return SMODS[bl.object_type](bl)
+
+	if Tower._is_lib then
+		return SMODS[bl.object_type](bl)
+	else
+		if bl.order == nil then
+			bl.order = -999
+		end
+		if Tower.object_queue[bl.order] == nil then
+			Tower.object_queue[bl.order] = {}
+		end
+		Tower.object_queue[bl.order][#(Tower.object_queue[bl.order])+1] = bl
+	end
 end
 for i, v in pairs({ --[["Achievement",]] "Atlas", "Blind", "Center", "Back", "Booster", "Consumable", "Edition", "Enhancement", "Joker", "Voucher", "Challenge", "DeckSkin", "DrawStep", "Gradient", "Keybind", "Language", "ObjectType", "PokerHand", "Rank", "Suit", "Rarity", "Seal", "Sound", "Stake", "Sticker", "Tag", "Shader" }) do
 	Tower[v] = function (bl)
@@ -43,7 +56,7 @@ for _, file in ipairs(files) do
 	end
 	f()
 end
-
+Tower._is_lib = nil
 local Load = {}
 
 local current = nil
@@ -64,6 +77,19 @@ for _, dir in ipairs(dirs) do
 			error(err)
 		end
 		f()
+	end
+end
+local things = {}
+for i, v in pairs(Tower.object_queue) do
+	things[#things+1] = {to_number(i), v}
+end
+table.sort(things, function (a, b)
+	return a[1] < b[1]
+end)
+for i, v in pairs(things) do
+	print(v[1])
+	for z, q in ipairs(v[2]) do
+		SMODS[q.object_type](q)
 	end
 end
 current = nil

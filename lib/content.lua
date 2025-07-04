@@ -33,6 +33,15 @@ Tower.Atlas({
 })
 
 Tower.Atlas({
+	key = "blinds4",
+	atlas_table = "ANIMATION_ATLAS",
+	path = "tower_blind4.png",
+	px = 34,
+	py = 34,
+	frames = 21,
+})
+
+Tower.Atlas({
 	key = "blind_lovers",
 	atlas_table = "ANIMATION_ATLAS",
 	path = "tower_blind_lovers.png",

@@ -3,7 +3,7 @@ Tower.Blind({
 	key = "blueprint",
 	pos = { x = 0, y = 5 },
 	atlas = "blinds",
-	order = 0,
+	order = -1,
     mult = G.tower_unknown,
     boss_colour = HEX("3e60d4"),
     boss = {

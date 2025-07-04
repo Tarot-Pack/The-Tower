@@ -4,7 +4,7 @@ Tower.Blind({
 	key = "soul",
 	pos = { x = 0, y = 4 },
 	atlas = "blinds",
-	order = 2,
+	order = 4,
     mult = 5,
     boss_colour = HEX("b5d2dc"),
     boss = {
@@ -41,7 +41,7 @@ Tower.Blind({
 	key = "wraith",
 	pos = { x = 0, y = 6 },
 	atlas = "blinds",
-	order = 2,
+	order = 4,
     mult = 5,
     boss_colour = HEX("c7b24a"),
     boss = {
@@ -74,7 +74,7 @@ Tower.Blind({
 	key = "incantation",
 	pos = { x = 0, y = 7 },
 	atlas = "blinds",
-	order = 2,
+	order = 4,
     mult = 5,
     boss_colour = HEX("ff0063"),
     boss = {
@@ -109,7 +109,7 @@ Tower.Blind({
 	key = "ankh",
 	pos = { x = 0, y = 8 },
 	atlas = "blinds",
-	order = 2,
+	order = 4,
     mult = 5,
     boss_colour = HEX("00ff6d"),
     boss = {
@@ -167,7 +167,7 @@ Tower.Blind({
 	key = "blackhole",
 	pos = { x = 0, y = 15 },
 	atlas = "blinds",
-	order = 2,
+	order = 4,
     mult = G.tower_unknown,
     boss_colour = HEX("7800ff"),
     boss = {
@@ -214,7 +214,7 @@ Tower.Blind({
 	key = "ectoplasm",
 	pos = { x = 0, y = 17 },
 	atlas = "blinds",
-	order = 2,
+	order = 4,
     mult = 5,
     boss_colour = HEX("8c80ff"),
     boss = {
@@ -247,7 +247,7 @@ Tower.Blind({
 	key = "sigil",
 	pos = { x = 0, y = 18 },
 	atlas = "blinds",
-	order = 2,
+	order = 4,
     mult = 5,
     boss_colour = HEX("ef838b"),
     boss = {
@@ -320,7 +320,7 @@ Tower.Blind({
 	key = "familiar",
 	pos = { x = 0, y = 23 },
 	atlas = "blinds2",
-	order = 2,
+	order = 4,
     mult = 5,
     boss_colour = HEX("ff0080"),
     boss = {
@@ -356,7 +356,7 @@ Tower.Blind({
 	key = "grim",
 	pos = { x = 0, y = 24 },
 	atlas = "blinds2",
-	order = 2,
+	order = 4,
     mult = 5,
     boss_colour = HEX("b1ff00"),
     boss = {
@@ -386,7 +386,7 @@ Tower.Blind({
 	key = "talisman",
 	pos = { x = 0, y = 25 },
 	atlas = "blinds2",
-	order = 2,
+	order = 4,
     mult = 5,
     boss_colour = HEX("ffba01"),
     boss = {
@@ -409,7 +409,7 @@ Tower.Blind({
 	key = "aura",
 	pos = { x = 0, y = 26 },
 	atlas = "blinds2",
-	order = 2,
+	order = 4,
     mult = 5,
     boss_colour = HEX("4600ff"),
     boss = {
@@ -468,7 +468,7 @@ Tower.Blind({
 	key = "ouija",
 	pos = { x = 0, y = 27 },
 	atlas = "blinds2",
-	order = 2,
+	order = 4,
     mult = 5,
     boss_colour = HEX("01ffd1"),
     boss = {
@@ -539,7 +539,7 @@ Tower.Blind({
 	key = "immolate",
 	pos = { x = 0, y = 1 },
 	atlas = "blinds3",
-	order = 2,
+	order = 4,
     mult = 5,
     boss_colour = HEX("ff6800"),
     boss = {
@@ -578,7 +578,7 @@ Tower.Blind({
 	key = "dejavu",
 	pos = { x = 0, y = 2 },
 	atlas = "blinds3",
-	order = 2,
+	order = 4,
     mult = 5,
     boss_colour = HEX("9174e1"),
     boss = {
@@ -635,7 +635,7 @@ Tower.Blind({
 	key = "hex",
 	pos = { x = 0, y = 3 },
 	atlas = "blinds3",
-	order = 2,
+	order = 4,
     mult = 5,
     boss_colour = HEX("9f00ff"),
     boss = {
@@ -663,7 +663,7 @@ Tower.Blind({
 	key = "trance",
 	pos = { x = 0, y = 4 },
 	atlas = "blinds3",
-	order = 2,
+	order = 4,
     mult = 5,
     boss_colour = HEX("01cfff"),
     boss = {
@@ -723,7 +723,7 @@ Tower.Blind({
 	key = "medium",
 	pos = { x = 0, y = 0 },
 	atlas = "blinds3",
-	order = 2,
+	order = 4,
     mult = 5,
     boss_colour = HEX("ef838b"),
     boss = {
@@ -819,7 +819,7 @@ Tower.Blind({
 	key = "cryptid",
 	pos = { x = 0, y = 5 },
 	atlas = "blinds3",
-	order = 2,
+	order = 4,
     mult = G.tower_unknown,
     boss_colour = HEX("0035ff"),
     boss = {
