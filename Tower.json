@@ -2,7 +2,7 @@
 	"id": "Tower",
 	"name": "The Tower",
 	"display_name": "The Tower",
-	"author": ["jamirror"],
+	"author": ["jamirror", "pikaboy10 (playtester & terraria joker ideas)"],
 	"description": "Very hard balatro.",
 	"prefix": "tower",
 	"main_file": "Tower.lua",

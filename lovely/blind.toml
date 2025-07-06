@@ -62,25 +62,25 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "functions/state_events.lua"
-pattern = "            if G.GAME.chips - G.GAME.blind.chips >= 0 then"
+pattern = "if to_big(G.GAME.chips) >= to_big(G.GAME.blind.chips) then"
 position = "at"
-payload = "            if G.GAME.blind:TowerCheckWin() then"
+payload = "if G.GAME.blind:TowerCheckWin() then"
 match_indent = true
+overwrite = true
 
 [[patches]]
 [patches.pattern]
-target = "functions/state_events.lua"
-pattern = '''if G.GAME.chips - G.GAME.blind.chips >= 0 then
-        a'''
+target = "blind.lua"
+pattern = "if self.boss and to_big(G.GAME.chips) - G.GAME.blind.chips >= to_big(0) then"
 position = "at"
-payload = '''if G.GAME.blind:TowerCheckWin() then
-        a'''
+payload = "if self.boss and G.GAME.blind:TowerCheckWin() then"
 match_indent = true
+overwrite = true
 
 [[patches]]
 [patches.pattern]
 target = "game.lua"
-pattern = '''if G.GAME.chips - G.GAME.blind.chips >= 0 or G.GAME.current_round.hands_left < 1 then'''
+pattern = '''if to_big(G.GAME.chips) >= to_big(G.GAME.blind.chips) or G.GAME.current_round.hands_left < 1 then'''
 position = "at"
 payload = '''if G.GAME.blind:TowerCheckRoundEnd() then'''
 match_indent = true
@@ -183,5 +183,16 @@ match_indent = true
 target = '''main.lua'''
 pattern = '''G.FPS_CAP = G.FPS_CAP or 500'''
 position = "after"
-payload = '''G.FPS_CAP = G.GAME.FPS_CAP or G.FPS_CAP'''
+payload = '''
+local FPS_CAP = G.GAME.FPS_CAP or G.FPS_CAP'''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''main.lua'''
+pattern = '''if run_time < 1./G.FPS_CAP then love.timer.sleep(1./G.FPS_CAP - run_time) end'''
+position = "at"
+payload = '''
+if run_time < 1./FPS_CAP then love.timer.sleep(1./FPS_CAP - run_time) end'''
+match_indent = true
+

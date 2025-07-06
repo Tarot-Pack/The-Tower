@@ -272,6 +272,98 @@ return {
                     "Five of a Kind"
 				},
 			},
+            bl_tower_asteroid_belt = {
+				name = "Asteroid Belt",
+				text = {
+					"Hand type may only be",
+                    "Bulwark"
+				},
+			},
+            bl_tower_void = {
+				name = "Void",
+				text = {
+					"Hand type may only be",
+                    Cryptid_config.family_mode and "Cluster" or "Clusterfuck",
+				},
+			},
+            bl_tower_phobos_diemos = {
+				name = "Phobos & Diemos",
+				text = {
+					"Hand type may only be",
+                    "Ultimate Pair"
+				},
+			},
+            bl_tower_universe = {
+				name = Cryptid_config.family_mode and "Universe" or "The Universe In Its Fucking Entirety",
+				text = {
+					"Hand type may only be",
+                    Cryptid_config.family_mode and "The Entire Deck" or "The Entire Fucking Deck"
+				},
+			},
+            bl_tower_nibiru = {
+				name = "Nibiru",
+				text = {
+					"Hand type may only be",
+                    "None"
+				},
+			},
+            bl_tower_neutronstar = {
+				name = "Neutron Star",
+				text = {
+					"Base mult is a",
+					"random hands level"
+				},
+			},
+            bl_tower_planetlua = {
+				name = "Planet.lua",
+				text = {
+					"Levels all hands",
+					"down before hand played"
+				},
+			},
+            bl_tower_sol = {
+				name = "Sol",
+				text = {
+					"Played hand must be",
+					"Ascended"
+				},
+			},
+            bl_tower_ruutu = {
+				name = "Ruutu",
+				text = {
+					"Must meet the required score and play",
+					"High Card, Pair and Two Pair"
+				},
+			},
+            bl_tower_risti = {
+				name = "Risti",
+				text = {
+					"Must meet the required score and play",
+					"Three of a Kind, Straight and Flush"
+				},
+			},
+            bl_tower_hertta = {
+				name = "Hertta",
+				text = {
+					"Must meet the required score and play",
+					"Full House, Four of a Kind and Straight Flush"
+				},
+			},
+            bl_tower_pata = {
+				name = "Pata",
+				text = {
+					"Must meet the required score and play",
+					"Five of a Kind, Flush House and Flush Five"
+				},
+			},
+            bl_tower_kaikki = {
+				name = "Kaikki",
+				text = {
+					"Must meet the required score and play",
+					Cryptid_config.family_mode and "Bulwark, Cluster and The Entire Deck"
+						or "Bulwark, Clusterfuck and The Entire Fucking Deck",
+				},
+			},
             bl_tower_ceres = {
 				name = "Capri Ceres",
 				text = {

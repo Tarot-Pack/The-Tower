@@ -9,12 +9,12 @@ string.rep = function (str, amount)
     end
 end
 
+local ffffffffff = G.FUNCS.cry_asc_UI_set;
 G.FUNCS.cry_asc_UI_set = function(e)
+    ffffffffff(e)
 	if G.GAME.tower_exploit_override then
 		e.config.object.colours = { darken(G.C.SECONDARY_SET.Code, 0.2) }
-	else
-		e.config.object.colours = { G.C.GOLD }
-	end
+    end
 	e.config.object:update_text()
 end
 
