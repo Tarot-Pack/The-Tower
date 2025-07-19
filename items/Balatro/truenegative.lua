@@ -76,7 +76,7 @@ local old_eval_card = eval_card
 function eval_card(card, context)
     local ret, post = old_eval_card(card, context)
     local meta = BigMeta or OmegaMeta
-    if card.edition and card.edition.tower_truenegative then
+    if (card.edition and card.edition.tower_truenegative) or G.GAME.tower_ritual then
         for i, v in pairs(ret) do
             for q, c in pairs(v) do
                 if getmetatable(c) == meta or type(c) == 'number' then
@@ -154,15 +154,26 @@ end
 
 local old_sd = Card.set_edition;
 function Card:set_edition(edition, immediate, silent, delay) 
-    if edition == "e_tower_truenegative" or (edition and edition.e_tower_truenegative) and not (G.GAME.modifiers.cry_force_edition == 'tower_truenegative') then
+    if (edition == "e_tower_truenegative" or (edition and edition.e_tower_truenegative)) and not (G.GAME.modifiers.cry_force_edition == 'tower_truenegative') then
         if self.edition and self.edition.tower_truenegative then
             edition = nil -- trolling
             Tower.achieve('true_positive')
         end
     end
+    if G.GAME.modifiers["replace_edition_" .. ((edition and edition.key) or 'e_base')] and self.ability.set == 'Joker' then
+        edition = G.GAME.modifiers["replace_edition_" .. ((edition and edition.key) or 'e_base')]
+    end
     local val = old_sd(self, edition, immediate, silent, delay)
     check_for_unlock({ type = "tower_modify_card", card = self })
     return val
+end
+local apply_to_run = Card.apply_to_run
+
+function Card:apply_to_run(center, raw)
+    if not raw and self and (self.edition and self.edition.tower_truenegative) then
+        return self:unapply_to_run(center, true)
+    end
+    return apply_to_run(self)
 end
 
 local old_sa = Card.set_ability;
@@ -256,7 +267,11 @@ function SMODS.modify_rank(card, amount) -- true neg is neg
     if is_negative and not card_is_negative then
         card:set_edition("e_tower_truenegative", nil, true)
     elseif not is_negative and card_is_negative then
-        card:set_edition('e_'+G.GAME.modifiers.cry_force_edition, nil, true)
+        if G.GAME.modifiers.cry_force_edition == nil then
+            card:set_edition(nil, nil, true)
+        else
+            card:set_edition('e_'+G.GAME.modifiers.cry_force_edition, nil, true)
+        end
     end
     return SMODS.change_base(card, nil, rank_key)
 end

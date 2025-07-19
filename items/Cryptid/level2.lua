@@ -4,7 +4,7 @@ local planets = {
     {"void", "cry_Clusterfuck", "000000", "cry_void"},
     {"phobos_diemos", "cry_UltPair", "ffaeb6", "cry_marsmoons"},
     {"universe", "cry_WholeDeck", "ffffff", "cry_universe"},
-    {"nibiru", "cry_None", "ffffff00", "cry_nibiru"}
+    {"nibiru", "cry_None", "ffffff00", "cry_nibiru", 0} -- funni blank soul level
 }
 
 local SPR_I = 9
@@ -15,6 +15,7 @@ for i, v in pairs(planets) do
     local key = v[1];
     local colour = v[3];
     local cons = v[4];
+    local soul_level = v[5],
     Tower.Blind({
 	    tower_is_planet = true,
         tower_consumable = cons,
@@ -26,7 +27,8 @@ for i, v in pairs(planets) do
         mult = 3,
         boss_colour = HEX(colour),
         boss = {
-            level = 2
+            level = 2,
+            soul_level = soul_level
         },
         dollars = 5,
 
@@ -171,7 +173,7 @@ local mplanets = {
     {"risti", {"Three of a Kind", "Straight", "Flush"}, "4400f5", "cry_Klubi"},
     {"hertta", {"Full House", "Four of a Kind", "Straight Flush"}, "ff7575", "cry_Sydan"},
     {"pata", {"Five of a Kind", "Flush House", "Flush Five"}, "313d3e", "cry_Lapio"},
-    {"kaikki", {"cry_Bulwark", "cry_Clusterfuck", "cry_UltPair"}, "f83b2f", "cry_Kaikki"}
+    {"kaikki", {"cry_Bulwark", "cry_Clusterfuck", "cry_UltPair"}, "f83b2f", "cry_Kaikki"},
 }
 
 for i, v in pairs(mplanets) do
@@ -199,7 +201,7 @@ for i, v in pairs(mplanets) do
             G.GAME.tower_cry_multiplanet = copy_table(hands)
         end,
         TowerCheckWin = function (self)
-            return (G.GAME.chips - G.GAME.blind.chips >= to_big(0)) and (#G.GAME.tower_cry_multiplanet == 0)
+            return (G.GAME.chips - G.GAME.blind.chips >= to_big(0)) and (#(G.GAME.tower_cry_multiplanet or {}) == 0)
         end,
         TowerModFinalScore = function (self, score, cards, poker_hands, hand, scoring_hand, mult, hand_chips)
             if G.GAME.blind.disabled then return score end
@@ -232,3 +234,80 @@ for i, v in pairs(mplanets) do
     })
 end
 
+Tower.Blind({
+    tower_is_planet = true,
+    tower_consumable = "cry_voxel",
+    name = "tower-voxel",
+    key = "voxel",
+    pos = { x = 0, y = 0 },
+    atlas = "blinds4",
+    order = 2,
+    mult = 3,
+    boss_colour = HEX("f83b2f"),
+    boss = {
+        level = 2
+    },
+    dollars = 5,
+
+    set_blind = function (self)
+        G.GAME.tower_cry_multiplanet = { "cry_Declare0", "cry_Declare1", "cry_Declare2" }
+    end,
+    loc_vars = function (self)
+        return {
+            vars = {
+                G.GAME.hands["cry_Declare0"] and G.GAME.hands["cry_Declare0"].declare_cards and localize(
+					"cry_Declare0",
+					"poker_hands"
+				) or localize("cry_code_empty"),
+				G.GAME.hands["cry_Declare1"] and G.GAME.hands["cry_Declare1"].declare_cards and localize(
+					"cry_Declare1",
+					"poker_hands"
+				) or localize("cry_code_empty"),
+				G.GAME.hands["cry_Declare2"] and G.GAME.hands["cry_Declare2"].declare_cards and localize(
+					"cry_Declare2",
+					"poker_hands"
+				) or localize("cry_code_empty"),
+            }
+        }
+    end,
+    collection_loc_vars = function (self)
+        return {
+            vars = {
+                localize("cry_code_empty"),
+                localize("cry_code_empty"),
+                localize("cry_code_empty"),
+            }
+        }
+    end,
+    TowerCheckWin = function (self)
+        return (G.GAME.chips - G.GAME.blind.chips >= to_big(0)) and (#G.GAME.tower_cry_multiplanet == 0)
+    end,
+    TowerModFinalScore = function (self, score, cards, poker_hands, hand, scoring_hand, mult, hand_chips)
+        if G.GAME.blind.disabled then return score end
+
+        local index = nil;
+        for i, v in ipairs(G.GAME.tower_cry_multiplanet) do
+            if v == hand then
+                index = i 
+                break
+            end
+        end
+        if index ~= nil then
+            table.remove(G.GAME.tower_cry_multiplanet, index)
+        end
+        return score
+    end,
+    
+    disable = function ()
+        G.GAME.tower_cry_multiplanet = nil
+    end,
+
+    defeat = function ()
+        G.GAME.tower_cry_multiplanet = nil
+    end,
+
+
+    TowerInPool = function ()
+        return G.GAME.modifiers.tower_planets_enabled
+    end
+})

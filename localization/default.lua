@@ -9,7 +9,7 @@ return {
 				},
 			},
 			tower_planet_sticker = { 
-				name = "Sticker of The Galatic War",
+				name = "Sticker of The Galaxy",
 				text = {
 					"Used this Joker",
 					"to win {C:attention}The Galatic War"
@@ -364,6 +364,13 @@ return {
 						or "Bulwark, Clusterfuck and The Entire Fucking Deck",
 				},
 			},
+            bl_tower_voxel = {
+				name = "Voxel",
+				text = {
+					"Must meet the required score and play",
+					"#1#, #2#, and #3#"
+				},
+			},
             bl_tower_ceres = {
 				name = "Capri Ceres",
 				text = {
@@ -383,9 +390,9 @@ return {
 				name = "The Fool",
 				text = {
 					"Round ends when all hands are used",
-					"Must score at least #1#",
+					"Must score at least 80%",
 					"Instant loss if",
-					"#2# has been scored"
+					"100% has been scored"
 				},
 			},
 			bl_tower_tower = {
@@ -513,9 +520,7 @@ return {
 			bl_tower_hangedman = {
 				name = "Hanged Man",
 				text = {
-					"Discards two played cards",
-					"All discarded cards are destroyed",
-					"Hand must have at least three cards"
+					"All discarded cards are destroyed"
 				},
 			},
 			bl_tower_judgement = { -- tbi
@@ -616,7 +621,7 @@ return {
 				name = "Merge",
 				text = {
 					"Has the effect of the",
-					"next two played blinds"
+					"next two blinds"
 				},
 			},
 			bl_tower_commit = {
@@ -772,6 +777,26 @@ return {
 					"Ends blind"
 				},
 			},
+			bl_tower_declare = {
+				name = "Declare",
+				text = {
+					"All ranks in played hand are #1#"
+				},
+			},
+			bl_tower_log = {
+				name = "Log",
+				text = {
+					"First 10 cards drawn are",
+					"the only cards that can be drawn"
+				},
+			},
+			bl_tower_quantify = {
+				name = "Quantify",
+				text = {
+					"All of your jokers are sent",
+					"to your deck"
+				},
+			},
 
 			bl_tower_soul = {
 				name = "The Soul",
@@ -910,6 +935,133 @@ return {
 					"Blind base is high score this run"
 				}
 			},
+			bl_tower_summoning = {
+				name = "The Summoning",
+				text = {
+					"All jokers are replaced with",
+					"1 round Perishable Canvas"
+				}
+			},
+			bl_tower_typhoon = {
+				name = "The Typhoon",
+				text = {
+					"Played poker hands base mult and base chips,",
+					"are set to 0 and cap score at played poker",
+					"hands old mult and chips",
+				}
+			},
+			bl_tower_meld = {
+				name = "The Meld",
+				text = {
+					"Fuse all un-fused jokers (if possible)",
+					"and set all values of both sides of",
+					"every joker to zero"
+				}
+			},
+			bl_tower_gateway = {
+				name = "The Gateway",
+				text = {
+					"Destroy all non-Exotic cards"
+				}
+			},
+			bl_tower_lock = {
+				name = "The Lock",
+				text = {
+					"Makes all jokers #1# and Edible"
+				}
+			},
+			bl_tower_vacuum = {
+				name = "The Vacuum",
+				text = {
+					"Destroy all played or held cards, jokers",
+					"and consumables with a modification",
+					"before hand played"
+				}
+			},
+			bl_tower_hammerspace = {
+				name = "The Hammerspace",
+				text = {
+					"Face random consumable blinds",
+					"for #1# antes and win ante",
+					"increases with ante"
+				}
+			},
+			bl_tower_trade = {
+				name = "The Trade",
+				text = {
+					"Unredeem and invert",
+					"all owned vouchers"
+				}
+			},
+			bl_tower_replica = {
+				name = "The Replica",
+				text = {
+					"Turn all drawn cards into blanks"
+				}
+			},
+			bl_tower_analog = {
+				name = "The Analog",
+				text = {
+					"Selects one joker and every other",
+					"joker is destroyed with two cursed",
+					"jokers being made for each destroyed joker"
+				}
+			},
+			bl_tower_ritual = {
+				name = "The Ritual",
+				text = {
+					"All triggered playing cards, jokers",
+					"and consumables have the effect",
+					"of true-negative"
+				}
+			},
+			bl_tower_adversary = {
+				name = "The Adversary",
+				text = {
+					"All jokers are negated and #1#",
+					"All future jokers have a 50%",
+					"chance of being true-negative"
+				}
+			},
+			bl_tower_chambered = {
+				name = "The Chambered",
+				text = {
+					"Blind has to be beaten 3 times"
+				}
+			},
+			bl_tower_conduit = {
+				name = "The Conduit",
+				text = {
+					"Chooses a random present edition in",
+					"your jokers, including base and all",
+					"current and future jokers of that edition",
+					"become true-negative"
+				}
+			},
+			bl_tower_source = {
+				name = "The Source",
+				text = {
+					"Copies the effect of one Code",
+					"blind for every card in your deck"
+				}
+			},
+			bl_tower_pointer = {
+				name = "The Pointer",
+				text = {
+					"Score requirement is set to 1 when",
+					"#1#",
+					"is triggered" -- blind requirement is initally infinity
+				}
+			},
+			bl_tower_white_hole = {
+				name = "White Hole",
+				text = {
+					"Blind base is the total of all of",
+					"your hand mult times the total of",
+					"all of your hand chips squared",
+					"All of your hand mult and chips are set to 0"
+				}
+			},
         },
 		Joker = {
 			j_tower_blank = {
@@ -964,10 +1116,28 @@ return {
 			tower_rank = "(random rank)",
 			tower_seal = "(random seal)",
 			tower_handtype = "(random hand type)",
-			tower_seraph_place = "(0.25x blind size)"
+			tower_seraph_place = "(0.25x blind size)",
+			tower_pointer_place = "(random card in the collection)",
+			tower_hammerspace_place = '(current ante)',
+
+			tower_hand_nil = "ERROR",
+		},
+		poker_hands = {
+			tower_nil = "ERROR",
+		},
+		poker_hand_descriptions = {
+			tower_nil = {""},
+		},
+        ranks={
+			tower_Joker = "Joker"
 		},
 		suits_plural = {
-			cry_abstract = "Abstract" -- a bit of trolling
+			cry_abstract = "Abstract", -- a bit of trolling
+			tower_Joker = "Jokers",
+		},
+		suits_singular = {
+			cry_abstract = "Abstract", -- a bit of trolling
+			tower_Joker = "Joker",
 		},
 		challenge_names = {
 			c_tower_true_negative = "Negative Nancy"

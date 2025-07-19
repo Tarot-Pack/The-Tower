@@ -86,6 +86,9 @@ Tower.Blind({
         for k, v in ipairs(G.deck.cards) do
             SMODS.destroy_cards(v)
         end
+        for k, v in ipairs(G.discard.cards) do
+            SMODS.destroy_cards(v)
+        end
 
         for k, v in ipairs(G.hand.cards) do
             local found = false;
@@ -331,16 +334,10 @@ Tower.Blind({
         local bad = false;
         if G.GAME.blind.disabled then return false end
         
-        for i, v in pairs(G.deck.cards) do
+        for i, v in pairs(G.playing_cards) do
             if v:is_face() then
                 bad = true;
                 break
-            end
-        end
-        for i, v in pairs(G.hand.cards) do
-            if v:is_face() then
-                bad = true
-                break;
             end
         end
         
@@ -417,12 +414,6 @@ Tower.Blind({
     },
     dollars = 10,
 
-    TowerOnSpawn = function (self)
-        if G.GAME.tower_aura_edition then return end
-        local options = G.P_CENTER_POOLS["Edition"]
-        local chosen = pseudorandom_element(options, pseudoseed('tower_aura'))
-        G.GAME.tower_aura_edition = chosen.key:sub(3);
-    end,
     defeat = function ()
         G.GAME.tower_aura_edition = nil
     end,
@@ -454,6 +445,11 @@ Tower.Blind({
     end,
 
     loc_vars = function (self)
+        if not G.GAME.tower_aura_edition then
+            local options = G.P_CENTER_POOLS["Edition"]
+            local chosen = pseudorandom_element(options, pseudoseed('tower_aura'))
+            G.GAME.tower_aura_edition = chosen.key:sub(3);
+        end
         return {
             vars = {
                 G.localization.descriptions.Edition["e_"..(G.GAME.tower_aura_edition or 'polychrome')].name
@@ -476,16 +472,6 @@ Tower.Blind({
     },
     dollars = 10,
 
-    TowerOnSpawn = function (self)
-        if G.GAME.tower_ouija_rank then return end
-        local options = {}
-        for i, v in pairs(SMODS.Ranks) do
-            options[#options+1] = i 
-        end
-        options[#options+1] = "cry_abstract" -- we do a bit of trolling
-        local chosen = pseudorandom_element(options, pseudoseed('tower_ouija'))
-        G.GAME.tower_ouija_rank = chosen;
-    end,
     defeat = function ()
         G.GAME.tower_ouija_rank = nil
     end,
@@ -524,6 +510,15 @@ Tower.Blind({
     end,
 
     loc_vars = function (self)
+        if not G.GAME.tower_ouija_rank then
+            local options = {}
+            for i, v in pairs(SMODS.Ranks) do
+                options[#options+1] = i 
+            end
+            options[#options+1] = "cry_abstract" -- we do a bit of trolling
+            local chosen = pseudorandom_element(options, pseudoseed('tower_ouija'))
+            G.GAME.tower_ouija_rank = chosen;
+        end
         return {
             vars = {
                 G.localization.misc.dictionary.ranks[G.GAME.tower_ouija_rank] or G.localization.misc.ranks[G.GAME.tower_ouija_rank] or G.localization.misc.dictionary.ranks.tower_0
@@ -586,13 +581,6 @@ Tower.Blind({
     },
     dollars = 10,
 
-    TowerOnSpawn = function (self)
-        if G.GAME.tower_dejavu_seal then return end
-        local options = G.P_CENTER_POOLS["Seal"]
-        local chosen = pseudorandom_element(options, pseudoseed('tower_dejavu'))
-        G.GAME.tower_dejavu_seal = chosen.key;
-    end,
-
     debuff_hand = function(self, cards, hand, handname, check)
         if G.GAME.blind.disabled then return false end
         local bad = false;
@@ -620,6 +608,11 @@ Tower.Blind({
     end,
 
     loc_vars = function (self)
+        if not G.GAME.tower_dejavu_seal then
+            local options = G.P_CENTER_POOLS["Seal"]
+            local chosen = pseudorandom_element(options, pseudoseed('tower_dejavu'))
+            G.GAME.tower_dejavu_seal = chosen.key;
+        end
         return {
             vars = {
                 G.localization.descriptions.Other[string.lower(G.GAME.tower_dejavu_seal or "Red").."_seal"].name
@@ -670,17 +663,7 @@ Tower.Blind({
         level = 4
     },
     dollars = 10,
-
-    TowerOnSpawn = function (self)
-        if G.GAME.tower_trance_handtype then return end
-
-        local options = {}
-        for i, v in pairs(SMODS.PokerHands) do
-            options[#options + 1] = i
-        end
-        local chosen = pseudorandom_element(options, pseudoseed('tower'))
-        G.GAME.tower_trance_handtype = chosen;
-    end,
+    
     defeat = function ()
         G.GAME.tower_trance_handtype = nil
     end,
@@ -708,6 +691,14 @@ Tower.Blind({
     end,
 
     loc_vars = function (self)
+        if not G.GAME.tower_trance_handtype then
+            local options = {}
+            for i, v in pairs(SMODS.PokerHands) do
+                options[#options + 1] = i
+            end
+            local chosen = pseudorandom_element(options, pseudoseed('tower'))
+            G.GAME.tower_trance_handtype = chosen;
+        end
         return {
             vars = {
                 localize(G.GAME.tower_trance_handtype or "High Card", "poker_hands")

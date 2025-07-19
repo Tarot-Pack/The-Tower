@@ -64,10 +64,9 @@ Tower.Sticker{
     rate = 0,
 	order = 999999,
     calculate = function (self, card, context) -- do virus calc in batch
-        if context.end_of_round then
+        if context.end_of_round and context.cardarea == G.jokers then
             local center = card;
             if not Card.no(center, "immutable", true) then
-                check = true
                 Cryptid.with_deck_effects(center, function(cards)
                     Cryptid.manipulate(cards, { value = 0.75 })
                 end)

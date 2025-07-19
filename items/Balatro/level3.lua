@@ -26,12 +26,6 @@ Tower.Blind({
     end,
     TowerCheckRoundTimeout = function (self)
         return G.GAME.chips - G.GAME.blind.chips > to_big(0) -- instant loss
-    end,
-	loc_vars = function()
-		return { vars = { 
-            "80% of blind size",
-            "blind size",
-         } }
     end
 })
 emperor_selection.misc[#emperor_selection.misc+1] = 'bl_tower_fool'
@@ -595,17 +589,6 @@ Tower.Blind({
     },
     dollars = 8,
 
-	debuff_hand = function(self, cards, hand, handname, check)
-		if
-			not G.GAME.blind.disabled
-            and #cards < 3
-		then
-			G.GAME.blind.triggered = true
-			return true
-		end
-		return false
-	end,
-
 	calculate = function(self, blind, context)
 		if context.discard and not G.GAME.blind.disabled then
 			for i, card in ipairs(G.hand.highlighted) do
@@ -620,12 +603,6 @@ Tower.Blind({
             card_pool[#card_pool+1] = v
         end
         if #card_pool == 0 then return end
-        local cards = {}
-        for i = 1, math.min(2, #card_pool) do
-            local q = pseudorandom(pseudoseed("tower_hangman"), 1, #card_pool)
-            card_pool[q]:set_perishable(true)
-            table.remove(card_pool, q)
-        end
     end
 })
 

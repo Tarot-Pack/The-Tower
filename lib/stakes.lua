@@ -1,9 +1,6 @@
 function math.T_pow(a, b)
     a = to_big(a);
     b = to_big(b);
-    if type(a) == 'number' then
-        return a ^ b -- if b is somehow not a number causes crash
-    end
     return a:pow(b)
 end
 
@@ -153,3 +150,4 @@ function Game:init_game_object()
     })
     return game
 end
+G.tower_default_stake = 5

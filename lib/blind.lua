@@ -1,5 +1,45 @@
 G.tower_unknown = '???'
 
+local old_end_round = end_round
+
+function end_round(...)
+    if G.GAME.tower_chambered ~= nil and not G.GAME.blind:TowerCheckWin() then
+        G.GAME.tower_chambered = nil
+    end
+    if G.GAME.tower_chambered ~= nil then
+        G.GAME.tower_chambered = G.GAME.tower_chambered - 1
+        if G.GAME.tower_chambered < 1 then
+            G.GAME.tower_chambered = nil
+        else
+            G.FUNCS.draw_from_hand_to_discard()
+            G.FUNCS.draw_from_discard_to_deck()
+            ease_discard(
+                math.max(0, G.GAME.round_resets.discards + G.GAME.round_bonus.discards) - G.GAME.current_round.discards_left
+            )
+            ease_hands_played(
+                math.max(1, G.GAME.round_resets.hands + G.GAME.round_bonus.next_hands) - G.GAME.current_round.hands_left
+            )
+            for k, v in pairs(G.playing_cards) do
+                v.ability.wheel_flipped = nil
+            end
+            G.E_MANAGER:add_event(Event({
+                trigger = "immediate",
+                func = function()
+                    G.STATE = G.STATES.DRAW_TO_HAND
+                    G.deck:shuffle("tower_chambered" .. G.GAME.round_resets.ante)
+                    G.deck:hard_set_T()
+                    G.STATE_COMPLETE = false
+                    G.GAME.chips = to_big(0)
+                    G.GAME.chips_text = number_format(G.GAME.chips)
+                    return true
+                end,
+            }))
+            return
+        end
+    end
+    return old_end_round(...)
+end
+
 local old_rep = string.rep;
 string.rep = function (str, amount) 
     if amount == G.tower_unknown then
@@ -84,8 +124,39 @@ function registerBlindMethod(name, def)
     end
 end
 
+-- grrr why taliman not have isInfinite on Big
+
+function Tower.isInfinite(n)
+    if Big == nil then
+        return n == math.huge
+    end
+    if n == math.huge then
+        return true -- no point
+    end
+    n = to_big(n)
+    if n.is_naneinf then
+        return n:is_naneinf()
+    end
+    if n.isInfinite then
+        return n:isInfinite()
+    end
+    return print("WTF check Tower.isInfinite??? value: ", n) -- wtf????
+end
+function Tower.isPositive(n)
+    if Big == nil then
+        return n > 0
+    end
+    n = to_big(n)
+    return n.sign > 0
+end
 registerBlindMethod('TowerCheckWin', function (self)
-    return G.GAME.chips - G.GAME.blind.chips >= to_big(0)
+    if Tower.isInfinite(G.GAME.blind.chips) then -- patch math.huge stuff
+        if not Tower.isPositive(G.GAME.blind.chips) then
+            return true -- always allow win
+        end
+        return Tower.isInfinite(G.GAME.chips) and Tower.isPositive(G.GAME.chips)
+    end
+    return to_big(G.GAME.chips) >= to_big(G.GAME.blind.chips)
 end)
 
 registerBlindMethod('TowerCheckRoundTimeout', function (self)
@@ -93,7 +164,7 @@ registerBlindMethod('TowerCheckRoundTimeout', function (self)
 end)
 
 registerBlindMethod('TowerCheckRoundEnd', function (self)
-    return self:TowerCheckWin() or self:TowerCheckRoundTimeout(self)
+    return self:TowerCheckWin() or self:TowerCheckRoundTimeout()
 end)
 
 registerBlindMethod('TowerDrawCard', function (self)
@@ -149,7 +220,6 @@ function Blind:TowerGetSlot() -- no reason to override this like at all
         return 2
     end
 end
-
 local old_score = SMODS.score_card
 function SMODS.score_card(card, context)
     if G.GAME.tower_eclipse_no_trigger or card.ability.tower_notrigger then
@@ -157,17 +227,6 @@ function SMODS.score_card(card, context)
     end
     return old_score(card, context)
 end
-
-local init_game = G.init_game_object
-
-G.get_inc_stake_ante = function()
-    return math.floor(G.GAME.win_ante / 8)
-end
-
-G.get_half_ante = function()
-    return math.floor(G.GAME.win_ante / 2)
-end
-
 function Tower.getBlinds(f, amount, seed)
     local pool = {}
     local ret = {}
@@ -198,9 +257,27 @@ function Blind:set_blind(blind, x, y)
     end
 end
 
+local old_ease_ante = ease_ante;
+function ease_ante(mod)
+    if G.GAME.modifiers.tower_hammerspace and not G.GAME.modifiers.tower_hammerspace_temp_disable then
+        G.GAME.win_ante = G.GAME.win_ante + mod
+        G.GAME.modifiers.tower_hammerspace = G.GAME.modifiers.tower_hammerspace - mod
+        print(G.GAME.modifiers.tower_hammerspace)
+        if G.GAME.modifiers.tower_hammerspace <= 0 then
+            G.GAME.modifiers.tower_hammerspace = nil 
+        end
+    end
+    if G.GAME.modifiers.tower_hammerspace_temp_disable then
+        G.GAME.modifiers.tower_hammerspace_temp_disable = nil
+    end
+
+    return old_ease_ante(mod)
+end
+
 function get_new_boss(level)
-    local inc_stake_ante = G.get_inc_stake_ante();
-    local half_ante = G.get_half_ante();
+    if G.GAME.modifiers.tower_hammerspace then
+        return Tower.getBlinds(function (bl) return bl.tower_consumable or bl.tower_is_spectral or bl.tower_is_tarot or bl.tower_is_planet or bl.tower_is_code end, 1, pseudoseed("tower_hammerspace"))[1].key
+    end
     if level == nil then
         level = 2
     end
@@ -322,6 +399,22 @@ function get_new_boss(level)
     
     return boss
 end
+function Tower.Eternal() -- get strongest eternal-like sticker
+    if SMODS.Stickers.entr_aleph then 
+        return SMODS.Stickers.entr_aleph
+    end
+    if SMODS.Stickers.cry_absolute then -- may or may not be redundant
+        return SMODS.Stickers.cry_absolute
+    end
+    return SMODS.Stickers.eternal
+end
+function Tower.getLocalization(item)
+    if item.set == "Sticker" then
+        return G.localization.descriptions.Other[item.key]
+    else
+        return G.localization.descriptions[item.set][item.key]
+    end
+end
 function Tower.blindFromOffset(offset)
     offset = offset - 1
     if offset < 0 then
@@ -379,11 +472,12 @@ end
 
 local old_toggle_shop = G.FUNCS.toggle_shop
 G.FUNCS.toggle_shop = function(e)
+    print('this code started working because of this print statement so i\'m not removing it')
     if G.GAME.tower_run_spend_all then
         if G.GAME.dollars >= to_big(0) then
             return
         end
-        G.GAME.tower_run_spend_all = false
+        G.GAME.tower_run_spend_all = nil
     end
     return old_toggle_shop(e)
 end
@@ -414,7 +508,7 @@ G.FUNCS.can_buy_and_use = function(e)
     if not G.GAME.tower_run_spend_all then
         return can_buy_and_use(e)
     end
-    if ((((G.GAME.dollars - G.GAME.bankrupt_at) < to_big(0)) and (e.config.ref_table.cost > 0)) or (not e.config.ref_table:can_use_consumeable())) then
+    if ((((to_big(G.GAME.dollars) - to_big(G.GAME.bankrupt_at)) < to_big(0)) and (e.config.ref_table.cost > 0)) or (not e.config.ref_table:can_use_consumeable())) then
         e.UIBox.states.visible = false
         e.config.colour = G.C.UI.BACKGROUND_INACTIVE
         e.config.button = nil
@@ -432,7 +526,7 @@ G.FUNCS.can_redeem = function(e)
     if not G.GAME.tower_run_spend_all then
         return can_reedem(e)
     end
-    if ((G.GAME.dollars - G.GAME.bankrupt_at) < to_big(0)) and (e.config.ref_table.cost > 0) then
+    if ((to_big(G.GAME.dollars) - to_big(G.GAME.bankrupt_at)) < to_big(0)) and (e.config.ref_table.cost > 0) then
         e.config.colour = G.C.UI.BACKGROUND_INACTIVE
         e.config.button = nil
     else
@@ -441,12 +535,32 @@ G.FUNCS.can_redeem = function(e)
     end
 end
 
+local can_reroll = G.FUNCS.can_reroll
+G.FUNCS.can_reroll = function(e)
+    if not G.GAME.tower_run_spend_all then
+        return can_reroll(e)
+    end
+    if ((to_big(G.GAME.dollars) - to_big(G.GAME.bankrupt_at)) < to_big(0)) and (G.GAME.current_round.reroll_cost > 0) then
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+        --e.children[1].children[1].config.shadow = false
+        --e.children[2].children[1].config.shadow = false
+        --e.children[2].children[2].config.shadow = false
+    else
+        e.config.colour = G.C.GREEN
+        e.config.button = 'reroll_shop'
+        --e.children[1].children[1].config.shadow = true
+        --e.children[2].children[1].config.shadow = true
+        --e.children[2].children[2].config.shadow = true
+    end
+end
+
 local can_open = G.FUNCS.can_open
 G.FUNCS.can_open = function(e)
     if not G.GAME.tower_run_spend_all then
         return can_open(e)
     end
-    if ((G.GAME.dollars - G.GAME.bankrupt_at) < to_big(0)) and (e.config.ref_table.cost > 0) then
+    if ((to_big(G.GAME.dollars) - to_big(G.GAME.bankrupt_at)) < to_big(0)) and (e.config.ref_table.cost > 0) then
         e.config.colour = G.C.UI.BACKGROUND_INACTIVE
         e.config.button = nil
     else
@@ -1070,3 +1184,14 @@ SMODS.Blind:take_ownership('bl_cry_obsidian_orb', Tower.ObsidianOrb({
     pick = function () return G.GAME.defeated_blinds or {} end,
     debuff_text = 'cry_debuff_obsidian_orb'
 }))
+
+local old_poll = poll_edition
+function poll_edition(_key, _mod, _no_neg, _guaranteed, _options)
+    if (G.GAME.modifiers.tower_adversary or 0) > 0 then
+        local val = math.pow((G.GAME.modifiers.tower_adversary+1), 2);
+        if val == math.huge or (pseudorandom(pseudoseed('tower_adversary')) > (1/(val))) then
+            return "e_tower_truenegative"
+        end
+    end
+    return old_poll(_key, _mod, _no_neg, _guaranteed, _options)
+end

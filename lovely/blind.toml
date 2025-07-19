@@ -120,17 +120,6 @@ payload = '''if blind_choice.config.mult == G.tower_unknown then
 end'''
 match_indent = true
 
-[[patches]]
-[patches.pattern]
-target = "functions/UI_definitions.lua"
-pattern = '''G.GAME.orbital_choices = G.GAME.orbital_choices or {}'''
-position = "before"
-payload = '''
---[[if blind_choice.config.TowerOnSpawn then
-        blind_choice.config:TowerOnSpawn()
-end]]'''
-match_indent = true
-
 #blackhole
 [[patches]]
 [patches.pattern]
@@ -164,7 +153,7 @@ target = "blind.lua" # deny disable when boss blind is immortal
 pattern = '''function Blind:disable()'''
 position = "after"
 payload = '''
-if G.GAME.tower_boss_blind_immortal then return false end
+if G.GAME.modifiers.tower_boss_blind_immortal then return false end
 '''
 match_indent = true
 
@@ -194,5 +183,13 @@ pattern = '''if run_time < 1./G.FPS_CAP then love.timer.sleep(1./G.FPS_CAP - run
 position = "at"
 payload = '''
 if run_time < 1./FPS_CAP then love.timer.sleep(1./FPS_CAP - run_time) end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''main.lua'''
+pattern = '''if to_big(G.GAME.chips) >= to_big(G.GAME.blind.chips) then'''
+position = "at"
+payload = '''if G.GAME.blind:TowerCheckWin() then'''
 match_indent = true
 

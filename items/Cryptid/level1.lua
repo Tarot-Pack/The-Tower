@@ -47,9 +47,10 @@ Tower.Blind({
             local fu = SMODS.add_card({
                 set = "Joker",
                 key = "j_joker",
-                stickers = { "tower_fuckyou", "cry_absolute" }
+                stickers = { "tower_fuckyou" }
             })
             SMODS.Stickers.tower_fuckyou:apply(fu, true)
+            Tower.Eternal():apply(fu, true)
         end
         local randomJoker = pseudorandom_element(G.jokers.cards, pseudoseed('tower_keygen'))
         SMODS.Stickers.banana:apply(randomJoker, true)
@@ -877,14 +878,13 @@ Tower.Blind({
 		for i = 1, hand_count do
 			draw_card(G.hand, G.cry_runarea, i * 100 / hand_count, "down", nil, nil, 0.07)
 		end
-
+        G.GAME.tower_run_spend_all = true
 		G.E_MANAGER:add_event(Event({
 			trigger = "immediate",
 			func = function()
 				G.GAME.current_round.jokers_purchased = 0
 				G.STATE = G.STATES.SHOP
 				G.GAME.USING_CODE = true
-                G.GAME.tower_run_spend_all = true
 				G.GAME.USING_RUN = true
 				G.GAME.RUN_STATE_COMPLETE = 0
 				G.GAME.shop_free = nil
@@ -1006,11 +1006,9 @@ Tower.Blind({
 
 	set_blind = function (self)
         for i, v in ipairs(G.jokers.cards) do 
-            if not Card.no(v, "immutable", true) then
-                Cryptid.with_deck_effects(v, function(cards)
-                    Cryptid.manipulate(cards, { value = 0.5 })
-                end)
-            end
+            Cryptid.with_deck_effects(v, function(cards)
+                Cryptid.manipulate(cards, { value = 0.5 })
+            end)
         end
     end,
 
@@ -1238,6 +1236,76 @@ Tower.Blind({
     end
 })
 
+Tower.Blind({
+    tower_is_code = true,
+    name = "tower-declare",
+    tower_consumable = "cry_declare",
+    key = "declare",
+    pos = { x = 0, y = 9 },
+    atlas = "blinds4",
+    order = 1,
+    mult = 2,
+    boss_colour = HEX("d125b7"),
+    boss = {
+        level = 1
+    },
+    dollars = 4,
+    cry_after_play = function ()
+        Tower.NillifyCard(G.play.cards)
+    end
+})
+
+Tower.Blind({
+    tower_is_code = true,
+    name = "tower-log",
+    tower_consumable = "cry_log",
+    key = "log",
+    pos = { x = 0, y = 9 },
+    atlas = "blinds4",
+    order = 1,
+    mult = 2,
+    boss_colour = HEX("d125b7"),
+    boss = {
+        level = 1
+    },
+    dollars = 4,
+    set_blind = function ()
+        local log_again = {}
+        for i = 1, 10 do
+            log_again[#log_again+1] = G.deck.cards[#G.deck.cards + 1 - i]
+        end
+        local length = #G.deck.cards;
+        G.deck.cards = {}
+        for i = 1, length do
+            G.deck.cards[#G.deck.cards+1] = copy_card(log_again[math.fmod(i - 1, #log_again) + 1]) -- devious
+        end
+    end
+})
+
+Tower.Blind({
+    tower_is_code = true,
+    name = "tower-quantify",
+    tower_consumable = "cry_quantify",
+    key = "quantify",
+    pos = { x = 0, y = 9 },
+    atlas = "blinds4",
+    order = 1,
+    mult = 2,
+    boss_colour = HEX("d125b7"),
+    boss = {
+        level = 1
+    },
+    dollars = 4,
+    set_blind = function ()
+        local j = {}
+        for i, v in pairs(G.jokers.cards) do 
+            j[#j+1] = v 
+        end
+        for i, v in ipairs(j) do
+            Tower.CardifyJoker(v)
+        end
+    end,
+})
 
 Tower.Blind({
     tower_is_code = true,

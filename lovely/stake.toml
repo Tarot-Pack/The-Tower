@@ -1,7 +1,7 @@
 [manifest]
 version = "1.0.0"
 dump_lua = true
-priority = -1
+priority = 0
 
 [[patches]]
 [patches.pattern]
@@ -60,18 +60,15 @@ payload = '''local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5, true)
 match_indent = true
 
 [[patches]]
-[patches.pattern]
+[patches.regex]
 target = "functions/state_events.lua"
-pattern = "check_for_unlock({type = 'ante_up', ante = G.GAME.round_resets.ante + 1})"
+pattern = "check_for_unlock\\(\\{type = 'ante_up', ante = G\\.GAME\\.round_resets\\.ante \\+ 1\\}\\)"
 position = "after"
 payload = '''
-if G.GAME.modifiers.tower_ultra_scaling then
-    local scalingFactor = G.GAME.round_resets.ante / 32;
-    scalingFactor = scalingFactor * G.GAME.tower_best_score;
-    G.GAME.starting_params.ante_scaling = math.T_pow(G.GAME.tower_best_score, scalingFactor)
+if G.GAME.modifiers.tower_ultra_scaling and G.GAME.tower_best_score ~= nil then
+  G.GAME.modifiers.tower_ante_scaling = math.T_pow(G.GAME.tower_best_score, G.GAME.tower_best_score)
 end
 '''
-match_indent = true
 
 [[patches]]
 [patches.pattern]

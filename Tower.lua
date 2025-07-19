@@ -14,14 +14,26 @@ SMODS.current_mod.optional_features = {
 
 Tower.object_queue = {}
 Tower._is_lib = true
+Tower.AfterAllLoadedCallbacks = {}
+Tower.AfterAllLoaded = function (obj)
+	Tower.AfterAllLoadedCallbacks[#Tower.AfterAllLoadedCallbacks+1] = obj
+end
+local inj = SMODS.injectItems;
+function SMODS.injectItems(...)
+	inj(...)
+	for i, v in ipairs(Tower.AfterAllLoadedCallbacks) do
+		v(...)
+	end
+end
 function Tower.Object(bl)
 	bl.tower_center_requires = bl.tower_center_requires or {}
+	bl.tower_blind_requires = bl.tower_blind_requires or {}
 	bl.dependencies = bl.dependencies or {}
 	if bl.tower_consumable then
 		bl.tower_center_requires[#bl.tower_center_requires+1] = ("c_" .. bl.tower_consumable)
 	end
 	if bl.tower_blind then
-		bl.tower_center_requires[#bl.tower_center_requires+1] = ("bl_" .. bl.tower_consumable)
+		bl.tower_blind_requires[#bl.tower_blind_requires+1] = bl.tower_blind
 	end
 	if current ~= nil then
 		bl.dependencies[#bl.dependencies+1] = current
@@ -93,3 +105,4 @@ for i, v in pairs(things) do
 	end
 end
 current = nil
+Tower._is_lib = true
