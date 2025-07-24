@@ -78,8 +78,10 @@ local current = nil
 local dirs = NFS.getDirectoryItems(mod_path .. "items")
 for _, dir in ipairs(dirs) do
 	print("[Tower] Loading compat " .. dir)
-	if not (dir == 'Balatro' or dir == "Cryptid") then
+	if not (dir == 'Balatro' or dir == "Cryptid" or dir == "The Tower") then
 		current = dir
+	else
+		current = nil
 	end
 	local files = NFS.getDirectoryItems(mod_path .. "items/" .. dir)
 	for _, file in ipairs(files) do
@@ -99,7 +101,6 @@ table.sort(things, function (a, b)
 	return a[1] < b[1]
 end)
 for i, v in pairs(things) do
-	print(v[1])
 	for z, q in ipairs(v[2]) do
 		SMODS[q.object_type](q)
 	end

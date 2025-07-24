@@ -210,6 +210,12 @@ function Blind:TowerBeforeBlindSet(blind, reset, silent) -- manual def as regist
     end
     return blind
 end
+function Blind:TowerAfterBlindSet(blind, reset, silent) -- manual def as registerBlindMethod doesnt work as it relies on name being set (before set_blind happens it isnt)
+    if blind == nil then return true end
+    if blind.TowerAfterBlindSet then
+        return blind.TowerAfterBlindSet(self, blind, reset, silent)
+    end
+end
 
 function Blind:TowerGetSlot() -- no reason to override this like at all
     if G.GAME.blind_on_deck == 'Small' then
@@ -240,7 +246,7 @@ function Tower.getBlinds(f, amount, seed)
         end
         return ret
     end
-    for i = 1, amount do
+    for i = 1, math.min(amount, #pool) do
         local elem, ind = pseudorandom_element(pool, seed)
         table.remove(pool, ind)
         ret[#ret+1] = elem
@@ -251,6 +257,7 @@ end
 local old_set = Blind.set_blind
 function Blind:set_blind(blind, x, y)
     old_set(self, blind, x, y)
+    self:TowerAfterBlindSet(blind, x, y)
     if G.GAME.tower_machinecode_old_ante then
         G.GAME.round_resets.ante = G.GAME.tower_machinecode_old_ante;
         G.GAME.tower_machinecode_old_ante = nil
@@ -260,12 +267,11 @@ end
 local old_ease_ante = ease_ante;
 function ease_ante(mod)
     if G.GAME.modifiers.tower_hammerspace and not G.GAME.modifiers.tower_hammerspace_temp_disable then
-        G.GAME.win_ante = G.GAME.win_ante + mod
         G.GAME.modifiers.tower_hammerspace = G.GAME.modifiers.tower_hammerspace - mod
-        print(G.GAME.modifiers.tower_hammerspace)
         if G.GAME.modifiers.tower_hammerspace <= 0 then
             G.GAME.modifiers.tower_hammerspace = nil 
         end
+        return
     end
     if G.GAME.modifiers.tower_hammerspace_temp_disable then
         G.GAME.modifiers.tower_hammerspace_temp_disable = nil
@@ -1188,8 +1194,11 @@ SMODS.Blind:take_ownership('bl_cry_obsidian_orb', Tower.ObsidianOrb({
 local old_poll = poll_edition
 function poll_edition(_key, _mod, _no_neg, _guaranteed, _options)
     if (G.GAME.modifiers.tower_adversary or 0) > 0 then
-        local val = math.pow((G.GAME.modifiers.tower_adversary+1), 2);
-        if val == math.huge or (pseudorandom(pseudoseed('tower_adversary')) > (1/(val))) then
+        local val = 1;
+        if G.GAME.modifiers.tower_adversary < 8 then
+            val = 1 - math.pow(2, -G.GAME.modifiers.tower_adversary);
+        end
+        if val == 1 or (pseudorandom(pseudoseed('tower_adversary')) <= val) then
             return "e_tower_truenegative"
         end
     end

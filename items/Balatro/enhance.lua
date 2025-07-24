@@ -8,7 +8,6 @@ function evaluate_poker_hand(_h)
             hand[#hand+1] = v
         end
     end
-    print(hand)
     local results = old_evaluate_poker_hand(hand)
     if G.GAME.tower_exploit_override and not G.GAME.cry_exploit_override then
         if not results[G.GAME.tower_exploit_override][1] then

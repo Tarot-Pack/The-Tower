@@ -21,22 +21,6 @@ match_indent = true
 
 [[patches]]
 [patches.pattern]
-target = "functions/button_callbacks.lua"
-pattern = 'G.viewed_stake = G.viewed_stake or 1'
-position = "after"
-payload = 'G.viewed_stake = G.viewed_stake or G.tower_default_stake or 1'
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = "functions/UI_definitions.lua"
-pattern = 'G.viewed_stake = G.viewed_stake or 1'
-position = "after"
-payload = 'G.viewed_stake = G.viewed_stake or G.tower_default_stake or 1'
-match_indent = true
-
-[[patches]]
-[patches.pattern]
 target = "functions/misc_functions.lua"
 pattern = "function localize(args, misc_cat)"
 position = "after"
@@ -81,21 +65,4 @@ position = "after"
 payload = '''if v.ability.set == "Joker" then 
 	v_nr = true; v_ns = true
 end'''
-match_indent = true
-
-
-[[patches]]
-[patches.pattern]
-target = "functions/common_events.lua"
-pattern = """if highest_win >= G.P_STAKES["stake_red"].stake_level then
-            unlock_achievement('low_stakes')
-        end
-        if highest_win >= G.P_STAKES["stake_black"].stake_level then
-            unlock_achievement('mid_stakes')
-        end
-        if highest_win >= G.P_STAKES["stake_gold"].stake_level then
-            unlock_achievement('high_stakes')
-        end"""
-position = "at"
-payload = '' # achievments existing cause crash
 match_indent = true

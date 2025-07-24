@@ -1,69 +1,51 @@
 return {
     descriptions = {
 		Other = {
-			tower_base_sticker = { 
-				name = "Sticker of The Tower",
+			p_tower_slime_1 = {
+				name = "Slime Pack",
 				text = {
-					"Used this Joker",
-					"to win {C:attention}The Hero and the Tower"
+					"Choose {C:attention}#1#{} of",
+					"up to {C:attention}#2# Slime Joker#<s>2#{}",
+				},
+			},			
+			p_tower_slime_2 = {
+				name = "Slime Pack",
+				text = {
+					"Choose {C:attention}#1#{} of",
+					"up to {C:attention}#2# Slime Joker#<s>2#{}",
 				},
 			},
-			tower_planet_sticker = { 
-				name = "Sticker of The Galaxy",
+			p_tower_slime_3 = {
+				name = "Slime Pack",
 				text = {
-					"Used this Joker",
-					"to win {C:attention}The Galatic War"
+					"Choose {C:attention}#1#{} of",
+					"up to {C:attention}#2# Slime Joker#<s>2#{}",
 				},
 			},
-			tower_tarot_sticker = { 
-				name = "Sticker of The Hill",
+
+			p_tower_terra_1 = {
+				name = "Terra Pack",
 				text = {
-					"Used this Joker",
-					"to win {C:attention}The Ruler of the Hill"
+					"Choose {C:attention}#1#{} of",
+					"up to {C:attention}#2# Terraria Joker#<s>2#{}",
+				},
+			},			
+			p_tower_terra_2 = {
+				name = "Terra Pack",
+				text = {
+					"Choose {C:attention}#1#{} of",
+					"up to {C:attention}#2# Terraria Joker#<s>2#{}",
 				},
 			},
-			tower_sixtyfour_sticker = { 
-				name = "Sticker of The Depths",
+			p_tower_terra_3 = {
+				name = "Terra Pack",
 				text = {
-					"Used this Joker",
-					"to win {C:attention}The Depths of the Tower"
+					"Choose {C:attention}#1#{} of",
+					"up to {C:attention}#2# Terraria Joker#<s>2#{}",
 				},
 			},
-			tower_immortal_sticker = { 
-				name = "Sticker of The Egg",
-				text = {
-					"Used this Joker",
-					"to win {C:attention}The Egg and the Baron"
-				},
-			},
-			tower_alltarot_sticker = { 
-				name = "Sticker of The Rotten",
-				text = {
-					"Used this Joker",
-					"to win {C:attention}The Rotten of the Depths"
-				},
-			},
-			tower_scaling_sticker = { 
-				name = "Sticker of The Hero",
-				text = {
-					"Used this Joker",
-					"to win {C:attention}The Soul-Bound Hero"
-				},
-			},
-			tower_famine_sticker = { 
-				name = "Sticker of The Gluttonous",
-				text = {
-					"Used this Joker",
-					"to win {C:attention}The Gluttonous King's Horrid Fate"
-				},
-			},
-			tower_nojokers_sticker = { 
-				name = "Sticker of The Impossible",
-				text = {
-					"Used this Joker",
-					"to win {C:attention}The Eye of God"
-				},
-			},
+
+
 			tower_bound = { 
 				name = "Bound",
 				text = {
@@ -96,8 +78,17 @@ return {
 				},
 			},
 		},
-		Stake = {
-			stake_tower_base = {
+		Bookmark = {
+			bookmark_tower_truenegative = {
+				name = "Parity Bookmark",
+				text = {
+					"Has a {C:attention}#1#% (x#2#){}",
+					"chance of making a joker {C:attention}true-negative{}"
+				}
+			},
+		},
+		Book = {
+			book_tower_base = {
 				name = "The Hero and the Tower",
 				text = {
 					"Adds {C:attention}Spectral Blinds{} and {C:attention}Code Blinds{} and makes",
@@ -106,7 +97,7 @@ return {
 					"The {C:attention}Winning Ante{} is {C:attention}32{}",
 				},
 			},
-			stake_tower_planet = {
+			book_tower_planet = {
 				name = "The Galatic War",
 				text = {
 					"Adds {C:attention}Planet Blinds{} to",
@@ -114,29 +105,29 @@ return {
 					'{s:0.8}Applies all previous Books'
 				},
 			},
-			stake_tower_tarot = {
-				name = "The Ruler of the Hill",
+			book_tower_tarot = {
+				name = "The Call of the Depths",
 				text = {
 					"Adds {C:attention}Tarot Blinds{}",
 					"every {C:attention}8 Antes{}",
 					'{s:0.8}Applies all previous Books'
 				},
 			},
-			stake_tower_sixtyfour = {
-				name = "The Depths of the Tower",
+			book_tower_sixtyfour = {
+				name = "The Million Steps",
 				text = {
 					"{C:attention}Winning Ante{} is {C:attention}64{}",
 					'{s:0.8}Applies all previous Books'
 				},
 			},
-			stake_tower_immortal = {
-				name = "The Egg and the Baron",
+			book_tower_immortal = {
+				name = "The Needle and the Egg",
 				text = {
 					"{C:attention}Blinds{} cannot be {C:attention}disabled{} or {C:attention}skipped{}",
 					'{s:0.8}Applies all previous Books'
 				},
 			},
-			stake_tower_alltarot = {
+			book_tower_alltarot = {
 				name = "The Rotten of the Depths",
 				text = {
 					"{C:attention}Tarot and Spectral Blinds{} happen",
@@ -144,7 +135,7 @@ return {
 					'{s:0.8}Applies all previous Books'
 				},
 			},
-			stake_tower_scaling = {
+			book_tower_scaling = {
 				name = "The Soul-Bound Hero",
 				text = {
 					"{C:attention}Ante Scaling{} scales with",
@@ -152,17 +143,18 @@ return {
 					'{s:0.8}Applies all previous Books'
 				},
 			},
-			stake_tower_famine = {
-				name = "The Gluttonous King's Horrid Fate",
+			book_tower_famine = {
+				name = "Fate's Harsh Grasp",
 				text = {
 					"{C:attention}Consumables{} no longer exist",
 					'{s:0.8}Applies all previous Books'
 				},
 			},
-			stake_tower_nojokers = {
-				name = "The Eye of God",
+			book_tower_nojokers = {
+				name = "The Roaring",
 				text = {
 					"{C:attention}Jokers{} no longer exist",
+					'{s:0.8}Applies all previous Books'
 				},
 			},
 		},
@@ -170,10 +162,8 @@ return {
 			e_tower_truenegative = {
 				name = "True Negative",
 				text = {
-					"All values",
-					"this card gives",
-					"are {C:attention}negated{}",
-					"{C:inactive}(If possible)",
+					"Inverts all values",
+					"on this card"
 				},
 			},
 		},
@@ -982,8 +972,8 @@ return {
 				name = "The Hammerspace",
 				text = {
 					"Face random consumable blinds",
-					"for #1# antes and win ante",
-					"increases with ante"
+					"for #1# antes",
+					"ante number cannot change"
 				}
 			},
 			bl_tower_trade = {
@@ -1069,11 +1059,118 @@ return {
 				text = {
 					"Does nothing?"
 				}
-			}
+			},
+			j_tower_king_slime = {
+				name = "King Slime",
+				text = {
+					"{C:chips}+#1#{} Chip#<s>1#{} for each {C:attention}King{} in deck",
+					"Additonally gives {X:mult,C:white} X#2# {} Mult for each",
+					"{C:attention}King{} in deck if next to {C:attention}Queen Slime{}",
+				},
+			},
+			j_tower_queen_slime = {
+				name = "Queen Slime",
+				text = {
+					"{C:mult}+#1#{} Mult{} for each {C:attention}Queen{} in deck",
+					"Additonally gives {X:chips,C:white} X#2# {} Chips for each",
+					"{C:attention}Queen{} in deck if next to {C:attention}King Slime{}",
+				},
+			},
+			j_tower_eye_of_cthulhu = {
+				name = "Eye of Cthulhu",
+				text = {
+					"{C:chips}+#1#{} Chip#<s>1#{} on 1st Blind of an ante",
+					"{C:mult}+#2#{} Mult{} on 2nd Blind of an ante",
+					"{X:mult,C:white} X#3# {} Mult of 3rd Blind of an ante",
+				},
+			},
+			j_tower_green_slime = {
+				name = "Green Slime",
+				text = {
+					"{C:chips}+#1#{} Chips{}",
+					"{C:mult}+#2#{} Mult{}",
+					"{C:money}+#3#${}",
+				},
+			},
+			j_tower_red_slime = {
+				name = "Red Slime",
+				text = {
+					"{C:mult}+#1#{} Mult{}"
+				},
+			},
+			j_tower_blue_slime = {
+				name = "Blue Slime",
+				text = {
+					"{C:chips}+#1#{} Chips{}"
+				},
+			},
+			j_tower_purple_slime = {
+				name = "Purple Slime",
+				text = {
+					"{C:chips}+#1#{} Chips{}",
+					"{C:mult}+#2#{} Mult{}",
+				},
+			},
+			j_tower_yellow_slime = {
+				name = "Yellow Slime",
+				text = {
+					"{C:money}+#1#${}"
+				},
+			},
+			j_tower_pinky = {
+				name = "Pinky",
+				text = {
+					"{X:dark_edition,C:white}#2#{} Chips",
+					"{X:dark_edition,C:white}#3#{} Mult",
+					"Increase operator by",
+					"one for each {C:attention}Slime{}",
+					"{C:inactive}(Currently #1# Slimes)"
+				},
+			},
+			j_tower_spiked_slime = {
+				name = "Spiked Slime",
+				text = {
+					"{C:attention}Destroy{} all scored cards and add ",
+					"{X:chips,C:white} X#1# {} Chips for each destroyed card",
+					"{C:inactive}(Currently {X:chips,C:white} X#2# {C:inactive} Chips)"
+				},
+			},
+			j_tower_dungeon_slime = {
+				name = "Dungeon Slime",
+				text = {
+					"Sell to apply {C:attention}Gold Seal{}, {C:attention}Gold{} and",
+					"{C:attention}Golden{} to all jokers, cards and consumables"
+				},
+			},
+			j_tower_black_slime = {
+				name = "Black Slime",
+				text = {
+					"Blind score is {C:attention}hidden{} and",
+					"{C:attention}reduced{} by {C:attention}10%{} at beginning of round",
+					"{C:inactive}(This joker is immutable)" -- 10% cannot be changed for... obvious reasons
+				},
+			},
+			j_tower_shimmer_slime = {
+				name = "Shimmer Slime",
+				text = {
+					"Permanently increase",
+					"{C:attention}Polychrome{} by {X:mult,C:white} X#1# {} compounding",
+					"{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)"
+				},
+			},
+			j_tower_golden_slime = {
+				name = "Golden Slime",
+				text = {
+					"{C:attention}Gold Seal{}, {C:attention}Gold{} and {C:attention}Golden{} gives {X:dark_edition,C:white} ^#1# {} dollars"
+				},
+			},
 		},
     },
 	misc = {
 		labels = {
+			k_tower_apollyon = "Apollyon",
+			k_tower_transmuted = "Transmuted",
+
 			tower_truenegative = "True Negative",
 			tower_bound = "Bound",
 			tower_notrigger = "Dud",
@@ -1082,6 +1179,13 @@ return {
 			tower_food = "Edible",
 		},
 		dictionary = {
+			k_tower_apollyon = "Apollyon",
+			k_tower_transmuted = "Transmuted",
+
+            k_book = "Book",
+            k_books = "Books",
+            gald_books = "Select Book",
+            gald_random_book = "Random Book",
 			tower_debuff_sun = "Must only contain Hearts",
 			tower_debuff_moon = "Must only contain Clubs",
 			tower_debuff_world = "Must only contain Spades",
@@ -1106,11 +1210,8 @@ return {
 				cry_abstract = "Abstract" -- a bit of trolling
 			},
 
-			b_stake = "Book",
-			k_deck_stake_wins="Deck Book Wins",
-            k_stake="Book",
-            k_stake_level="Book Level",
-			ph_display_stickers="Display Book Stickers during Run",
+			b_tower_book = "Book",
+            k_tower_book="Book",
 
 			tower_edition = "(random edition)",
 			tower_rank = "(random rank)",
@@ -1121,6 +1222,17 @@ return {
 			tower_hammerspace_place = '(current ante)',
 
 			tower_hand_nil = "ERROR",
+
+			k_tower_slime_pool = "Slime Pack",
+			k_tower_terra_pool = "Terra Pack"
+		},
+		v_dictionary = {
+			tower_bounce = 'Bounce!',
+			tower_boring_bounce = 'Bounce',
+			tower_big_bounce = 'Big Bounce!',
+			tower_hidden_bounce = 'Hidden Bounce!',
+			tower_virtue_boing = 'Boing!',
+			tower_money_bounce = "Money Bounce!",
 		},
 		poker_hands = {
 			tower_nil = "ERROR",

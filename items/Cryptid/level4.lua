@@ -168,10 +168,10 @@ Tower.Blind({
     tower_consumable = "cry_vacuum",
 	key = "vacuum",
 	pos = { x = 0, y = 0 },
-	atlas = "blinds4",
+	atlas = "blinds5",
 	order = 4,
     mult = 5,
-    boss_colour = HEX("ff8c00"),
+    boss_colour = HEX("f8ff00"),
     boss = {
         level = 4
     },
@@ -217,11 +217,11 @@ Tower.Blind({
 	name = "tower-hammerspace",
     tower_consumable = "cry_hammerspace",
 	key = "hammerspace",
-	pos = { x = 0, y = 22 },
-	atlas = "blinds4",
+	pos = { x = 0, y = 1 },
+	atlas = "blinds5",
 	order = 4,
     mult = 5,
-    boss_colour = HEX("b5d2dc"),
+    boss_colour = HEX("00ff99"),
     boss = {
         level = 4
     },
@@ -264,11 +264,11 @@ Tower.Blind({
 	name = "tower-trade",
     tower_consumable = "cry_trade",
 	key = "trade",
-	pos = { x = 0, y = 22 },
-	atlas = "blinds4",
+	pos = { x = 0, y = 2 },
+	atlas = "blinds5",
 	order = 4,
     mult = 5,
-    boss_colour = HEX("b5d2dc"),
+    boss_colour = HEX("ff8300"),
     boss = {
         level = 4
     },
@@ -287,11 +287,11 @@ Tower.Blind({
 	name = "tower-replica",
     tower_consumable = "cry_replica",
 	key = "replica",
-	pos = { x = 0, y = 22 },
-	atlas = "blinds4",
+	pos = { x = 0, y = 3 },
+	atlas = "blinds5",
 	order = 4,
     mult = 5,
-    boss_colour = HEX("b5d2dc"),
+    boss_colour = HEX("6ffe9b"),
     boss = {
         level = 4
     },
@@ -308,11 +308,11 @@ Tower.Blind({
 	name = "tower-analog",
     tower_consumable = "cry_analog",
 	key = "analog",
-	pos = { x = 0, y = 8 },
-	atlas = "blinds4",
+	pos = { x = 0, y = 4 },
+	atlas = "blinds5",
 	order = 4,
     mult = 5,
-    boss_colour = HEX("00ff6d"),
+    boss_colour = HEX("d4267b"),
     boss = {
         level = 4
     },
@@ -353,11 +353,11 @@ Tower.Blind({
 	name = "tower-ritual",
     tower_consumable = "cry_ritual",
 	key = "ritual",
-	pos = { x = 0, y = 8 },
-	atlas = "blinds4",
+	pos = { x = 0, y = 13 },
+	atlas = "blinds5",
 	order = 4,
     mult = 5,
-    boss_colour = HEX("00ff6d"),
+    boss_colour = HEX("000037"),
     boss = {
         level = 4
     },
@@ -380,11 +380,11 @@ Tower.Blind({
 	name = "tower-adversary",
 	key = "adversary",
     tower_consumable = "cry_adversary",
-	pos = { x = 0, y = 8 },
-	atlas = "blinds4",
+	pos = { x = 0, y = 5 },
+	atlas = "blinds5",
 	order = 4,
     mult = 5,
-    boss_colour = HEX("00ff6d"),
+    boss_colour = HEX("070083"),
     boss = {
         level = 4
     },
@@ -415,24 +415,18 @@ Tower.Blind({
 	name = "tower-chambered",
     tower_consumable = "cry_chambered",
 	key = "chambered",
-	pos = { x = 0, y = 8 },
-	atlas = "blinds4",
+	pos = { x = 0, y = 6 },
+	atlas = "blinds5",
 	order = 4,
     mult = 5,
-    boss_colour = HEX("00ff6d"),
+    boss_colour = HEX("00ffc0"),
     boss = {
         level = 4
     },
     dollars = 10,
-    
     set_blind = function (self)
         if G.GAME.blind.disabled then return end
         G.GAME.tower_chambered = (G.GAME.tower_chambered or 3)
-    end,
-    loc_vars = function ()
-        return {
-            vars = {4 - (G.GAME.tower_chambered or 3)}
-        }
     end,
     disable = function ()
         G.GAME.tower_chambered = 1
@@ -444,11 +438,11 @@ Tower.Blind({
 	name = "tower-conduit",
     tower_consumable = "cry_conduit",
 	key = "conduit",
-	pos = { x = 0, y = 8 },
-	atlas = "blinds4",
+	pos = { x = 0, y = 9 },
+	atlas = "blinds5",
 	order = 4,
     mult = 5,
-    boss_colour = HEX("00ff6d"),
+    boss_colour = HEX("ff0000"),
     boss = {
         level = 4
     },
@@ -488,43 +482,48 @@ Tower.Blind({
     end,
 })
 
-Tower.Blind({
+Tower.Blind(Tower.ObsidianOrb({
 	tower_is_spectral = true,
 	name = "tower-source",
     tower_consumable = "cry_source",
 	key = "source",
-	pos = { x = 0, y = 8 },
-	atlas = "blinds4",
+	pos = { x = 0, y = 10 },
+	atlas = "blinds5",
 	order = 4,
     mult = 5,
-    boss_colour = HEX("00ff6d"),
+    boss_colour = HEX("005b1f"),
     boss = {
         level = 4
     },
     dollars = 10,
     
-    set_blind = function (self)
-        if G.GAME.blind.disabled then return end
-        if #G.jokers.cards == 0 then return end
-        
-        for i, v in pairs(G.jokers.cards) do
-            if v.config.center.config ~= nil then
-                v.ability.extra = v.config.center.config.extra
-            end
+    pick = function ()
+        if G.GAME.tower_source_pick then return G.GAME.tower_source_pick end
+        G.GAME.tower_source_pick = {}
+        local list = Tower.getBlinds(function (blind)
+            return blind.tower_is_code
+        end, #G.playing_cards, pseudoseed("tower_source"))
+        for i, v in ipairs(G.GAME.tower_source_pick) do
+            G.GAME.tower_source_pick[v.key] = true
         end
+        return G.GAME.tower_source_pick
     end,
-})
+
+    cleanup = function()
+        G.GAME.tower_source_pick = nil
+    end
+}))
 
 Tower.Blind({
 	tower_is_spectral = true,
 	name = "tower-pointer",
     tower_consumable = "cry_pointer",
 	key = "pointer",
-	pos = { x = 0, y = 8 },
-	atlas = "blinds4",
+	pos = { x = 0, y = 11 },
+	atlas = "blinds5",
 	order = 4,
     mult = math.huge,
-    boss_colour = HEX("00ff6d"),
+    boss_colour = HEX("02ff00"),
     boss = {
         level = 4
     },
@@ -574,10 +573,10 @@ Tower.Blind({
     name = "tower-white_hole",
     tower_consumable = "cry_white_hole",
     key = "white_hole",
-	pos = { x = 0, y = 8 },
-	atlas = "blinds4",
+	pos = { x = 0, y = 12 },
+	atlas = "blinds5",
 	order = 4,
-    boss_colour = HEX("00ff6d"),
+    boss_colour = HEX("f1ffe4"),
     mult = G.tower_unknown,
     boss = {
         level = 2

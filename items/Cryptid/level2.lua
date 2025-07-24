@@ -239,11 +239,11 @@ Tower.Blind({
     tower_consumable = "cry_voxel",
     name = "tower-voxel",
     key = "voxel",
-    pos = { x = 0, y = 0 },
-    atlas = "blinds4",
+    pos = { x = 0, y = 14 },
+    atlas = "blinds5",
     order = 2,
     mult = 3,
-    boss_colour = HEX("f83b2f"),
+    boss_colour = HEX("1dc035"),
     boss = {
         level = 2
     },
@@ -255,18 +255,18 @@ Tower.Blind({
     loc_vars = function (self)
         return {
             vars = {
-                G.GAME.hands["cry_Declare0"] and G.GAME.hands["cry_Declare0"].declare_cards and localize(
+                (G.GAME.hands["cry_Declare0"] and G.GAME.hands["cry_Declare0"].declare_cards and localize(
 					"cry_Declare0",
 					"poker_hands"
-				) or localize("cry_code_empty"),
-				G.GAME.hands["cry_Declare1"] and G.GAME.hands["cry_Declare1"].declare_cards and localize(
+				)) or localize("cry_code_empty"),
+				(G.GAME.hands["cry_Declare1"] and G.GAME.hands["cry_Declare1"].declare_cards and localize(
 					"cry_Declare1",
 					"poker_hands"
-				) or localize("cry_code_empty"),
-				G.GAME.hands["cry_Declare2"] and G.GAME.hands["cry_Declare2"].declare_cards and localize(
+				)) or localize("cry_code_empty"),
+				(G.GAME.hands["cry_Declare2"] and G.GAME.hands["cry_Declare2"].declare_cards and localize(
 					"cry_Declare2",
 					"poker_hands"
-				) or localize("cry_code_empty"),
+				)) or localize("cry_code_empty"),
             }
         }
     end,
@@ -280,7 +280,15 @@ Tower.Blind({
         }
     end,
     TowerCheckWin = function (self)
-        return (G.GAME.chips - G.GAME.blind.chips >= to_big(0)) and (#G.GAME.tower_cry_multiplanet == 0)
+        local processes = {}
+        if G.GAME.tower_cry_multiplanet ~= nil then
+            for i, v in ipairs(G.GAME.tower_cry_multiplanet) do
+                if G.GAME.hands[v] and G.GAME.hands[v].declare_cards then
+                    processes[#processes+1] = v
+                end
+            end
+        end
+        return (G.GAME.chips - G.GAME.blind.chips >= to_big(0)) and (#processes == 0)
     end,
     TowerModFinalScore = function (self, score, cards, poker_hands, hand, scoring_hand, mult, hand_chips)
         if G.GAME.blind.disabled then return score end
@@ -308,6 +316,18 @@ Tower.Blind({
 
 
     TowerInPool = function ()
-        return G.GAME.modifiers.tower_planets_enabled
+        if not G.GAME.modifiers.tower_planets_enabled then
+            return false
+        else
+            local any = false
+            for i, v in ipairs({ "cry_Declare0", "cry_Declare1", "cry_Declare2" }) do
+                if G.GAME.hands[v] and G.GAME.hands[v].declare_cards then
+                    any = true
+
+                    break
+                end
+            end
+            return any
+        end
     end
 })

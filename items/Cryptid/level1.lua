@@ -218,7 +218,6 @@ Tower.Blind({
         if G.GAME.blind.disabled or not G.GAME.tower_np_error_cards then return false end
         local bad = false;
         local pool = copy_table(G.GAME.tower_np_error_cards)
-        print(cards)
         for i, v in ipairs(cards) do
             local index = -1
             for q, z in ipairs(pool) do
@@ -333,7 +332,6 @@ Tower.Blind(Tower.ObsidianOrb({
         local ret = {}
         ret[Tower.blindFromOffset(G.GAME.blind:TowerGetSlot() + 1)] = true
         ret[Tower.blindFromOffset(G.GAME.blind:TowerGetSlot() + 2)] = true
-        print(ret)
         G.GAME.tower_merg_choice = ret
         return ret
     end,
@@ -849,7 +847,6 @@ local vsal = Tower.ObsidianOrb({
     end
 })
 Tower.Blind(vsal)
-print(G.P_BLINDS["bl_tower_cryfunction"])
 
 Tower.Blind({
     tower_is_code = true,

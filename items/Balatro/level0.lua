@@ -3,7 +3,6 @@ Tower.Blind({
 	key = "blank",
 	pos = { x = 0, y = 0 },
 	atlas = "blinds",
-	order = 0,
     mult = 1,
     boss_colour = HEX("3a55ab"),
     boss = {

@@ -1,13 +1,11 @@
-Tower.Stake {
+Tower.Book {
     name = "tower-base",
     key = "base",
-    set = "Book", -- do not absorb
     atlas = "book",
     sticker_atlas = "stickers",
-    unlocked_stake = "planet",
-    applied_stakes = {},
+    applied_books = {},
     pos = { x = 0, y = 0 },
-    sticker_pos = { x = 1, y = 0 },
+    applied_books = {},
     modifiers = function()
         G.GAME.win_ante = 32; 
         G.GAME.modifiers.tower_tarot_rate = nil; -- no tarots
@@ -15,123 +13,102 @@ Tower.Stake {
         G.GAME.modifiers.tower_code_enabled = true
     end,
     colour = HEX('c1294f'),
-    loc_txt = {}
+    config = {},
 }
 
-Tower.Stake {
+Tower.Book {
     name = "tower-planet",
     key = "planet",
-    set = "Book", -- do not absorb
     atlas = "book",
     sticker_atlas = "stickers",
-    unlocked_stake = "tarot",
-    applied_stakes = { "base" },
+    applied_books = { "base" },
     pos = { x = 1, y = 0 },
-    sticker_pos = { x = 2, y = 0 },
     modifiers = function()
         G.GAME.modifiers.tower_planets_enabled = true;
     end,
     colour = HEX('2fbadb'),
-    loc_txt = {}
+    config = {},
 }
 
-Tower.Stake {
+Tower.Book {
     name = "tower-tarot",
     key = "tarot",
-    set = "Book", -- do not absorb
     atlas = "book",
     sticker_atlas = "stickers",
-    unlocked_stake = "sixtyfour",
-    applied_stakes = { "planet" },
+    applied_books = { "planet" },
     pos = { x = 2, y = 0 },
-    sticker_pos = { x = 3, y = 0 },
     modifiers = function()
         G.GAME.modifiers.tower_tarot_rate = 8; -- every 8
     end,
     colour = HEX('ab7100'),
-    loc_txt = {}
+    config = {},
 }
 
-Tower.Stake {
+Tower.Book {
     name = "tower-sixtyfour",
     key = "sixtyfour",
-    set = "Book", -- do not absorb
     atlas = "book",
     sticker_atlas = "stickers",
-    unlocked_stake = "immortal",
-    applied_stakes = { "tarot" },
+    applied_books = { "tarot" },
     pos = { x = 3, y = 0 },
-    sticker_pos = { x = 4, y = 0 },
     modifiers = function() 
         G.GAME.win_ante = 64; 
     end,
     colour = HEX('715dc9'),
-    loc_txt = {}
+    config = {},
 }
 
-Tower.Stake {
+Tower.Book {
     name = "tower-immortal",
     key = "immortal",
-    set = "Book", -- do not absorb
     atlas = "book",
     sticker_atlas = "stickers",
-    unlocked_stake = "alltarot",
-    applied_stakes = { "sixtyfour" },
+    applied_books = { "sixtyfour" },
     pos = { x = 4, y = 0 },
-    sticker_pos = { x = 0, y = 1 },
     modifiers = function()
         G.GAME.modifiers.tower_boss_blind_immortal = true;
         G.GAME.modifiers.tower_no_skip = true
     end,
     colour = HEX('4874ff'),
-    loc_txt = {}
+    config = {},
 }
 
-Tower.Stake {
+Tower.Book {
     name = "tower-alltarot",
     key = "alltarot",
-    set = "Book", -- do not absorb
     atlas = "book",
     sticker_atlas = "stickers",
-    unlocked_stake = "scaling",
-    applied_stakes = { "immortal" },
+    applied_books = { "immortal" },
     pos = { x = 0, y = 1 },
-    sticker_pos = { x = 1, y = 1 },
     modifiers = function()
         G.GAME.modifiers.tower_tarot_rate = 1;
         G.GAME.modifiers.tower_spectral_rate = 1;
     end,
     colour = HEX('e15600'),
-    loc_txt = {}
+    config = {},
 }
 
-Tower.Stake {
+Tower.Book {
     name = "tower-scaling",
     key = "scaling",
-    set = "Book", -- do not absorb
     atlas = "book",
     sticker_atlas = "stickers",
-    unlocked_stake = "famine",
-    applied_stakes = { "alltarot" },
+    applied_books = { "alltarot" },
     pos = { x = 1, y = 1 },
-    sticker_pos = { x = 2, y = 1 },
     modifiers = function()
         G.GAME.modifiers.tower_ultra_scaling = true;
     end,
     colour = HEX('3100ff'),
-    loc_txt = {}
+    config = {},
 }
 
-Tower.Stake {
+Tower.Book {
     name = "tower-famine",
     key = "famine",
-    set = "Book", -- do not absorb
     atlas = "book",
     sticker_atlas = "stickers",
-    unlocked_stake = "nojokers",
-    applied_stakes = { "scaling" },
+    applied_books = { "scaling" },
     pos = { x = 2, y = 1 },
-    sticker_pos = { x = 3, y = 1 },
     modifiers = function() 
         G.GAME.modifiers.tower_no_consumables = true;
         for _,v in ipairs(SMODS.ConsumableType.ctype_buffer) do
@@ -139,23 +116,20 @@ Tower.Stake {
         end
     end,
     colour = HEX('ac7100'),
-    loc_txt = {}
+    config = {},
 }
 
-Tower.Stake {
+Tower.Book {
     name = "tower-nojokers",
     key = "nojokers",
-    set = "Book", -- do not absorb
     atlas = "book",
     sticker_atlas = "stickers",
-    unlocked_stake = nil,
-    applied_stakes = { "famine" },
+    applied_books = { "famine" },
     pos = { x = 3, y = 1 },
-    sticker_pos = { x = 4, y = 1 },
     modifiers = function() 
         G.GAME.modifiers.tower_no_jokers = true;
         G.GAME.joker_rate = 0;
     end,
     colour = HEX('ff000e'),
-    loc_txt = {}
+    config = {},
 }

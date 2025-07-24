@@ -67,26 +67,25 @@ Tower.Edition {
         card_limit = 1,
     },
 
+
+	on_apply = function(card)
+		if not card.ability.tower_truenegative then
+			Cryptid.manipulate(card, {
+				value = -1,
+			}, nil, true)
+		end
+		card.ability.tower_truenegative = true
+	end,
+	on_remove = function(card)
+		Cryptid.manipulate(card, { value = -1 })
+		Cryptid.manipulate(card)
+		card.ability.tower_truenegative = nil
+	end,
+
     in_pool = function (self, args) 
         return false -- no
     end
 }
-
-local old_eval_card = eval_card
-function eval_card(card, context)
-    local ret, post = old_eval_card(card, context)
-    local meta = BigMeta or OmegaMeta
-    if (card.edition and card.edition.tower_truenegative) or G.GAME.tower_ritual then
-        for i, v in pairs(ret) do
-            for q, c in pairs(v) do
-                if getmetatable(c) == meta or type(c) == 'number' then
-                    v[q] = -c
-                end
-            end
-        end
-    end
-    return ret, post
-end
 
 Tower.Challenge {
 	key = "true_negative",

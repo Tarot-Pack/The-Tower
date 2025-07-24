@@ -26,8 +26,7 @@ Tower.Achievement({
     rank = 2,
     unlock_condition = function (self, args)
         if args.type == 'win' then
-            local highest_win, lowest_win = get_deck_win_stake(nil)
-            if highest_win >= 5 then
+            if G.GAME.tower_book >= 5 then
                 return true
             end
         end
@@ -58,8 +57,7 @@ Tower.Achievement({
     rank = 3,
     unlock_condition = function (self, args)
         if args.type == 'win' then
-            local highest_win, lowest_win = get_deck_win_stake(nil)
-            if highest_win >= 9 then
+            if G.GAME.tower_book >= 9 then
                 return true
             end
         end
@@ -70,14 +68,4 @@ Tower.Achievement({
 Tower.Achievement({
 	key = "clusterfuck_you",
 	rank = 3
-})
-
-Tower.Achievement({
-	key = "darker_than_dark",
-	rank = 3,
-    unlock_condition = function (self, args)
-        if args.type == "tower_modify_card" and args.card and args.card.edition and args.card.edition.tower_truenegative and args.card.config.center.key == "m_cry_light" then
-            return true
-        end
-    end
 })
