@@ -1,0 +1,36 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = -2
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/ui.lua"]'''
+pattern = '''local t = { n = G.UIT.C, config = { align = 'cm' }, nodes = {'''
+position = "before"
+payload = '''
+create_consumable_nodes = function (_start, _end)
+    local t = {}
+    for i = _start, _end do
+        local key = type_buf[i]
+        if not key then
+            if i == _start then break end
+            t[#t+1] = { n = G.UIT.R, config = { align ='cm', minh = 0.81 }, nodes = {}}
+        elseif SMODS.ConsumableTypes[key].no_collection then
+            -- ignore
+        else 
+            local id = 'your_collection_'..key:lower()..'s'
+            t[#t+1] = UIBox_button({button = id, label = {localize('b_'..key:lower()..'_cards')}, count = G.ACTIVE_MOD_UI and modsCollectionTally(G.P_CENTER_POOLS[key]) or G.DISCOVER_TALLIES[key:lower()..'s'], minw = 4, id = id, colour = G.C.SECONDARY_SET[key]})
+        end
+    end
+    return t
+end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''functions/UI_definitions.lua'''
+pattern = '''UIBox_button({button = 'your_collection_boosters', label = {localize('b_booster_packs')}, count = G.DISCOVER_TALLIES.boosters, minw = 5, id = 'your_collection_boosters'}),'''
+position = "after"
+payload = '''UIBox_button({button = "your_collection_tower_transmuted", label = {localize('b_tower_transmuted_cards')}, count = { tally = #G.P_CENTER_POOLS["tower_transmuted"], of = #G.P_CENTER_POOLS["tower_transmuted"] }, minw = 5, id = id, colour = G.C.SECONDARY_SET["tower_transmuteds"]}),'''
+match_indent = true

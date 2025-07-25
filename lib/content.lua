@@ -116,6 +116,13 @@ SMODS.Atlas({
 })
 
 SMODS.Atlas({
+	key = "consumables",
+	path = "tower_consumables.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Atlas({
 	key = "pack",
 	path = "tower_boosters.png",
 	px = 71,
@@ -123,28 +130,42 @@ SMODS.Atlas({
 })
 
 SMODS.ObjectType({
-	object_type = "ObjectType",
 	key = "Tower-Slime",
 	default = "j_tower_king_slime",
 	cards = {}
 })
 
 SMODS.ObjectType({
-	object_type = "ObjectType",
 	key = "Tower-Terra",
 	default = "j_tower_eye_of_cthulhu",
 	cards = {}
 })
 
+Tower.TransmutedGrad = SMODS.Gradient {
+	key = 'transmuted_grad',
+	colours = { HEX('5a5efa'), HEX('6e44f7'), HEX('a534de'), HEX('dc5392'), HEX('e38e8d') },
+	cycle = 1,
+}
 
 SMODS.Rarity({
 	key = "transmuted",
 	loc_txt = {},
-	badge_colour = SMODS.Gradient {
-        key = 'transmuted_grad',
-        colours = { HEX('5a5efa'), HEX('6e44f7'), HEX('a534de'), HEX('dc5392'), HEX('e38e8d') },
-        cycle = 1,
-    },
+	badge_colour = Tower.TransmutedGrad,
+	default = "j_tower_shimmer_slime",
+})
+
+SMODS.ConsumableType({
+	key = "transmuted",
+	prefix_config = { key = true },
+	primary_colour = Tower.TransmutedGrad,
+	secondary_colour = Tower.TransmutedGrad,
+	collection_rows = { 4, 4 },
+	shop_rate = 0.0,
+	loc_txt = {},
+	default = "c_tower_aether_monolith",
+	can_stack = true,
+	can_divide = true,
+	no_collection = true
 })
 
 SMODS.Rarity({
@@ -155,4 +176,5 @@ SMODS.Rarity({
         colours = { HEX('ff0000'), HEX('e4a92e'), HEX('2ec4df'), HEX('2f52f2'), HEX('ec2fa5') },
         cycle = 1,
     },
+	default = "j_tower_pinky",
 })

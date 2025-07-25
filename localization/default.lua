@@ -1165,6 +1165,22 @@ return {
 				},
 			},
 		},
+		tower_transmuted = {
+			c_tower_aether_monolith = {
+				name = "Aether Monolith",
+				text = {
+					"Create an {C:tower_apollyon,E:1}Apollyon{} Joker",
+				},
+			},
+		},
+		Spectral = {
+			c_tower_shimmer_bottle = {
+				name = "Shimmer Bottle",
+				text = {
+					"Select #1# ??? to use"
+				}
+			}
+		}
     },
 	misc = {
 		labels = {
@@ -1177,6 +1193,8 @@ return {
 			tower_fuckyou = Cryptid_config.family_mode and "Your Sins" or "Fuck You",
 			tower_virus = "Infected",
 			tower_food = "Edible",
+			tower_transmuted = "Transmuted",
+
 		},
 		dictionary = {
 			k_tower_apollyon = "Apollyon",
@@ -1212,6 +1230,9 @@ return {
 
 			b_tower_book = "Book",
             k_tower_book="Book",
+			k_tower_transmuted_cards = "Transmuted Cards",
+			b_tower_transmuted_cards = "Transmuted Cards",
+
 
 			tower_edition = "(random edition)",
 			tower_rank = "(random rank)",

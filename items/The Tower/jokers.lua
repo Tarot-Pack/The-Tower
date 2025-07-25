@@ -280,8 +280,7 @@ Tower.Joker({
 	key = "pinky",
 	pos = { x = 5, y = 0 },
 	soul_pos = { x = 6, y = 0, extra = { x = 7, y = 0 } },
-	pools = {},
-	tower_is_slime = true,
+	pools = { ["Tower-Slime"] = true, ["Tower-Terra"] = true },
 	config = {
 		extra = {
 			chips = 2,
@@ -292,8 +291,8 @@ Tower.Joker({
 		return {
 			vars = {
 				card.ability.amount or 1, 
-				Tower.FormatArrowMult(card.ability.amount or 1, card.ability.extra.chips),
-				Tower.FormatArrowMult(card.ability.amount or 1, card.ability.extra.mult)
+				Tower.EntComp.FormatArrowMult(card.ability.amount or 1, card.ability.extra.chips),
+				Tower.EntComp.FormatArrowMult(card.ability.amount or 1, card.ability.extra.mult)
 			}
 		}
 	end,
@@ -301,7 +300,7 @@ Tower.Joker({
 		if G.STAGE == G.STAGES.RUN then
 			card.ability.amount = 0
 			for i = 1, #G.jokers.cards do
-				if G.jokers.cards[i].config.center and G.jokers.cards[i].config.center.pools and (G.jokers.cards[i].config.center.pools['Tower-Slime'] or G.jokers.cards[i].config.center.tower_is_slime) then
+				if Tower.HasPool('Tower-Slime', G.jokers.cards[i]) then
 					card.ability.amount = card.ability.amount + 1
 				end
 			end
@@ -495,7 +494,16 @@ Tower.Joker({
 	name = "tower-shimmer_slime",
 	key = "shimmer_slime",
 	pos = { x = 1, y = 1 },
-	pools = { },
+	shimmer_effect = function (self)
+		local items = {}
+		for i = 1, #G.P_CENTER_POOLS['Tower-Slime'] do
+			if G.P_CENTER_POOLS['Tower-Slime'][i].key ~= "j_tower_shimmer_slime" then
+				items[#items+1] = G.P_CENTER_POOLS['Tower-Slime'][i]
+			end
+		end
+		self:set_ability(pseudorandom_element(items))
+	end,
+	pools = { ["Tower-Slime"] = true, ["Tower-Terra"] = true },
 	config = {
 		extra = {
 			mult_mod = 0.1
@@ -510,7 +518,7 @@ Tower.Joker({
 		}
 	end,
 	rarity = "tower_transmuted",
-	cost = 5,
+	cost = 1,
 	atlas = "jokers1",
 	blueprint_compat = true,
 	calculate = function (self, card, context)

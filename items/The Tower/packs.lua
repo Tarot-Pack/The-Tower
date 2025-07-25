@@ -6,7 +6,7 @@ Tower.JokerBoosters({ -- order 1 - 3
 	order = 1,
 	config = { extra = 5, choose = 2 },
 	cost = 5,
-	weight = 0.14,
+	weight = 1,
 	soul_card = "j_tower_pinky",
     amount = 3,
     colour = G.C.GREEN,

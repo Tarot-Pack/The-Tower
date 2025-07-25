@@ -40,7 +40,7 @@ function G.FUNCS.tower_previous_setup_step()
 end
 
 function Tower.setup_book(book)
-    G.GAME.tower_book = book or 1
+    G.GAME.tower_book = book or G.tower_default_book
     for i = 1, G.GAME.tower_book do
         G.P_CENTER_POOLS.Book[i].modifiers()
     end
@@ -102,7 +102,7 @@ function G.UIDEF.run_setup_option(_type)
 end
 
 function Tower.get_book_sprite(_book, _scale)
-  _book = _book or 1
+  _book = _book or G.tower_default_book
   _scale = _scale or 1
   local book_w = 2.4*(36.5)/41
   local book_h = 2.4*(48.5)/41
@@ -129,7 +129,8 @@ G.FUNCS.RUN_SETUP_check_book_name = function(e)
 end
 
 function G.UIDEF.viewed_book_option()
-    G.viewed_book = G.viewed_book or 1
+    G.viewed_book = G.viewed_book or G.tower_default_book
+    G.PROFILES[G.SETTINGS.profile].MEMORY.book = G.viewed_book
     local _stake_center = G.P_CENTER_POOLS.Book[G.viewed_book]
 
     local ret_nodes = {}
@@ -316,7 +317,7 @@ G.FUNCS.RUN_SETUP_check_book = function(e)
             definition = G.UIDEF.book_option(),
             config = { offset = { x = 0, y = 0 }, align = 'tmi', parent = e }
         }
-        e.config.id = G.viewed_book or 1
+        e.config.id = G.viewed_book or G.tower_default_book
     end
 end
 
@@ -327,7 +328,7 @@ G.FUNCS.RUN_SETUP_check_book2 = function(e)
             definition = G.UIDEF.viewed_book_option(),
             config = { offset = { x = 0, y = 0 }, align = 'cm', parent = e }
         }
-        e.config.id = G.viewed_book or 1
+        e.config.id = G.viewed_book or G.tower_default_book
     end
 end
 
