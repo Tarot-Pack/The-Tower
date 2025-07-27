@@ -99,16 +99,17 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     vec4 tex = Texel(texture, texture_coords);
 	vec2 uv = (((texture_coords)*(image_details)) - texture_details.xy*texture_details.ba)/texture_details.ba;
 
-    tex.r = 0.62745098039;
-    tex.g = 0.46666666666;
-    tex.b = 0.9294117647;
+    vec4 hsl = HSL(tex);
+    hsl.x = min(1, 0.725 - ((hsl.x - .5) / 4));
+    hsl.z = .7 + (hsl.z * .3);
+    vec4 trans = RGB(hsl);
 
     // yoinked from astral (why do i have to do this bro??)
     if (uv.x > uv.x * 2.){
         uv = transmuted;
     }
 
-	return dissolve_mask(tex*colour, texture_coords, uv);
+	return dissolve_mask(trans*colour, texture_coords, uv);
 }
 
 extern MY_HIGHP_OR_MEDIUMP vec2 mouse_screen_pos;

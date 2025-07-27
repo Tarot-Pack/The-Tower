@@ -54,6 +54,9 @@ if (card_type == 'Default' or card_type == 'Enhanced') and self.ability.tower_sh
         loc_vars.nominal_mult = loc_vars.nominal_mult + loc_vars.nominal_chips
         loc_vars.nominal_chips = nil;
     end
+    if loc_vars.colour then
+        loc_vars.colour = G.C.MULT_SUITS[loc_vars.suit]
+    end
 end
 '''
 match_indent = true
@@ -65,7 +68,7 @@ pattern = '''localize{type = 'other', key = 'playing_card', set = 'Other', nodes
 position = "at"
 payload = '''
 if specific_vars.tower_shimmer_mult then
-	localize{type = 'other', key = 'playing_card', set = 'Other', nodes = full_UI_table.name, vars = {localize(specific_vars.suit, 'suits_plural'), localize(specific_vars.value, 'ranks'), colours = {specific_vars.colour}}}
+	localize{type = 'other', key = 'tower_mult_rank', set = 'Other', nodes = full_UI_table.name, vars = {localize(specific_vars.suit, 'suits_singular'), localize(specific_vars.value, 'ranks_plural'), colours = {specific_vars.colour}}}
 else 
     localize{type = 'other', key = 'playing_card', set = 'Other', nodes = full_UI_table.name, vars = {localize(specific_vars.value, 'ranks'), localize(specific_vars.suit, 'suits_plural'), colours = {specific_vars.colour}}}
 end'''

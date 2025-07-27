@@ -56,7 +56,7 @@ SMODS.Enhancement({
 SMODS.Enhancement({
 	key = "blank",
     name = "tower-blank",
-    atlas = "centers",
+    atlas = "decks",
 	order = 30,
 	weight = 1,
 	in_shop = false,

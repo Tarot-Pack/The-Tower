@@ -64,45 +64,6 @@ Tower.Consumable({
 })
 
 -- shimmer bottle is pain
-function Tower.ShimmerCanUse(self, card, cards, max)
-	if max == nil then
-		if #cards == 0 then
-			return false
-		end
-	else
-		if #cards > max or #cards == 0 then
-			return false
-		end
-	end
-	for q = 1, #cards do
-		local is_good = false
-		for i = 1, #Tower.ShimmerEffects do
-			if Tower.ShimmerEffects[i].can_use and Tower.ShimmerEffects[i].can_use(self, cards[q], card) then
-				is_good = true
-				break
-			end
-		end
-		if not is_good then
-			return false
-		end
-	end
-	return true
-end
-
-function Tower.ShimmerUse(self, card, cards)
-	table.sort(Tower.ShimmerEffects, function (a, b)
-		return a.priority > b.priority
-	end)
-	Tower.EntComp.FlipThen(cards, function(item)
-		for i = 1, #Tower.ShimmerEffects do
-			if Tower.ShimmerEffects[i].can_use and Tower.ShimmerEffects[i].can_use(self, item, card) then
-				Tower.ShimmerEffects[i].use(self, item, card)
-				return
-			end
-		end
-	end)
-end
-
 
 Tower.Consumable({
 	set = "Spectral",
@@ -132,11 +93,11 @@ Tower.Consumable({
 	end,
 
 	can_use = function(self, card)
-		return Tower.ShimmerCanUse(self, card, Tower.EntComp.GetHighlightedCards({G.consumeables, G.hand, G.pack_cards, G.shop_jokers, G.shop_vouchers, G.shop_booster, G.jokers}, card), card.ability.select)
+		return Tower.Shimmer.CanApply(self, card, Tower.EntComp.GetHighlightedCards({G.consumeables, G.hand, G.pack_cards, G.shop_jokers, G.shop_vouchers, G.shop_booster, G.jokers}, card), card.ability.select)
 	end,
 
 	use = function(self, card, area, copier)
-		Tower.ShimmerUse(self, card, Tower.EntComp.GetHighlightedCards({G.consumeables, G.hand, G.pack_cards, G.shop_jokers, G.shop_vouchers, G.shop_booster, G.jokers}, card))
+		Tower.Shimmer.Apply(self, card, Tower.EntComp.GetHighlightedCards({G.consumeables, G.hand, G.pack_cards, G.shop_jokers, G.shop_vouchers, G.shop_booster, G.jokers}, card))
 	end,
 	
     tower_credits = {

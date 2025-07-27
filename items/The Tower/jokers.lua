@@ -4,7 +4,7 @@ Tower.Joker({
 	pos = { x = 1, y = 0 },
 	rarity = 1,
 	cost = 0,
-	atlas = "centers",
+	atlas = "decks",
 	order = 1,
 	blueprint_compat = true,
     tower_credits = {
@@ -657,6 +657,7 @@ Tower.Joker({
 			end
 		end
 		self:set_ability(pseudorandom_element(items))
+		self:set_cost()
 	end,
 	pools = { ["Tower-Slime"] = true, ["Tower-Terra"] = true },
 	config = {
@@ -875,11 +876,11 @@ Tower.Joker({
 	blueprint_compat = true,
 	
 	can_use = function(self, card)
-		return Tower.ShimmerCanUse(self, card, Tower.EntComp.GetHighlightedCards({G.consumeables, G.hand, G.pack_cards, G.shop_jokers, G.shop_vouchers, G.shop_booster, G.jokers}, card), nil)
+		return Tower.Shimmer.CanApply(self, card, Tower.EntComp.GetHighlightedCards({G.consumeables, G.hand, G.pack_cards, G.shop_jokers, G.shop_vouchers, G.shop_booster, G.jokers}, card), nil)
 	end,
 
 	use = function(self, card, area, copier)
-		Tower.ShimmerUse(self, card, Tower.EntComp.GetHighlightedCards({G.consumeables, G.hand, G.pack_cards, G.shop_jokers, G.shop_vouchers, G.shop_booster, G.jokers}, card))
+		Tower.Shimmer.Apply(self, card, Tower.EntComp.GetHighlightedCards({G.consumeables, G.hand, G.pack_cards, G.shop_jokers, G.shop_vouchers, G.shop_booster, G.jokers}, card))
 	end,
 
     tower_credits = {

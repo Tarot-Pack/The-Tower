@@ -70,7 +70,7 @@ end
 local old_sell_and_use = G.UIDEF.use_and_sell_buttons
 function G.UIDEF.use_and_sell_buttons(card)
     local val = old_sell_and_use(card)
-    if card.config.center.use then
+    if card.config.center.use and card.config.center.set == "Joker" and card.area ~= G.pack_cards then -- no using in joker pack if ever in one (only select)
         val.nodes[1].nodes[2].nodes[1] = {n=G.UIT.C, config={align = "cr"}, nodes={
             {n=G.UIT.C, config={ref_table = card, align = "cr",maxw = 1.25, padding = 0.1, r=0.08, minw = 1.25, minh = 1, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'tower_use_joker', func = 'tower_can_use_joker'}, nodes={
                 {n=G.UIT.B, config = {w=0.1,h=0.6}},
@@ -79,6 +79,64 @@ function G.UIDEF.use_and_sell_buttons(card)
         }}
     end
     return val
+end
+
+
+function Tower.rgb2hsl(rgb)
+    local r = rgb[1]
+    local g = rgb[2]
+    local b = rgb[3]
+	local M, m = math.max( r, g, b ), math.min( r, g, b )
+	local C = M - m
+	local K = 1.0 / (6*C)
+	local h = 0
+	if C ~= 0 then
+		if M == r then     h = ((g - b) * K) % 1.0
+		elseif M == g then h = (b - r) * K + 1.0/3.0
+		else               h = (r - g) * K + 2.0/3.0
+		end
+	end
+	local l = 0.5 * (M + m)
+	local s = 0
+	if l > 0 and l < 1 then
+		s = C / (1-math.abs(l + l - 1))
+	end
+	return {h, s, l, rgb[4]}
+end
+
+function Tower.hsl2rgb(hsl)
+    local h = hsl[1]
+    local s = hsl[2]
+    local l = hsl[3]
+	local C = ( 1 - math.abs( l + l - 1 ))*s
+	local m = l - 0.5*C
+	local r, g, b = m, m, m
+	if h == h then
+		local h_ = (h % 1.0) * 6.0
+		local X = C * (1 - math.abs(h_ % 2 - 1))
+		C, X = C + m, X + m
+		if     h_ < 1 then r, g, b = C, X, m
+		elseif h_ < 2 then r, g, b = X, C, m
+		elseif h_ < 3 then r, g, b = m, C, X
+		elseif h_ < 4 then r, g, b = m, X, C
+		elseif h_ < 5 then r, g, b = X, m, C
+		else               r, g, b = C, m, X
+		end
+	end
+	return {r, g, b, hsl[4]}
+end
+
+local old_update_suit_colours = G.FUNCS.update_suit_colours;
+G.FUNCS.update_suit_colours = function(suit, skin, palette_num)
+    local colour = old_update_suit_colours(suit, skin, palette_num)
+    G.C.MULT_SUITS = G.C.MULT_SUITS or {}
+    for i, tex in pairs(G.C.SUITS) do
+        local hsl = Tower.rgb2hsl(tex);
+        hsl[1] = math.min(1, 0.725 - ((hsl[1] - 0.5) / 4));
+        hsl[3] = 0.7 + (hsl[3] * 0.3);
+        local final = Tower.hsl2rgb(hsl);
+        G.C.MULT_SUITS[i] = final
+    end
 end
 
 
@@ -419,7 +477,7 @@ function Tower.JokerBoosters(conf)
                 local ccard = create_card(conf.type, G.jokers, nil, nil, true, true, nil, "diha")
                 ccard:set_edition({ negative = true }, true)
                 ccard:add_to_deck()
-                G.jokers:emplace(ccard) --Note: Will break if any non-Joker gets added to the meme pool
+                G.jokers:emplace(ccard)
             end,
         },
     })

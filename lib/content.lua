@@ -109,13 +109,6 @@ Tower.Atlas({
 })
 
 SMODS.Atlas({
-	key = "centers",
-	path = "tower_balala_enhance.png",
-	px = 71,
-	py = 95
-})
-
-SMODS.Atlas({
 	key = "jokers1",
 	path = "tower_jokers1.png",
     px = 71,
@@ -141,6 +134,13 @@ SMODS.Atlas({
 	path = "tower_boosters.png",
 	px = 71,
 	py = 95,
+})
+
+SMODS.Atlas({
+	key = "decks",
+	path = "tower_decks.png",
+	px = 71,
+	py = 95
 })
 
 SMODS.ObjectType({

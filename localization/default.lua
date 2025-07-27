@@ -1,5 +1,16 @@
 return {
     descriptions = {
+        Back={
+            b_tower_shimmered={
+                name="Shimmered Deck",
+                text={
+                    "Start run with an {C:attention}#1#{}",
+					"{C:tower_transmuted}Bottomless Shimmer Bucket{}",
+					"and a fully {C:tower_transmuted}Shimmered{} deck,",
+					"cards are randomly {C:tower_transmuted}Shimmered"
+                },
+            },
+		},
 		["Description Cards"] = {
 			desc_tower_mult_rank = {
 				name = "Mult Rank Card",
@@ -45,6 +56,11 @@ return {
 			},
 		},
 		Other = {
+            tower_mult_rank={
+                text={
+                    " {V:1}#1#{C:light_black} of #2# ",
+                },
+            },
 			p_tower_slime_1 = {
 				name = "Slime Pack",
 				text = {
@@ -1265,7 +1281,22 @@ return {
 			}
 		}
     },
-	misc = {
+	misc = {        
+		ranks_plural={
+            ["10"]="10s",
+            ["2"]="2s",
+            ["3"]="3s",
+            ["4"]="4s",
+            ["5"]="5s",
+            ["6"]="6s",
+            ["7"]="7s",
+            ["8"]="8s",
+            ["9"]="9s",
+            Ace="Aces",
+            Jack="Jacks",
+            King="Kings",
+            Queen="Queens",
+        },
 		labels = {
 			k_tower_apollyon = "Apollyon",
 			k_tower_transmuted = "Transmuted",
