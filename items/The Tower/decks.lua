@@ -48,7 +48,7 @@ function CardArea:emplace(card, location, stay_flipped)
     for i, v in ipairs(Tower.Shimmer.DeckCardareaWhitelist()) do
         if G[v] == self then
             G.GAME.shimmer_chance = G.GAME.shimmer_chance or 0.5
-            if G.GAME.tower_random_shimmer and (pseudorandom(pseudoseed("tower_randomshimmer")) > G.GAME.shimmer_chance) then
+            if G.GAME.tower_random_shimmer and (pseudorandom(pseudoseed("tower_randomshimmer")) < G.GAME.shimmer_chance) then
                 if Tower.Shimmer.CanApply(self, card, {card}) then
                     Tower.Shimmer.Apply(self, card, {card})
                     G.GAME.shimmer_chance = G.GAME.shimmer_chance - 0.01
@@ -64,4 +64,10 @@ local old_end_round = end_round
 function end_round(...)
     G.GAME.shimmer_chance = 0.5
     return old_end_round(...)
+end
+
+local old_new_round = new_round
+function new_round(...)
+    G.GAME.shimmer_chance = 0.5
+    return old_new_round(...)
 end

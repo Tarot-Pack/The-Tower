@@ -138,7 +138,7 @@ Tower.Shimmer.Into['c_cry_alt_tab'] = { 'c_cry_reboot' }
 
 
 
-
+Tower.Shimmer.Into["j_joker"] = {"j_half", "j_half"}
 
 function Tower.Shimmer.Effect(object)
     object.priority = object.priority or 1
@@ -231,7 +231,7 @@ Tower.Shader {
 
 Tower.DrawStep {
     key = 'transmuted_shader',
-    order = 999,
+    order = 29,
     func = function(self)
         if self.ability.tower_shimmer_mult then
             self.children.front:draw_shader('tower_transmuted', nil, self.ARGS.send_to_shader)
@@ -260,7 +260,7 @@ Tower.Shimmer.Effect({ -- fallback for jokers (decraft into two of lower rarity 
         if other.ability.set == "Joker" and (
             Tower.TableHasElement(Tower.RarityOrder, (Tower.IndexToRarity[other.config.center.rarity] or other.config.center.rarity))
             or Tower.TableHasElement(Tower.FinalRarities, other.config.center.rarity)
-        ) then 
+        ) and not other.config.center.key == 'j_half' then 
             return true
         end
     end,
@@ -280,7 +280,6 @@ Tower.Shimmer.Effect({ -- fallback for jokers (decraft into two of lower rarity 
         else
             centers = Tower.PickFixed(G.P_JOKER_RARITY_POOLS[Tower.RarityToIndex[rarityInto] or rarityInto], other.config.center, 2, "shimmer_into"..other.config.center.key)
         end
-        local area = other.area;
         other:start_dissolve()
         for i, center in ipairs(centers) do
             local _card = SMODS.add_card({
@@ -290,10 +289,7 @@ Tower.Shimmer.Effect({ -- fallback for jokers (decraft into two of lower rarity 
             if area == G.shop_jokers then
                 create_shop_card_ui(_card)
             end
-            area:emplace(_card)
         end
-        area:set_ranks()
-        area:align_cards()
     end
 })
 
@@ -367,8 +363,6 @@ Tower.Shimmer.Effect({ -- Generic shimmer effect
                         end
                     end
                 end
-				area:set_ranks()
-				area:align_cards()
             end
         end
     end
