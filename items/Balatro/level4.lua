@@ -754,7 +754,18 @@ Tower.Sticker{
 	no_sticker_sheet = true, -- do not the bound
 	badge_colour = HEX("9174e1"),
     rate = 0,
-	order = 999999
+	order = 999999,
+    tower_credits = {
+		idea = {
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 }
 
 local old_dbf_hand = Blind.debuff_hand;

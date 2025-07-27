@@ -35,9 +35,9 @@ pattern = """                    {n=G.UIT.C, config={align = "cm", minw = 5, min
                       }}
                     }},"""
 position = "at"
-payload = '''{n=G.UIT.C, config={align = "cm", minw = 5, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.BLUE, button = ((G.TowerSetupStep == #Tower.SetupSteps or type ~= 'New Run') and "start_setup_run") or "tower_next_setup_step", shadow = true, func = ((G.TowerSetupStep == #Tower.SetupSteps or type ~= 'New Run') and 'can_start_run') or nil}, nodes={
+payload = '''{n=G.UIT.C, config={align = "cm", minw = 5, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.BLUE, button = ((G.TowerSetupStep == #(Tower.RenderedSetupSteps or {}) or type ~= 'New Run') and "start_setup_run") or "tower_next_setup_step", shadow = true, func = ((G.TowerSetupStep == #(Tower.RenderedSetupSteps or {}) or type ~= 'New Run') and 'can_start_run') or nil}, nodes={
         {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
-            {n=G.UIT.T, config={text = ((G.TowerSetupStep == #Tower.SetupSteps or type ~= 'New Run') and localize('b_play_cap')) or localize('b_next'), scale = 0.8, colour = G.C.UI.TEXT_LIGHT,func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
+            {n=G.UIT.T, config={text = ((G.TowerSetupStep == #(Tower.RenderedSetupSteps or {}) or type ~= 'New Run') and localize('b_play_cap')) or localize('b_next'), scale = 0.8, colour = G.C.UI.TEXT_LIGHT,func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
         }}
     }},'''
 match_indent = true

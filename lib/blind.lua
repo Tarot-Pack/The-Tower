@@ -96,22 +96,6 @@ Tower.DestroyCardsBeforePlay = function (cards)
     remove_from_table(G.hand.highlighted, cards, false)
 end
 
-local start_run = Game.start_run
-function Game:start_run(args)
-    local value = start_run(self, args)
-    for i, v in pairs(G.P_BLINDS) do 
-        if v.tower_center_requires then
-            for q, z in ipairs(v.tower_center_requires) do
-                if not G.P_CENTERS[z] then
-                    G.GAME.banned_keys[q] = true
-                    break
-                end
-            end
-        end
-    end
-    return value
-end
-
 function registerBlindMethod(name, def)
     Blind[name] = function (self, ...)
         if self.config.blind ~= nil and self.config.blind.key ~= nil then
@@ -280,9 +264,83 @@ function ease_ante(mod)
     return old_ease_ante(mod)
 end
 
+local old = get_new_boss
 function get_new_boss(level)
     if G.GAME.modifiers.tower_hammerspace then
         return Tower.getBlinds(function (bl) return bl.tower_consumable or bl.tower_is_spectral or bl.tower_is_tarot or bl.tower_is_planet or bl.tower_is_code end, 1, pseudoseed("tower_hammerspace"))[1].key
+    end
+    if not G.GAME.modifiers.tower_book_enabled then
+        if level == 0 then
+            if pseudorandom('tower_boss_soul_'..G.GAME.round_resets.ante) > 0.997 then
+                return 'bl_tower_blank'
+            else
+                return "bl_small"
+            end
+        elseif level == 1 then
+            return "bl_big"
+        else
+            local eligible_bosses = {}
+            for k, v in pairs(G.P_BLINDS) do
+                if not v.boss then
+
+                elseif v.in_pool and type(v.in_pool) == 'function' then
+                    local res, options = v:in_pool()
+                    if
+                        (
+                            ((G.GAME.round_resets.ante)%G.GAME.win_ante == 0 and G.GAME.round_resets.ante >= 2) ==
+                            (v.boss.showdown or false)
+                        ) or
+                        (options or {}).ignore_showdown_check
+                    then
+                        eligible_bosses[k] = res and true or nil
+                    end
+                elseif not (v.boss.showdown or (v.boss.level and v.boss.level ~= 1)) and (v.boss.min == nil or (v.boss.min <= math.max(1, G.GAME.round_resets.ante)) and ((math.max(1, G.GAME.round_resets.ante))%G.GAME.win_ante ~= 0 or G.GAME.round_resets.ante < 2)) then
+                    eligible_bosses[k] = true
+                elseif (v.boss.showdown or (v.boss.level and v.boss.level == 2)) and (((G.GAME.round_resets.ante)%G.GAME.win_ante == 0 and G.GAME.round_resets.ante >= 2) or G.GAME.modifiers.cry_big_showdown ) then
+                    eligible_bosses[k] = true
+                end
+            end
+            for k, v in pairs(G.GAME.banned_keys) do
+                if eligible_bosses[k] then eligible_bosses[k] = nil end
+            end
+
+            local min_use = 100
+            for k, v in pairs(G.GAME.bosses_used) do
+                if eligible_bosses[k] then
+                    eligible_bosses[k] = v
+                    if eligible_bosses[k] <= min_use then 
+                        min_use = eligible_bosses[k]
+                    end
+                end
+            end
+            for k, v in pairs(eligible_bosses) do
+                if eligible_bosses[k] then
+                    eligible_bosses[k] = v
+                    if eligible_bosses[k] <= min_use then 
+                        min_use = eligible_bosses[k]
+                    end
+                end
+            end
+            for k, v in pairs(eligible_bosses) do
+                if eligible_bosses[k] then
+                    if eligible_bosses[k] > min_use then 
+                        eligible_bosses[k] = nil
+                    end
+                end
+            end
+            if G.GAME.modifiers.ortalab_only then
+                for k, v in pairs(eligible_bosses) do
+                    if eligible_bosses[k] and not G.P_BLINDS[k].mod or G.P_BLINDS[k].mod.id ~= 'ortalab' then
+                        eligible_bosses[k] = nil
+                    end
+                end
+            end
+            local _, boss = pseudorandom_element(eligible_bosses, pseudoseed('boss'))
+            G.GAME.bosses_used[boss] = G.GAME.bosses_used[boss] + 1
+            
+            return boss
+
+        end
     end
     if level == nil then
         level = 2
@@ -397,6 +455,16 @@ function get_new_boss(level)
             end
         end
     end
+
+
+    if G.GAME.modifiers.ortalab_only and level <= 2 and level >= 1 then
+        for k, v in pairs(eligible_bosses) do
+            if eligible_bosses[k] and not G.P_BLINDS[k].mod or G.P_BLINDS[k].mod.id ~= 'ortalab' then
+                eligible_bosses[k] = nil
+            end
+        end
+    end
+
     local _, boss = pseudorandom_element(eligible_bosses, pseudoseed('boss'))
     if G.GAME.bosses_used[boss] == nil then
         boss = "bl_tower_blank"

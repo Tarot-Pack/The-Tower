@@ -7,10 +7,21 @@ function math.T_pow(a, b)
     return a:pow(b)
 end
 Tower.SetupSteps = {}
-function Tower.SetupStep(func)
-    Tower.SetupSteps[#Tower.SetupSteps+1] = func
+function Tower.SetupStep(obj)
+    if type(obj) == 'function' then
+        local func = obj
+        obj = {
+            UIDEF = func
+        }
+    end
+    if obj.enabled == nil then
+        obj.enabled = function ()
+            return true
+        end
+    end
+    Tower.SetupSteps[#Tower.SetupSteps+1] = obj
 end
-Tower.SetupStep(function()
+function Tower.UIDEFBookSelection()
     local UI_NODES = {}
     
     UI_NODES[#UI_NODES+1] = {n=G.UIT.O,
@@ -21,7 +32,13 @@ Tower.SetupStep(function()
         cont
     }}
     return root
-end)
+end
+Tower.SetupStep({
+    UIDEF = Tower.UIDEFBookSelection,
+    enabled = function ()
+        return not Tower.Config.disable_book
+    end
+})
 
 function G.FUNCS.tower_next_setup_step()
     G.TowerSetupStep = (G.TowerSetupStep or 0) + 1;
@@ -31,9 +48,6 @@ function G.FUNCS.tower_next_setup_step()
 end
 function G.FUNCS.tower_previous_setup_step()
     G.TowerSetupStep = (G.TowerSetupStep or 0) - 1;
-    if G.TowerSetupStep <= 0 then
-        G.TowerSetupStep = 0
-    end
 
     local tab_but = G.OVERLAY_MENU:get_UIE_by_ID("tab_but_" .. localize('b_new_run'))
     G.FUNCS.change_tab(tab_but)
@@ -41,6 +55,9 @@ end
 
 function Tower.setup_book(book)
     G.GAME.tower_book = book or G.tower_default_book
+    if Tower.Config.disable_book then
+        G.GAME.tower_book = 1
+    end
     for i = 1, G.GAME.tower_book do
         G.P_CENTER_POOLS.Book[i].modifiers()
     end
@@ -73,15 +90,23 @@ function G.UIDEF.run_setup_option(_type)
     if G.TowerSetupStep < 0 then
         G.TowerSetupStep = 0
     end
-    if G.TowerSetupStep > #Tower.SetupSteps then
+    if G.TowerSetupStep == 0 or not Tower.RenderedSetupSteps then
+        Tower.RenderedSetupSteps = Tower.RenderedSetupSteps or {}
+        for i, v in ipairs(Tower.SetupSteps) do
+            if v.enabled() then
+                Tower.RenderedSetupSteps[#Tower.RenderedSetupSteps+1] = v.UIDEF
+            end
+        end
+    end
+    if G.TowerSetupStep > #Tower.RenderedSetupSteps then
         G.TowerSetupStep = nil
         return nil
     end
     local playbutton = {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
         {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
-            {n=G.UIT.C, config={align = "cm", minw = 5, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.BLUE, button = (G.TowerSetupStep == #Tower.SetupSteps and "start_setup_run") or "tower_next_setup_step", shadow = true, func = (G.TowerSetupStep == #Tower.SetupSteps and 'can_start_run') or nil}, nodes={
+            {n=G.UIT.C, config={align = "cm", minw = 5, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.BLUE, button = (G.TowerSetupStep == #Tower.RenderedSetupSteps and "start_setup_run") or "tower_next_setup_step", shadow = true, func = (G.TowerSetupStep == #Tower.RenderedSetupSteps and 'can_start_run') or nil}, nodes={
                 {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
-                    {n=G.UIT.T, config={text = (G.TowerSetupStep == #Tower.SetupSteps and localize('b_play_cap')) or localize('b_next'), scale = 0.8, colour = G.C.UI.TEXT_LIGHT,func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
+                    {n=G.UIT.T, config={text = (G.TowerSetupStep == #Tower.RenderedSetupSteps and localize('b_play_cap')) or localize('b_next'), scale = 0.8, colour = G.C.UI.TEXT_LIGHT,func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
                 }}
             }}
         }}
@@ -92,7 +117,11 @@ function G.UIDEF.run_setup_option(_type)
     if G.TowerSetupStep == 0 then
         ui = old_run_setup_option(_type)
     else
-        ui, insert_at = Tower.SetupSteps[G.TowerSetupStep](from_game_over)
+        ui, insert_at = Tower.RenderedSetupSteps[G.TowerSetupStep](from_game_over)
+        if ui == false then
+            G.TowerSetupStep = G.TowerSetupStep + 1;
+            return G.UIDEF.run_setup_option(_type)
+        end
         insert_at = insert_at or {}
         insert_at.obj = insert_at.obj or ui
         insert_at.index = insert_at.index or #insert_at.obj.nodes+1
@@ -404,4 +433,4 @@ function Game:init_game_object()
     })
     return game
 end
-G.tower_default_book = 5
+G.tower_default_book = 6

@@ -13,5 +13,16 @@ Tower.JokerBoosters({ -- order 1 - 3
     secondary_colour = G.C.BLUE,
     name = "tower_slime",
     type = "Tower-Slime",
-	group_key = "k_tower_slime_pool"
+	group_key = "k_tower_slime_pool",
+	tower_credits = {
+		idea = {
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })

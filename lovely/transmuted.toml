@@ -1,7 +1,7 @@
 [manifest]
 version = "1.0.0"
 dump_lua = true
-priority = -2
+priority = 0
 
 [[patches]]
 [patches.pattern]
@@ -26,11 +26,70 @@ create_consumable_nodes = function (_start, _end)
     return t
 end'''
 match_indent = true
-
+[[patches]]
+[patches.regex]
+target = '''=[SMODS _ "src/ui.lua"]'''
+pattern = '''\{ b = 'tags', p = G\.P_TAGS \}'''
+position = "before"
+payload = '''{ k = 'tower_transmuted', l = "tower_transmuted_cards" }, '''
 [[patches]]
 [patches.pattern]
 target = '''functions/UI_definitions.lua'''
 pattern = '''UIBox_button({button = 'your_collection_boosters', label = {localize('b_booster_packs')}, count = G.DISCOVER_TALLIES.boosters, minw = 5, id = 'your_collection_boosters'}),'''
 position = "after"
-payload = '''UIBox_button({button = "your_collection_tower_transmuted", label = {localize('b_tower_transmuted_cards')}, count = { tally = #G.P_CENTER_POOLS["tower_transmuted"], of = #G.P_CENTER_POOLS["tower_transmuted"] }, minw = 5, id = id, colour = G.C.SECONDARY_SET["tower_transmuteds"]}),'''
+payload = '''UIBox_button({button = "your_collection_tower_transmuted", label = {localize('b_tower_transmuted_cards')}, count = Tower.CountTransmuted(), minw = 5, id = id, colour = G.C.SECONDARY_SET["tower_transmuteds"]}),'''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''return generate_card_ui(self.config.center, nil, loc_vars, card_type, badges, hide_desc, main_start, main_end, self)'''
+position = "before"
+payload = '''
+if (card_type == 'Default' or card_type == 'Enhanced') and self.ability.tower_shimmer_mult then
+	loc_vars = loc_vars or {}
+	loc_vars.tower_shimmer_mult = true
+	if loc_vars.nominal_chips then
+        loc_vars.nominal_mult = loc_vars.nominal_mult or 0
+        loc_vars.nominal_mult = loc_vars.nominal_mult + loc_vars.nominal_chips
+        loc_vars.nominal_chips = nil;
+    end
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''localize{type = 'other', key = 'playing_card', set = 'Other', nodes = full_UI_table.name, vars = {localize(specific_vars.value, 'ranks'), localize(specific_vars.suit, 'suits_plural'), colours = {specific_vars.colour}}}'''
+position = "at"
+payload = '''
+if specific_vars.tower_shimmer_mult then
+	localize{type = 'other', key = 'playing_card', set = 'Other', nodes = full_UI_table.name, vars = {localize(specific_vars.suit, 'suits_plural'), localize(specific_vars.value, 'ranks'), colours = {specific_vars.colour}}}
+else 
+    localize{type = 'other', key = 'playing_card', set = 'Other', nodes = full_UI_table.name, vars = {localize(specific_vars.value, 'ranks'), localize(specific_vars.suit, 'suits_plural'), colours = {specific_vars.colour}}}
+end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''if specific_vars.nominal_chips then'''
+position = "before"
+payload = '''
+if specific_vars.nominal_mult then
+    localize{type = 'other', key = 'tower_card_mult', nodes = desc_nodes, vars = {specific_vars.nominal_mult}}
+end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''if obj and obj.set_badges and type(obj.set_badges) == 'function' then'''
+position = "before"
+payload = '''
+if Tower.IsTransmutedPlayingCard and Tower.IsTransmutedPlayingCard(card) then
+    badges[#badges+1] = create_badge(localize('k_tower_transmuted'), Tower.TransmutedGrad, nil, 1.2 )
+end'''
+match_indent = true
+

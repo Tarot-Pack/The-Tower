@@ -6,7 +6,18 @@ Tower.Joker({
 	cost = 0,
 	atlas = "centers",
 	order = 1,
-	blueprint_compat = true
+	blueprint_compat = true,
+    tower_credits = {
+		idea = {
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })
 
 Tower.Joker({
@@ -54,7 +65,19 @@ Tower.Joker({
 	cost = 2,
 	atlas = "jokers1",
 	order = 1,
-	blueprint_compat = true
+	blueprint_compat = true,
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })
 
 Tower.Joker({
@@ -112,7 +135,19 @@ Tower.Joker({
 	cost = 7,
 	atlas = "jokers1",
 	order = 2,
-	blueprint_compat = true
+	blueprint_compat = true,
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })
 
 Tower.Joker({
@@ -170,7 +205,19 @@ Tower.Joker({
 	cost = 8,
 	atlas = "jokers1",
 	order = 3,
-	blueprint_compat = true
+	blueprint_compat = true,
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })
 
 Tower.Joker({
@@ -207,7 +254,19 @@ Tower.Joker({
 	rarity = 1,
 	cost = 1,
 	atlas = "jokers1",
-	blueprint_compat = true
+	blueprint_compat = true,
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })
 
 Tower.Joker({
@@ -238,7 +297,19 @@ Tower.Joker({
 	rarity = 1,
 	cost = 1,
 	atlas = "jokers1",
-	blueprint_compat = true
+	blueprint_compat = true,
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })
 
 Tower.Joker({
@@ -272,7 +343,19 @@ Tower.Joker({
 	rarity = 1,
 	cost = 1,
 	atlas = "jokers1",
-	blueprint_compat = true
+	blueprint_compat = true,
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })
 
 Tower.Joker({
@@ -325,7 +408,19 @@ Tower.Joker({
 	cost = 100,
 	atlas = "jokers1",
 	order = 2,
-	blueprint_compat = true
+	blueprint_compat = true,
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })
 
 Tower.Joker({
@@ -367,7 +462,19 @@ Tower.Joker({
 	blueprint_compat = true,
 	in_pool = function ()
 		return next(SMODS.find_card("j_tower_king_slime"))
-	end
+	end,
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })
 
 Tower.Joker({
@@ -398,7 +505,19 @@ Tower.Joker({
 	rarity = 1,
 	cost = 1,
 	atlas = "jokers1",
-	blueprint_compat = true
+	blueprint_compat = true,
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })
 
 Tower.Joker({
@@ -429,7 +548,19 @@ Tower.Joker({
 	rarity = 2,
 	cost = 5,
 	atlas = "jokers1",
-	blueprint_compat = true
+	blueprint_compat = true,
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })
 
 Tower.Joker({
@@ -467,7 +598,19 @@ Tower.Joker({
 	rarity = "cry_epic",
 	cost = 10,
 	atlas = "jokers1",
-	blueprint_compat = true
+	blueprint_compat = true,
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })
 
 Tower.Joker({
@@ -488,6 +631,18 @@ Tower.Joker({
 			}
 		end
 	end,
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })
 
 Tower.Joker({
@@ -529,6 +684,18 @@ Tower.Joker({
 			}
 		end
 	end,
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })
 
 Tower.Joker({
@@ -656,6 +823,18 @@ Tower.Joker({
 			}
 		end
 	end,
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })
 
 SMODS.Edition:take_ownership('polychrome', {
@@ -679,3 +858,40 @@ function number_format(num, ...)
 
 	return old_number_format(num, ...)
 end
+
+Tower.Joker({
+	name = "tower-shimmer_bucket",
+	key = "shimmer_bucket",
+	pos = { x = 6, y = 1 },
+	pools = { ["Tower-Terra"] = true },
+	loc_vars = function(self, info_queue, card)
+		return {
+			vars = {}
+		}
+	end,
+	rarity = "tower_transmuted",
+	cost = 1,
+	atlas = "jokers1",
+	blueprint_compat = true,
+	
+	can_use = function(self, card)
+		return Tower.ShimmerCanUse(self, card, Tower.EntComp.GetHighlightedCards({G.consumeables, G.hand, G.pack_cards, G.shop_jokers, G.shop_vouchers, G.shop_booster, G.jokers}, card), nil)
+	end,
+
+	use = function(self, card, area, copier)
+		Tower.ShimmerUse(self, card, Tower.EntComp.GetHighlightedCards({G.consumeables, G.hand, G.pack_cards, G.shop_jokers, G.shop_vouchers, G.shop_booster, G.jokers}, card))
+	end,
+
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
+})

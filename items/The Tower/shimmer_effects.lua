@@ -191,6 +191,65 @@ function Tower.IndexOf(table, elem)
     return -1
 end
 
+function Tower.ShuffleInPlace(t, seed)
+    for i = #t, 2, -1 do
+        local j = pseudorandom(seed, 1, i)
+        t[i], t[j] = t[j], t[i]
+    end
+end
+
+local old_get_chip_bonus = Card.get_chip_bonus;
+function Card:get_chip_bonus()
+    if not self.ability.tower_shimmer_mult then return old_get_chip_bonus(self) end
+    -- prevent nominal from scoring as chips for shimmer mult
+    local old = self.base.nominal;
+    self.base.nominal = 0;
+    local val = old_get_chip_bonus(self);
+    self.base.nominal = old;
+    return val
+end
+local old_get_chip_mult = Card.get_chip_mult;
+function Card:get_chip_mult()
+    if not self.ability.tower_shimmer_mult then return old_get_chip_mult(self) end
+    local val = old_get_chip_mult(self);
+    val = val + self.base.nominal
+    return val
+end
+
+function Tower.IsTransmutedPlayingCard(card)
+    return card.ability and card.ability.tower_shimmer_mult
+end
+
+Tower.Shader {
+	key = "transmuted",
+	path = "transmuted.fs",
+}
+
+Tower.DrawStep {
+    key = 'transmuted_shader',
+    order = 999,
+    func = function(self)
+        if self.ability.tower_shimmer_mult then
+            self.children.front:draw_shader('tower_transmuted', nil, self.ARGS.send_to_shader)
+        end
+    end,
+    conditions = { vortex = false, facing = 'front' },
+}
+
+Tower.ShimmerEffect({ -- multage
+    priority = -1,
+    can_use = function (self, other)
+        if not G.P_CENTERS.desc_tower_mult_rank then return end -- disabling the desc card removes the mechanic
+        if other.ability.set == "Default" or other.ability.set == "Enhanced" then
+            return true
+        end
+    end,
+    use = function (self, other)
+        if not G.P_CENTERS.desc_tower_mult_rank then return end -- disabling the desc card removes the mechanic
+        other.ability.tower_shimmer_mult = not (other.ability.tower_shimmer_mult or false) -- Spades of 5
+    end
+})
+
 Tower.ShimmerEffect({ -- fallback for jokers (decraft into two of lower rarity or two jimbos if common)
     priority = -1,
     can_use = function (self, other)
@@ -224,6 +283,9 @@ Tower.ShimmerEffect({ -- fallback for jokers (decraft into two of lower rarity o
             _card:set_ability(center)
             _card:add_to_deck()
             _card:set_card_area(area)
+            if area == G.shop_jokers then
+                create_shop_card_ui(_card)
+            end
             area:emplace(_card)
         end
         area:set_ranks()
@@ -233,12 +295,15 @@ Tower.ShimmerEffect({ -- fallback for jokers (decraft into two of lower rarity o
 
 Tower.ShimmerEffect({ -- Slime into shimmer slime and back
     can_use = function (self, other)
-        if Tower.HasPool('Tower-Slime', other) and other.ability.set == "Joker" then
+        if Tower.HasPool('Tower-Slime', other) and other.ability.set == "Joker" and (G.P_CENTERS.j_tower_shimmer_slime) then
             return true
         end
     end,
     use = function (self, other)
         other:set_ability(G.P_CENTERS.j_tower_shimmer_slime)
+        if other.area == G.shop_jokers then
+            create_shop_card_ui(_card)
+        end
     end
 })
 
@@ -251,6 +316,9 @@ Tower.ShimmerEffect({ -- ortalab conversions (Tower.ShimmerOrtaConversions)
     end,
     use = function (self, other)
         other:set_ability(G.P_CENTERS[Tower.ShimmerOrtaConversions[other.config.center.key]])
+        if other.area == G.shop_jokers then
+            create_shop_card_ui(_card)
+        end
     end
 })
 
@@ -265,7 +333,7 @@ Tower.ShimmerEffect({ -- Generic shimmer effect
             local filtered = {}
             for i, v in ipairs(into) do
                 if G.P_CENTERS[v] then
-                    filtered[#filtered+1] = V
+                    filtered[#filtered+1] = v
                 end
             end
             return #filtered > 0
@@ -283,16 +351,21 @@ Tower.ShimmerEffect({ -- Generic shimmer effect
             end
             if #into == 1 then
                 other:set_ability(into[1])
+                if other.area == G.shop_jokers then
+                    create_shop_card_ui(_card)
+                end
             else
                 local area = other.area;
                 other:start_dissolve()
                 for i, v in ipairs(into) do
                     local center = G.P_CENTERS[v]
-                    print(v, center)
                     if center ~= nil then
                         local _card = create_card(center.set, area, nil, nil, nil, nil, v)
                         _card:add_to_deck()
                         _card:set_card_area(area)
+                        if area == G.shop_jokers then
+                            create_shop_card_ui(_card)
+                        end
                         area:emplace(_card)
                     end
                 end

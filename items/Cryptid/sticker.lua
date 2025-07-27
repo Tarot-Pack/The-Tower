@@ -10,7 +10,18 @@ Tower.Sticker{
  		Joker = true,
         ["Playing Card"] = true,
         Consumable = true
- 	}
+ 	},	
+    tower_credits = {
+		idea = {
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 }
 Tower.onCalculate(function (context, ret) -- do virus calc in batch
     if context.ending_shop then
@@ -77,5 +88,16 @@ Tower.Sticker{
  		Joker = true,
         ["Playing Card"] = true,
         Consumable = true
- 	}
+ 	},
+    tower_credits = {
+		idea = {
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 }

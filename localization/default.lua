@@ -1,5 +1,49 @@
 return {
     descriptions = {
+		["Description Cards"] = {
+			desc_tower_mult_rank = {
+				name = "Mult Rank Card",
+				text = {
+					"A card that scores {C:mult}Mult{} equal",
+					"to its rank instead of {C:chips}Chips",
+				},
+			},
+		},
+		["Content Set"] = {
+			set_tower_blinds = {
+				name = "Blinds",
+				text = {
+					"{C:attention}Boss Blinds{} added",
+					"by The Tower",
+				},
+			},
+			set_tower_slime = {
+				name = "Slime Jokers",
+				text = {
+					"{C:attention}Jokers{} referencing {C:attention}Terraria Slimes{}",
+				},
+			},
+			set_tower_terraria = {
+				name = "Terraria Jokers",
+				text = {
+					"{C:attention}Jokers{} referencing {C:attention}Terraria{}",
+				},
+			},
+			set_tower_apollyon = {
+				name = "Apollyon Jokers",
+				text = {
+					"Powerful Jokers with",
+					"{C:tower_apollyon,E:1}Apollyon{} rarity"
+				},
+			},
+			set_tower_transmuted = {
+				name = "Transmuted Cards",
+				text = {
+					"Cards related to/created through",
+					"the {C:tower_transmuted}Shimmer{}"
+				},
+			},
+		},
 		Other = {
 			p_tower_slime_1 = {
 				name = "Slime Pack",
@@ -45,6 +89,12 @@ return {
 				},
 			},
 
+			tower_card_mult={
+                text={
+                    "{C:mult}+#1#{} mult",
+                },
+            },
+
 
 			tower_bound = { 
 				name = "Bound",
@@ -78,16 +128,13 @@ return {
 				},
 			},
 		},
-		Bookmark = {
-			bookmark_tower_truenegative = {
-				name = "Parity Bookmark",
-				text = {
-					"Has a {C:attention}#1#% (x#2#){}",
-					"chance of making a joker {C:attention}true-negative{}"
-				}
-			},
-		},
 		Book = {
+			book_tower_no_book = {
+				name = "No Book",
+				text = {
+					"Does not apply {C:attention}Book{} effects",
+				},
+			},
 			book_tower_base = {
 				name = "The Hero and the Tower",
 				text = {
@@ -1120,8 +1167,8 @@ return {
 			j_tower_pinky = {
 				name = "Pinky",
 				text = {
-					"{X:dark_edition,C:white}#2#{} Chips",
-					"{X:dark_edition,C:white}#3#{} Mult",
+					"{X:dark_edition,C:white} #2# {} Chips",
+					"{X:dark_edition,C:white} #3# {} Mult",
 					"Increase operator by",
 					"one for each {C:attention}Slime{}",
 					"{C:inactive}(Currently #1# Slimes)"
@@ -1164,6 +1211,42 @@ return {
 					"{C:attention}Gold Seal{}, {C:attention}Gold{} and {C:attention}Golden{} gives {X:dark_edition,C:white} ^#1# {} dollars"
 				},
 			},
+			j_tower_shimmer_bucket = {
+				name = "Bottomless Shimmer Bucket",
+				text = {
+					"{C:attention}Use{} this card on ???",
+					"{C:inactive}(Max uses: Infinity)"
+				},
+			},
+			j_tower_tanpaku = {
+				name = "Tanpaku",
+				text = {
+					"When a {C:attention}Consumable{} is used, create {C:attention}#1#{} copies",
+					"of {C:attention}all selected and created cards{} and {C:attention}one{} copy",
+					"of the {C:attention}Consumable{}, then increase copies by {C:attention}#2#{}" -- 1 copies increase by 1
+				},
+			},
+			j_tower_tanjun = {
+				name = "Tanjun",
+				text = {
+					"{X:dark_edition,C:white} ^#1# Chips {} for every #1# times scored cards are triggered" -- ^2 every 2
+				},
+			},
+			j_tower_mi = {
+				name = "Mi",
+				text = {
+					"{X:dark_edition,C:white} #1# {} Chips, multiply by highest value on the rightmost",
+					"Joker and increase operator by #2# at end of round" -- x1 by 1
+				},
+			},
+			j_tower_jufuku = {
+				name = "Jufuku",
+				text = {
+					"{C:attention}Double{} all values",
+					"of all scored {C:attention}Jokers",
+					"and {C:attention}Playing Cards"
+				},
+			},
 		},
 		tower_transmuted = {
 			c_tower_aether_monolith = {
@@ -1186,6 +1269,7 @@ return {
 		labels = {
 			k_tower_apollyon = "Apollyon",
 			k_tower_transmuted = "Transmuted",
+			b_tower_transmuted = "Transmuted",
 
 			tower_truenegative = "True Negative",
 			tower_bound = "Bound",
@@ -1199,6 +1283,7 @@ return {
 		dictionary = {
 			k_tower_apollyon = "Apollyon",
 			k_tower_transmuted = "Transmuted",
+			b_tower_transmuted = "Transmuted",
 
             k_book = "Book",
             k_books = "Books",
@@ -1221,6 +1306,8 @@ return {
 			tower_debuff_automaton = "Copies three random Code Blinds",
 			tower_debuff_merge = "Copies the effects of the next two blinds",
 			tower_debuff_cryfunction = "Copies the effects of the last three consumable blinds played",
+
+			tower_skip_book = "Skip book selection",
 
 			ranks = {
 				tower_0 = '0',
@@ -1245,7 +1332,12 @@ return {
 			tower_hand_nil = "ERROR",
 
 			k_tower_slime_pool = "Slime Pack",
-			k_tower_terra_pool = "Terra Pack"
+			k_tower_terra_pool = "Terra Pack",
+
+			k_tower_transmuted_ex = { 
+				"Transmuted cards are cards created by the Shimmer.",
+				"They cannot be obtained through other means."
+			},
 		},
 		v_dictionary = {
 			tower_bounce = 'Bounce!',

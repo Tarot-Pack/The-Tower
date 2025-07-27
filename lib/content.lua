@@ -95,6 +95,13 @@ Tower.Atlas({
 })
 
 Tower.Atlas({
+	key = "widejokers",
+	path = "tower_widejokers.png",
+	px = 96,
+	py = 87
+})
+
+Tower.Atlas({
 	key = "achievements",
 	path = "tower_achievements.png",
 	px = 66,
@@ -118,6 +125,13 @@ SMODS.Atlas({
 SMODS.Atlas({
 	key = "consumables",
 	path = "tower_consumables.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Atlas({
+	key = "description_cards",
+	path = "tower_descriptioncards.png",
     px = 71,
     py = 95
 })
@@ -177,4 +191,57 @@ SMODS.Rarity({
         cycle = 1,
     },
 	default = "j_tower_pinky",
+})
+
+
+SMODS.ContentSet({
+	key = "blinds",
+	atlas = "blinds",
+	pos = { x = 0, y = 15 },
+	cry_blind = true,
+	cry_order = -4,
+})
+
+SMODS.ContentSet({
+	key = "slime",
+	atlas = "jokers1",
+	pos = { x = 2, y = 0 },
+	cry_order = -3,
+})
+
+SMODS.ContentSet({
+	key = "terraria",
+	atlas = "jokers1",
+	pos = { x = 2, y = 1 },
+	cry_order = -2,
+})
+
+SMODS.ContentSet({
+	key = "transmuted",
+	atlas = "consumables",
+	pos = { x = 3, y = 0 },
+	cry_order = -1,
+})
+
+SMODS.ContentSet({
+	key = "apollyon",
+	atlas = "jokers1",
+	pos = { x = 5, y = 0 },
+	soul_pos = { x = 6, y = 0, extra = { x = 7, y = 0 } },
+	cry_order = 0,
+})
+
+SMODS.DescriptionCard({
+	key = "mult_rank",
+	atlas = "description_cards",
+	dependencies = {
+		items = {
+			"set_tower_transmuted"
+		}
+	},
+	pools = {tower_transmuted = true},
+	pos = { x = 0, y = 0 },
+	set_badges = function (self, card, badges)
+		badges[#badges+1] = create_badge(localize('k_tower_transmuted'), Tower.TransmutedGrad, nil, 1.2 )
+	end,
 })

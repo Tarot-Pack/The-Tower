@@ -1,4 +1,4 @@
-SMODS.Consumable({
+Tower.Consumable({
 	set = "tower_transmuted",
 	name = "tower-aether_monolith",
 	key = "aether_monolith",
@@ -49,11 +49,62 @@ SMODS.Consumable({
 	force_use = function(self, card, area)
 		self:use(card, area)
 	end,
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })
 
 -- shimmer bottle is pain
+function Tower.ShimmerCanUse(self, card, cards, max)
+	if max == nil then
+		if #cards == 0 then
+			return false
+		end
+	else
+		if #cards > max or #cards == 0 then
+			return false
+		end
+	end
+	for q = 1, #cards do
+		local is_good = false
+		for i = 1, #Tower.ShimmerEffects do
+			if Tower.ShimmerEffects[i].can_use and Tower.ShimmerEffects[i].can_use(self, cards[q], card) then
+				is_good = true
+				break
+			end
+		end
+		if not is_good then
+			return false
+		end
+	end
+	return true
+end
 
-SMODS.Consumable({
+function Tower.ShimmerUse(self, card, cards)
+	table.sort(Tower.ShimmerEffects, function (a, b)
+		return a.priority > b.priority
+	end)
+	Tower.EntComp.FlipThen(cards, function(item)
+		for i = 1, #Tower.ShimmerEffects do
+			if Tower.ShimmerEffects[i].can_use and Tower.ShimmerEffects[i].can_use(self, item, card) then
+				Tower.ShimmerEffects[i].use(self, item, card)
+				return
+			end
+		end
+	end)
+end
+
+
+Tower.Consumable({
 	set = "Spectral",
 	name = "tower-shimmer_bottle",
 	key = "shimmer_bottle",
@@ -61,6 +112,12 @@ SMODS.Consumable({
 	cost = 4,
 	atlas = "consumables",
 	order = 1,
+
+	dependencies = {
+		items = {
+			"set_tower_transmuted",
+		}
+	},
 
     config = {
         select = 1,
@@ -75,48 +132,23 @@ SMODS.Consumable({
 	end,
 
 	can_use = function(self, card)
-        local cards = Tower.EntComp.GetHighlightedCards({G.consumeables, G.hand, G.pack_cards, G.shop_jokers, G.shop_vouchers, G.shop_booster, G.jokers}, card)
-        if #cards > card.ability.select or #cards == 0 then
-            return false
-        end
-        for q = 1, #cards do
-            local is_good = false
-            for i = 1, #Tower.ShimmerEffects do
-                if Tower.ShimmerEffects[i].can_use and Tower.ShimmerEffects[i].can_use(self, cards[q], card) then
-                    is_good = true
-                    break
-                end
-            end
-            if not is_good then
-                return false
-            end
-        end
-		return true
+		return Tower.ShimmerCanUse(self, card, Tower.EntComp.GetHighlightedCards({G.consumeables, G.hand, G.pack_cards, G.shop_jokers, G.shop_vouchers, G.shop_booster, G.jokers}, card), card.ability.select)
 	end,
 
 	use = function(self, card, area, copier)
-        local cards = Tower.EntComp.GetHighlightedCards({G.consumeables, G.hand, G.pack_cards, G.shop_jokers, G.shop_vouchers, G.shop_booster, G.jokers}, card)
-
-        table.sort(Tower.ShimmerEffects, function (a, b)
-            return a.priority > b.priority
-        end)
-        Tower.EntComp.FlipThen(cards, function(card)
-            for i = 1, #Tower.ShimmerEffects do
-                for q = 1, #cards do
-                    if Tower.ShimmerEffects[i].can_use and Tower.ShimmerEffects[i].can_use(self, cards[q], card) then
-                        Tower.ShimmerEffects[i].use(self, cards[q])
-                        return
-                    end
-                end
-            end
-        end)
+		Tower.ShimmerUse(self, card, Tower.EntComp.GetHighlightedCards({G.consumeables, G.hand, G.pack_cards, G.shop_jokers, G.shop_vouchers, G.shop_booster, G.jokers}, card))
 	end,
-	demicoloncompat = true,
-	force_use = function(self, card, area)
-        for i, v in ipairs(Tower.ShimmerEffects) do
-            if v.can_use and v.can_use(self, card, area, copier) then
-                v.force_use(self, card, area, copier)
-            end
-        end
-	end,
+	
+    tower_credits = {
+		idea = {
+			"pikaboy10",
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
 })

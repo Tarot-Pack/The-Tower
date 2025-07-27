@@ -12,6 +12,19 @@ Tower.Sticker{
         ["Playing Card"] = true,
         Consumable = true
  	},
+
+	tower_credits = {
+		idea = {
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
+
     apply = function (self, card, val)
         if val and card.ability.tower_fuckyou then
             local remove_ind = nil
@@ -43,6 +56,17 @@ Tower.Sticker{
 	badge_colour = HEX("9174e1"),
     rate = 0,
 	order = 999999,
+    tower_credits = {
+		idea = {
+			"jamirror",
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	},
     sets = {
         ["Playing Card"] = true,
  	}

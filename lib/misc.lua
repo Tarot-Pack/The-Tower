@@ -26,6 +26,61 @@ function SMODS.calculate_context(context, return_table)
         return ret
     end
 end
+G.FUNCS.tower_use_joker = function(e, mute, nosave)
+    local card = e.config.ref_table;
+    local old = G.STATE
+    if card.ability.set == 'Booster' then G.GAME.PACK_INTERRUPT = G.STATE end 
+    G.STATE = (G.STATE == G.STATES.TAROT_PACK and G.STATES.TAROT_PACK) or
+      (G.STATE == G.STATES.PLANET_PACK and G.STATES.PLANET_PACK) or
+      (G.STATE == G.STATES.SPECTRAL_PACK and G.STATES.SPECTRAL_PACK) or
+      (G.STATE == G.STATES.STANDARD_PACK and G.STATES.STANDARD_PACK) or
+      (G.STATE == G.STATES.SMODS_BOOSTER_OPENED and G.STATES.SMODS_BOOSTER_OPENED) or
+      (G.STATE == G.STATES.BUFFOON_PACK and G.STATES.BUFFOON_PACK) or
+      G.STATES.PLAY_TAROT
+      
+    G.CONTROLLER.locks.use = true
+
+    if card.children.use_button then card.children.use_button:remove(); card.children.use_button = nil end
+    if card.children.sell_button then card.children.sell_button:remove(); card.children.sell_button = nil end
+    if card.children.price then card.children.price:remove(); card.children.price = nil end
+
+    card.config.center:use(card, area)
+    G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.2,
+        func = function()
+            stop_use()
+            G.STATE = old
+            card:highlight(card.is_higlighted)
+            G.CONTROLLER.locks.use = false
+            return true
+        end
+    }))
+end
+G.FUNCS.tower_can_use_joker = function(e)
+    if e.config.ref_table.config.center:can_use(e.config.ref_table) then 
+        e.config.colour = G.C.RED
+        e.config.button = 'tower_use_joker'
+    else
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+    end
+end
+
+local old_sell_and_use = G.UIDEF.use_and_sell_buttons
+function G.UIDEF.use_and_sell_buttons(card)
+    local val = old_sell_and_use(card)
+    if card.config.center.use then
+        val.nodes[1].nodes[2].nodes[1] = {n=G.UIT.C, config={align = "cr"}, nodes={
+            {n=G.UIT.C, config={ref_table = card, align = "cr",maxw = 1.25, padding = 0.1, r=0.08, minw = 1.25, minh = 1, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'tower_use_joker', func = 'tower_can_use_joker'}, nodes={
+                {n=G.UIT.B, config = {w=0.1,h=0.6}},
+                {n=G.UIT.T, config={text = localize('b_use'),colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true}}
+            }}
+        }}
+    end
+    return val
+end
+
 
 local old_never_scores = SMODS.never_scores
 function SMODS.never_scores(c) 
@@ -138,7 +193,6 @@ G.FUNCS.your_suits_page = function (a)
     return val
 end
 
-
 local old_delete = SMODS.Center.delete
 
 SMODS.Center.delete = function(self)
@@ -148,6 +202,108 @@ SMODS.Center.delete = function(self)
     return old_delete(self)
 end
 
+local old_insert_pool = SMODS.insert_pool;
+G.tower_transmuted_pool_copy = {}
+SMODS.insert_pool = function (pool, center)
+    old_insert_pool(pool, center)
+    if pool == G.P_CENTER_POOLS.tower_transmuted then
+        local good = true;
+        for i, v in ipairs(G.tower_transmuted_pool_copy) do
+            if v.key == center.key then 
+                good = false
+                break
+            end
+        end
+        if not good then return end
+        old_insert_pool(G.tower_transmuted_pool_copy, center)
+    end
+end
+
+Tower.AfterAllLoaded(function ()
+    local old_enable = SMODS.Center.enable
+    SMODS.Center.enable = function(self)
+        if self.cry_disabled then
+            if self.rarity == "tower_transmuted" or self.set == "tower_transmuted" or (self.pools and self.pools.tower_transmuted) then
+                SMODS.insert_pool(G.P_CENTER_POOLS.tower_transmuted, self)
+            end
+        end
+        return old_enable(self)
+    end
+    local old = SMODS.collection_pool;
+    SMODS.collection_pool = function(base_pool)
+        if base_pool ~= G.P_CENTER_POOLS.tower_transmuted then
+            local val = old(base_pool)
+            local actual = {}		
+            for k, v in pairs(val) do
+                if not (v.rarity == "tower_transmuted" or v.set == "tower_transmuted") then
+                    actual[#actual+1] = v
+                end
+            end
+            return actual
+		else
+            return old(G.tower_transmuted_pool_copy)
+        end
+    end
+
+    local old_modsCollectionTally = modsCollectionTally
+function modsCollectionTally(pool, set)
+    if set == 'tower_transmuted' or pool == G.P_CENTER_POOLS.tower_transmuted then
+        return Tower.CountTransmuted()
+    end
+    local obj_tally = old_modsCollectionTally(pool, set);
+	if G.ACTIVE_MOD_UI and (Cryptid.mod_gameset_whitelist[G.ACTIVE_MOD_UI.id] or G.ACTIVE_MOD_UI.id == "Cryptid") then
+		--infer pool
+		local _set = set or Cryptid.safe_get(pool, 1, "set")
+		--check for general consumables
+		local consumable = false
+		if _set and Cryptid.safe_get(pool, 1, "consumeable") then
+			for i = 1, #pool do
+				if Cryptid.safe_get(pool, i, "set") ~= _set then
+					consumable = true
+					break
+				end
+			end
+		end
+		if _set then
+			if _set == "Seal" then
+				pool = SMODS.Seal.obj_table
+				set = _set
+			elseif G.P_CENTER_POOLS[_set] then
+				pool = SMODS.Center.obj_table
+				set = _set
+			end
+		end
+		for _, v in pairs(pool) do
+			if v.mod and G.ACTIVE_MOD_UI.id == v.mod.id and not v.no_collection then
+				if set then
+					if v.rarity == "tower_transmuted" and set == "Joker" then
+						obj_tally.of = obj_tally.of - 1
+						if Cryptid.enabled(v.key) == true then
+							obj_tally.tally = obj_tally.tally - 1
+						end
+					end
+				end
+			end
+		end
+	else
+        local set = set or nil
+
+        for _, v in pairs(pool) do
+            if v.mod and G.ACTIVE_MOD_UI.id == v.mod.id and not v.no_collection then
+                if set then
+                    if v.rarity == "tower_transmuted" and set == "Joker" then
+                        obj_tally.of = obj_tally.of-1
+                        if v.discovered then 
+                            obj_tally.tally = obj_tally.tally-1
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return obj_tally
+end
+end)
 
 local old_inject = SMODS.Center.inject
 
@@ -160,19 +316,18 @@ SMODS.Center.inject = function(self)
 
         -- the same but with joker pool injection omitted
         for k, v in pairs(SMODS.ObjectTypes) do
-            -- Should "cards" be formatted as `{[<center key>] = true}` or {<center key>}?
-            -- Changing "cards" and "pools" wouldn't be hard to do, just depends on preferred format
-            if ((self.pools and self.pools[k]) or (v.cards and v.cards[self.key])) then
-                v:inject_card(self)
+            if k ~= "Joker" then
+                -- Should "cards" be formatted as `{[<center key>] = true}` or {<center key>}?
+                -- Changing "cards" and "pools" wouldn't be hard to do, just depends on preferred format
+                if ((self.pools and self.pools[k]) or (v.cards and v.cards[self.key])) then
+                    v:inject_card(self)
+                end
             end
         end
-
-        print("ETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDDETESYIBIUVQDIUGQBVDYVIUQBDVQIUDBIUQBDIUBQDD")
     else
         return old_inject(self)
     end
 end
-
 Tower.AfterAllLoaded(function()
     -- added scaling
     local old_smds = SMODS.get_blind_amount;
@@ -228,6 +383,7 @@ function Tower.JokerBoosters(conf)
         weight = conf.weight,
         amount = conf.amount,
         name = conf.name,
+        tower_credits = conf.tower_credits,
         create_card = function(self, card)
             if
                 (not G.GAME.used_jokers[conf.soul_card]) or next(find_joker("Showman"))
@@ -293,6 +449,7 @@ function Tower.Joker(object)
     if object.rarity == "cry_exotic" then
         object.tower_orig_rarity = object.rarity
     end
+
     return old_tower_joker(object)
 end
 

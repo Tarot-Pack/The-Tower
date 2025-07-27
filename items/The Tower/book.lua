@@ -1,4 +1,16 @@
 Tower.Book {
+    name = "tower-no_book",
+    key = "no_book",
+    atlas = "book",
+    sticker_atlas = "stickers",
+    applied_books = {},
+    pos = { x = -1, y = 0 },
+    applied_books = {},
+    modifiers = function() end,
+    colour = HEX('000000'),
+    config = {},
+}
+Tower.Book {
     name = "tower-base",
     key = "base",
     atlas = "book",
@@ -8,6 +20,7 @@ Tower.Book {
     applied_books = {},
     modifiers = function()
         G.GAME.win_ante = 32; 
+        G.GAME.modifiers.tower_book_enabled = true
         G.GAME.modifiers.tower_tarot_rate = nil; -- no tarots
         G.GAME.modifiers.tower_spectral_rate = 16;
         G.GAME.modifiers.tower_code_enabled = true
