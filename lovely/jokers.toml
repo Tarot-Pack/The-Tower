@@ -12,3 +12,188 @@ payload = '''
 card_eval_status_text(scored_card, 'jokers', nil, percent, nil, {message = localize{type='variable',key= to_big(amount) > to_big(0) and 'a_xmult' or 'a_xmult_minus',vars={amount}}, Xmult_mod =  amount, colour =  G.C.EDITION, edition = true})
 '''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''functions/button_callbacks.lua'''
+pattern = '''if card.ability.set == 'Booster' and not nosave and G.STATE == G.STATES.SHOP then'''
+position = "before"
+payload = '''
+if card.ability.consumeable then
+    SMODS.calculate_context({ tower_before_consumable_used = true, consumeable = card, area = card.from_area })
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/utils.lua"]'''
+pattern = '''local available_rarities = copy_table(SMODS.ObjectTypes[_pool_key].rarities)'''
+position = "after"
+payload = '''
+available_rarities = available_rarities or {}
+'''
+match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''if obj and obj.set_badges and type(obj.set_badges) == 'function' then'''
+position = "before"
+payload = '''
+if (card.ability and card.ability.set == "Joker") and 
+((not ((G.GAME and G.GAME.tower_global_joker_invert) or false) and (card.ability and card.ability.tower_joker_invert))
+or (((G.GAME and G.GAME.tower_global_joker_invert) or false) and (not ((card.ability and card.ability.tower_joker_invert) or false)))) then
+    badges[#badges+1] = create_badge(localize('k_tower_inverted'), Tower.ChipMultGrad, nil, 1 )
+    loc_vars = loc_vars or {}
+    loc_vars.tower_joker_invert = true
+end'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS Cryptid "lib/calculate.lua"]'''
+pattern = '''if G.jokers.cards[i].ability.cry_rigged then
+    G.GAME.probabilities.normal = 1e9
+end'''
+position = "before"
+payload = '''
+if next(find_joker('tower-forgotten_die')) and (G.jokers.cards[i].ability.tower_forgotten_choice == nil) then
+    G.jokers.cards[i].ability.tower_forgotten_choice = pseudorandom(pseudoseed('forgotten_die')) > 0.5
+elseif not (next(find_joker('tower-forgotten_die'))) then
+    G.jokers.cards[i].ability.tower_forgotten_choice = nil
+end
+if G.jokers.cards[i].ability.tower_forgotten_choice ~= nil then
+    if G.jokers.cards[i].ability.tower_forgotten_choice then
+        G.GAME.probabilities.normal = 1e9
+    else
+        G.GAME.probabilities.normal = 0
+    end
+end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS Cryptid "lib/calculate.lua"]'''
+pattern = '''if G.jokers.cards[i].ability.cry_rigged then
+    G.GAME.probabilities.normal = ggpn
+end'''
+position = "before"
+payload = '''
+if G.jokers.cards[i].ability.tower_forgotten_choice ~= nil then
+    G.GAME.probabilities.normal = ggpn
+end'''
+match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS Cryptid "lib/calculate.lua"]'''
+pattern = '''if card.ability.cry_rigged then
+    G.GAME.probabilities.normal = 1e9
+end'''
+position = "before"
+payload = '''
+if next(find_joker('tower-forgotten_die')) and (card.ability.tower_forgotten_choice == nil) then
+    card.ability.tower_forgotten_choice = pseudorandom(pseudoseed('forgotten_die')) > 0.5
+elseif not (next(find_joker('tower-forgotten_die'))) then
+    card.ability.tower_forgotten_choice = nil
+end
+if card.ability.tower_forgotten_choice ~= nil then
+    if card.ability.tower_forgotten_choice then
+        G.GAME.probabilities.normal = 1e9
+    else
+        G.GAME.probabilities.normal = 0
+    end
+end'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS Cryptid "lib/calculate.lua"]'''
+pattern = '''if card.ability.cry_rigged then
+    G.GAME.probabilities.normal = ggpn
+end'''
+position = "before"
+payload = '''
+if card.ability.tower_forgotten_choice ~= nil then
+    G.GAME.probabilities.normal = ggpn
+end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS Cryptid "lib/calculate.lua"]'''
+pattern = '''if active_side.ability.cry_rigged then
+    G.GAME.probabilities.normal = 1e9
+end'''
+position = "before"
+payload = '''
+if next(find_joker('tower-forgotten_die')) and (active_side.ability.tower_forgotten_choice == nil) then
+    active_side.ability.tower_forgotten_choice = pseudorandom(pseudoseed('forgotten_die')) > 0.5
+elseif not (next(find_joker('tower-forgotten_die'))) then
+    active_side.ability.tower_forgotten_choice = nil
+end
+if active_side.ability.tower_forgotten_choice ~= nil then
+    if active_side.ability.tower_forgotten_choice then
+        G.GAME.probabilities.normal = 1e9
+    else
+        G.GAME.probabilities.normal = 0
+    end
+end'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS Cryptid "lib/calculate.lua"]'''
+pattern = '''if active_side.ability.cry_rigged then
+    G.GAME.probabilities.normal = ggpn
+end'''
+position = "before"
+payload = '''
+if active_side.ability.tower_forgotten_choice ~= nil then
+    G.GAME.probabilities.normal = ggpn
+end'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS Cryptid "lib/calculate.lua"]'''
+pattern = '''if G.jokers.cards[j].ability.cry_rigged then
+    G.GAME.probabilities.normal = 1e9
+end'''
+position = "before"
+payload = '''
+if next(find_joker('tower-forgotten_die')) and (G.jokers.cards[j].ability.tower_forgotten_choice == nil) then
+    G.jokers.cards[j].ability.tower_forgotten_choice = pseudorandom(pseudoseed('forgotten_die')) > 0.5
+elseif not (next(find_joker('tower-forgotten_die'))) then
+    G.jokers.cards[j].ability.tower_forgotten_choice = nil
+end
+if G.jokers.cards[i].ability.tower_forgotten_choice ~= nil then
+    if G.jokers.cards[j].ability.tower_forgotten_choice then
+        G.GAME.probabilities.normal = 1e9
+    else
+        G.GAME.probabilities.normal = 0
+    end
+end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS Cryptid "lib/calculate.lua"]'''
+pattern = '''if G.jokers.cards[j].ability.cry_rigged then
+    G.GAME.probabilities.normal = ggpn
+end'''
+position = "before"
+payload = '''
+if G.jokers.cards[j].ability.tower_forgotten_choice ~= nil then
+    G.GAME.probabilities.normal = ggpn
+end'''
+match_indent = true

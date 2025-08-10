@@ -26,6 +26,7 @@ function SMODS.calculate_context(context, return_table)
         return ret
     end
 end
+
 G.FUNCS.tower_use_joker = function(e, mute, nosave)
     local card = e.config.ref_table;
     local old = G.STATE
@@ -70,14 +71,22 @@ end
 local old_sell_and_use = G.UIDEF.use_and_sell_buttons
 function G.UIDEF.use_and_sell_buttons(card)
     local val = old_sell_and_use(card)
-    if card.config.center.use and card.config.center.set == "Joker" and card.area ~= G.pack_cards then -- no using in joker pack if ever in one (only select)
-        val.nodes[1].nodes[2].nodes[1] = {n=G.UIT.C, config={align = "cr"}, nodes={
-            {n=G.UIT.C, config={ref_table = card, align = "cr",maxw = 1.25, padding = 0.1, r=0.08, minw = 1.25, minh = 1, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'tower_use_joker', func = 'tower_can_use_joker'}, nodes={
-                {n=G.UIT.B, config = {w=0.1,h=0.6}},
-                {n=G.UIT.T, config={text = localize('b_use'),colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true}}
+    if
+		card.config
+        and card.config.center
+	then
+        if card.config.center.use and card.config.center.set == "Joker" and card.area ~= G.pack_cards and (card.config.center.mod.id == "Tower" or Tower.FeatureWL[card.config.center.mod.id]) then -- no using in joker pack if ever in one (only select)
+            val.nodes[1].nodes[2].nodes[1] = {n=G.UIT.C, config={align = "cr"}, nodes={
+                {n=G.UIT.C, config={ref_table = card, align = "cr",maxw = 1.25, padding = 0.1, r=0.08, minw = 1.25, minh = 1, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'tower_use_joker', func = 'tower_can_use_joker'}, nodes={
+                    {n=G.UIT.B, config = {w=0.1,h=0.6}},
+                    {n=G.UIT.T, config={text = localize('b_use'),colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true}}
+                }}
             }}
-        }}
-    end
+        end
+        if card.config.center.tower_inescapeable and card.config.center.rarity ~= "cry_cursed" then -- exclude cry_cursed as cryptid will just do it for us
+		    table.remove(val.nodes[1].nodes, 1)
+        end
+	end
     return val
 end
 
@@ -428,8 +437,80 @@ function Tower.BatchBooster(conf)
 end
 
 
+function Tower.find_card(key, count_debuffed)
+    local results = {}
+    local areas = {SMODS.get_card_areas('jokers'), {G.consumeables}}
+    for _, h in ipairs(areas) do
+        for _2, area in ipairs(h) do
+            if area.cards then
+                for _, v in pairs(area.cards) do
+                    if v and type(v) == 'table' and v.config.center.key == key and (count_debuffed or not v.debuff) then
+                        table.insert(results, v)
+                    end
+                end
+            end
+        end
+    end
+    return results
+end
 
-function Tower.JokerBoosters(conf)
+function Tower.poll_pool_weighted(_pool_key, _rand_key)
+    local rarity_poll = pseudorandom(pseudoseed(_rand_key or ('rarity'..G.GAME.round_resets.ante))) -- Generate the poll value
+    local available_rarities = SMODS.ObjectTypes[_pool_key].tower_rarities or {} -- Table containing a list of rarities and their rates
+    local vanilla_rarities = {["Common"] = 1, ["Uncommon"] = 2, ["Rare"] = 3, ["Legendary"] = 4}
+    if #available_rarities == 0 then return nil end
+    -- Calculate total rates of rarities
+    local total_weight = 0
+    local compiled = {}
+    for key, items in ipairs(available_rarities) do
+        if #items > 0 then
+            local v = {
+                key = key,
+                weight = 1
+            }
+            if v.key ~= "spec_none" then
+                v.mod = G.GAME[tostring(v.key):lower().."_mod"] or 1
+                -- Should this fully override the v.weight calcs?
+                if SMODS.Rarities[v.key] and SMODS.Rarities[v.key].get_weight and type(SMODS.Rarities[v.key].get_weight) == "function" then
+                    v.weight = SMODS.Rarities[v.key]:get_weight(v.weight, SMODS.ObjectTypes[_pool_key])
+                end
+            else
+                v.mod = 1;
+            end
+            v.weight = v.weight*v.mod
+            total_weight = total_weight + v.weight
+            compiled[#compiled+1] = v
+        else
+            available_rarities[key] = nil
+        end
+    end
+    -- recalculate rarities to account for v.mod
+    for _, v in ipairs(compiled) do
+        v.weight = v.weight / total_weight
+    end
+
+    -- Calculate selected rarity
+    local weight_i = 0
+    local selected_rarity;
+    for _, v in ipairs(compiled) do
+        weight_i = weight_i + v.weight
+        if rarity_poll < weight_i then
+            selected_rarity = v.key
+        end
+    end
+    if selected_rarity == nil then
+        return nil
+    end
+    local pool = available_rarities[selected_rarity];
+    local new_pool = {};
+    for i = 1, #pool do
+        if ((not pool[i].in_pool) or pool[i]:in_pool()) and not (G.GAME.banned_keys[pool[i].key]) then
+            new_pool[#new_pool+1] = pool[i]
+        end
+    end
+    return pseudorandom_element(new_pool, _rand_key).key
+end
+function Tower.GenericBoosters(conf)
     Tower.BatchBooster({
         key = conf.key,
         kind = conf.kind,
@@ -450,7 +531,8 @@ function Tower.JokerBoosters(conf)
                     return create_card(conf.type, G.pack_cards, nil, nil, true, true, conf.soul_card, nil)
                 end
             end
-            return create_card(conf.type, G.pack_cards, nil, SMODS.poll_rarity("Joker", 'rarity'..G.GAME.round_resets.ante..conf.type), true, true, nil, conf.type)
+            return create_card(conf.type, G.pack_cards, nil, nil, true, true, Tower.poll_pool_weighted(conf.type, 'rarity'..G.GAME.round_resets.ante..conf.type), nil)
+            --return create_card(conf.type, G.pack_cards, nil, SMODS.poll_rarity(conf.type, 'rarity'..G.GAME.round_resets.ante..conf.type), true, true, nil, conf.type)
         end,
         ease_background_colour = function(self)
             ease_colour(G.C.DYN_UI.MAIN, conf.colour)
@@ -474,11 +556,49 @@ function Tower.JokerBoosters(conf)
             colour = conf.colour,
             loc_key = "k_plus_joker",
             create = function()
-                local ccard = create_card(conf.type, G.jokers, nil, nil, true, true, nil, "diha")
+                local ccard = create_card(conf.type, nil, nil, nil, true, true, nil, "diha")
+                local area = G.jokers;
+                if ccard.ability.consumeable then
+                    area = G.consumeables
+                elseif other.ability.set == "Default" or other.ability.set == "Enhanced" then
+                    area = G.deck
+                end
+                ccard.area = area;
                 ccard:set_edition({ negative = true }, true)
                 ccard:add_to_deck()
-                G.jokers:emplace(ccard)
+                area:emplace(ccard)
             end,
+        },
+    })
+end
+
+function Tower.AuthorBooster(author, cnf)
+    Tower.GenericBoosters({ -- order 1 - 3
+        key = author,
+        kind = author,
+        atlas = cnf.atlas,
+        pos = cnf.pos,
+        order = cnf.order,
+        config = cnf.config,
+        cost = cnf.cost,
+        weight = cnf.weight,
+        soul_card = cnf.soul_card,
+        amount = cnf.amount,
+        colour = cnf.colour,
+        secondary_colour = cnf.secondary_colour,
+        name = "tower_" .. author .. "_pack",
+        type = "Tower-" .. author,
+        group_key = "k_tower_" .. author .. "_pack",
+        tower_credits = {
+            idea = {
+                author,
+            },
+            art = {
+                "jamirror",
+            },
+            code = {
+                "jamirror",
+            },
         },
     })
 end
@@ -497,6 +617,7 @@ rarityOrderModifiers["tower_transmuted"] = 9
 local poolOrder = {
     slime = 1
 }
+local shimmer_from_to_load = {}
 function Tower.Joker(object)
     object.order = (object.order or 0) + ((rarityOrderModifiers[object.rarity] or 10) * 1000)
     if object.pools then
@@ -513,4 +634,21 @@ end
 
 function Tower.HasPool(pool, item)
     return item.config.center and item.config.center.pools and item.config.center.pools[pool]
+end
+
+function Tower.RollDie(seed_key, max) -- max should be big or string
+    max = to_big(max)
+    local length = #tostring(max)
+    local random = to_big(pseudorandom(pseudoseed(seed_key)));
+    local number = tostring(math.floor(random * max)+1); -- (random * max) maximum is max - 1 but adding one makes it correct and provides the 1 minimum
+    local digits = {}
+    for i = 1, length - #number do
+        digits[#digits+1] = 0
+    end
+
+    for i = 1, #number do
+        digits[#digits+1] = tonumber(string.sub(number, i, i))
+    end
+
+    return number, digits
 end

@@ -133,15 +133,26 @@ function Tower.isPositive(n)
     n = to_big(n)
     return n.sign > 0
 end
-registerBlindMethod('TowerCheckWin', function (self)
+Blind.TowerCheckWin = function (self, ...)
+    if next(find_joker('tower-99_percent')) then -- 99% behavour
+        G['tower_99_cache' .. tostring(G.GAME.round)] = G['tower_99_cache' .. tostring(G.GAME.round)] or (pseudorandom(pseudoseed("99_percent")) > 1/20)
+        return G['tower_99_cache' .. tostring(G.GAME.round)] -- 19/20 win 1/20 lose
+    end
+    if self.config.blind ~= nil and self.config.blind.key ~= nil then
+        local bl = G.P_BLINDS[self.config.blind.key]
+        if (bl ~= nil and bl[name]) then
+            return bl[name](bl, ...)
+        end
+    end
+
     if Tower.isInfinite(G.GAME.blind.chips) then -- patch math.huge stuff
         if not Tower.isPositive(G.GAME.blind.chips) then
-            return true -- always allow win
+            return true -- always allow win if negative because if score is neg inf then it is >= and if score is pos inf then it is always biggee
         end
         return Tower.isInfinite(G.GAME.chips) and Tower.isPositive(G.GAME.chips)
     end
     return to_big(G.GAME.chips) >= to_big(G.GAME.blind.chips)
-end)
+end
 
 registerBlindMethod('TowerCheckRoundTimeout', function (self)
     return G.GAME.current_round.hands_left < 1
@@ -242,6 +253,23 @@ local old_set = Blind.set_blind
 function Blind:set_blind(blind, x, y)
     old_set(self, blind, x, y)
     self:TowerAfterBlindSet(blind, x, y)
+    if next(find_joker('tower-99_percent')) then
+        G.E_MANAGER:add_event(
+			Event({
+				trigger = "immediate",
+				func = function()
+					if G.STATE ~= G.STATES.SELECTING_HAND then
+						return false
+					end
+					G.STATE = G.STATES.HAND_PLAYED
+					G.STATE_COMPLETE = true
+					end_round()
+					return true
+				end,
+			}),
+			"other"
+		)
+    end
     if G.GAME.tower_machinecode_old_ante then
         G.GAME.round_resets.ante = G.GAME.tower_machinecode_old_ante;
         G.GAME.tower_machinecode_old_ante = nil
@@ -266,9 +294,50 @@ end
 
 local old = get_new_boss
 function get_new_boss(level)
+    if G.FORCE_BOSS then return G.FORCE_BOSS end
+    if Entropy and ((G.GAME.EEBuildup or (to_big(G.GAME.round_resets.ante) >= to_big(32) and not G.GAME.EEBeaten) or G.GAME.modifiers.zenith) and Entropy.CanEeSpawn()) then
+        return "bl_entr_endless_entropy_phase_one"
+    end
+    if level == nil then
+        level = 2
+    end
+    local blind_slot = level;
+    G.GAME.perscribed_bosses = G.GAME.perscribed_bosses or {
+    }
+    G.GAME.tower_perscribed_bosses = G.GAME.tower_perscribed_bosses or {
+    }
+    G.GAME.tower_perscribed_bosses[G.GAME.round_resets.ante] = G.GAME.tower_perscribed_bosses[G.GAME.round_resets.ante] or {nil, nil, nil}
+    if G.GAME.perscribed_bosses and G.GAME.perscribed_bosses[G.GAME.round_resets.ante] and blind_slot == 2 then
+        G.GAME.tower_perscribed_bosses[G.GAME.round_resets.ante][3] = G.GAME.perscribed_bosses[G.GAME.round_resets.ante] -- make perscribed_bosses work while allowing finer control w/tower perscribed
+        G.GAME.perscribed_bosses[G.GAME.round_resets.ante] = nil
+    end
+    if G.GAME.tower_perscribed_bosses[G.GAME.round_resets.ante][blind_slot + 1] ~= nil then
+        local ret_boss = G.GAME.tower_perscribed_bosses[G.GAME.round_resets.ante][blind_slot + 1]
+        G.GAME.tower_perscribed_bosses[G.GAME.round_resets.ante][blind_slot + 1] = nil
+        G.GAME.bosses_used[ret_boss] = G.GAME.bosses_used[ret_boss] + 1
+        return ret_boss
+    end
+
+    if G.GAME.modifiers.tower_spectral_rate ~= nil and ((G.GAME.round_resets.ante) % G.GAME.modifiers.tower_spectral_rate == 0) then
+        level = level + 2
+        if level < 4 and G.GAME.modifiers.tower_tarot_rate == nil then
+            level = level - 1
+        end
+    elseif G.GAME.modifiers.tower_tarot_rate ~= nil and ((G.GAME.round_resets.ante) % G.GAME.modifiers.tower_tarot_rate == 0) then
+        level = level + 1
+    end
+
     if G.GAME.modifiers.tower_hammerspace then
         return Tower.getBlinds(function (bl) return bl.tower_consumable or bl.tower_is_spectral or bl.tower_is_tarot or bl.tower_is_planet or bl.tower_is_code end, 1, pseudoseed("tower_hammerspace"))[1].key
     end
+
+	--Fix an issue with adding bosses mid-run
+	for k, v in pairs(G.P_BLINDS) do
+		if not G.GAME.bosses_used[k] then
+			G.GAME.bosses_used[k] = 0
+		end
+	end
+
     if not G.GAME.modifiers.tower_book_enabled then
         if level == 0 then
             if pseudorandom('tower_boss_soul_'..G.GAME.round_resets.ante) > 0.997 then
@@ -279,8 +348,12 @@ function get_new_boss(level)
         elseif level == 1 then
             return "bl_big"
         else
-            local eligible_bosses = {}
-            for k, v in pairs(G.P_BLINDS) do
+            local eligible_bosses = {} 
+            local list = G.P_BLINDS;
+            if G.GAME.entr_alt then
+                list = Entropy.AltBlinds
+            end
+            for k, v in pairs(list) do
                 if not v.boss then
 
                 elseif v.in_pool and type(v.in_pool) == 'function' then
@@ -292,12 +365,12 @@ function get_new_boss(level)
                         ) or
                         (options or {}).ignore_showdown_check
                     then
-                        eligible_bosses[k] = res and true or nil
+                        eligible_bosses[v.key] = res and 0 or nil
                     end
                 elseif not (v.boss.showdown or (v.boss.level and v.boss.level ~= 1)) and (v.boss.min == nil or (v.boss.min <= math.max(1, G.GAME.round_resets.ante)) and ((math.max(1, G.GAME.round_resets.ante))%G.GAME.win_ante ~= 0 or G.GAME.round_resets.ante < 2)) then
-                    eligible_bosses[k] = true
+                    eligible_bosses[v.key] = 0
                 elseif (v.boss.showdown or (v.boss.level and v.boss.level == 2)) and (((G.GAME.round_resets.ante)%G.GAME.win_ante == 0 and G.GAME.round_resets.ante >= 2) or G.GAME.modifiers.cry_big_showdown ) then
-                    eligible_bosses[k] = true
+                    eligible_bosses[v.key] = 0
                 end
             end
             for k, v in pairs(G.GAME.banned_keys) do
@@ -328,7 +401,7 @@ function get_new_boss(level)
                     end
                 end
             end
-            if G.GAME.modifiers.ortalab_only then
+            if G.GAME.modifiers.ortalab_only and (list == G.P_BLINDS) then
                 for k, v in pairs(eligible_bosses) do
                     if eligible_bosses[k] and not G.P_BLINDS[k].mod or G.P_BLINDS[k].mod.id ~= 'ortalab' then
                         eligible_bosses[k] = nil
@@ -336,56 +409,24 @@ function get_new_boss(level)
                 end
             end
             local _, boss = pseudorandom_element(eligible_bosses, pseudoseed('boss'))
-            G.GAME.bosses_used[boss] = G.GAME.bosses_used[boss] + 1
+            G.GAME.bosses_used[boss] = (G.GAME.bosses_used[boss] or 0) + 1
+            print(boss, #eligible_bosses)
             
             return boss
-
         end
     end
-    if level == nil then
-        level = 2
-    end
-    local blind_slot = level;
 
-	--Fix an issue with adding bosses mid-run
-	for k, v in pairs(G.P_BLINDS) do
-		if not G.GAME.bosses_used[k] then
-			G.GAME.bosses_used[k] = 0
-		end
-	end
-
-    if G.GAME.modifiers.tower_spectral_rate ~= nil and ((G.GAME.round_resets.ante) % G.GAME.modifiers.tower_spectral_rate == 0) then
-        level = level + 2
-        if level < 4 and G.GAME.modifiers.tower_tarot_rate == nil then
-            level = level - 1
-        end
-    elseif G.GAME.modifiers.tower_tarot_rate ~= nil and ((G.GAME.round_resets.ante) % G.GAME.modifiers.tower_tarot_rate == 0) then
-        level = level + 1
-    end
-    G.GAME.perscribed_bosses = G.GAME.perscribed_bosses or {
-    }
-    G.GAME.tower_perscribed_bosses = G.GAME.tower_perscribed_bosses or {
-    }
-    G.GAME.tower_perscribed_bosses[G.GAME.round_resets.ante] = G.GAME.tower_perscribed_bosses[G.GAME.round_resets.ante] or {nil, nil, nil}
-    if G.GAME.perscribed_bosses and G.GAME.perscribed_bosses[G.GAME.round_resets.ante] and blind_slot == 2 then
-        G.GAME.tower_perscribed_bosses[G.GAME.round_resets.ante][3] = G.GAME.perscribed_bosses[G.GAME.round_resets.ante] -- make perscribed_bosses work while allowing finer control w/tower perscribed
-        G.GAME.perscribed_bosses[G.GAME.round_resets.ante] = nil
-    end
-    if G.GAME.tower_perscribed_bosses[G.GAME.round_resets.ante][blind_slot + 1] ~= nil then
-        local ret_boss = G.GAME.tower_perscribed_bosses[G.GAME.round_resets.ante][blind_slot + 1]
-        G.GAME.tower_perscribed_bosses[G.GAME.round_resets.ante][blind_slot + 1] = nil
-        G.GAME.bosses_used[ret_boss] = G.GAME.bosses_used[ret_boss] + 1
-        return ret_boss
+    local list = G.P_BLINDS;
+    if G.GAME.entr_alt and ((level == 1) or (level == 2)) then
+        list = Entropy.AltBlinds
     end
 
-    if G.FORCE_BOSS then return G.FORCE_BOSS end
-    
     local eligible_bosses = {}
     function mainLoop()
         function tryagain()
-            G.TowerApplyOverrides(function (k, v)
+            G.TowerApplyOverrides(list, function (k, v)
                 if not v.boss then
-                elseif v.boss.level == level and ((not v.TowerInPool) or v.TowerInPool(v)) then
+                elseif v.boss.level == level and (((not v.TowerInPool) or v.TowerInPool(v)) and ((not v.in_pool) or v.in_pool(v))) then
                     eligible_bosses[k] = true
                 end
             end)
@@ -396,7 +437,7 @@ function get_new_boss(level)
         if (pseudorandom(pseudoseed("levelminusone")) < (1 / 10)) then -- 1 in 10 for level -1
             for k, v in pairs(G.P_BLINDS) do
                 if v.boss then
-                    if v.boss.level == -1 and ((not v.TowerInPool) or v.TowerInPool(v)) then
+                    if v.boss.level == -1 and (((not v.TowerInPool) or v.TowerInPool(v)) and ((not v.in_pool) or v.in_pool(v))) then
                         eligible_bosses[k] = true
                     end
                 end
@@ -421,9 +462,9 @@ function get_new_boss(level)
     end
     
     if pseudorandom('tower_boss_soul_'..G.GAME.round_resets.ante) > 0.997 then
-        G.TowerApplyOverrides(function (k, v)
+        G.TowerApplyOverrides(list, function (k, v)
             if not v.boss then
-            elseif v.boss.soul_level == level and ((not v.TowerInPool) or v.TowerInPool(v)) then
+            elseif v.boss.soul_level == level and (((not v.TowerInPool) or v.TowerInPool(v)) and ((not v.in_pool) or v.in_pool(v))) then
                 eligible_bosses[k] = true
             end
         end)
@@ -470,7 +511,6 @@ function get_new_boss(level)
         boss = "bl_tower_blank"
     end
     G.GAME.bosses_used[boss] = G.GAME.bosses_used[boss] + 1
-    
     return boss
 end
 function Tower.Eternal() -- get strongest eternal-like sticker
@@ -511,22 +551,23 @@ function Tower.blindFromOffset(offset)
     return boss
 end
 local doNothing = function() end
-G.TowerApplyOverrides = function (afterEach)
+G.TowerApplyOverrides = function (list, afterEach)
     afterEach = afterEach or doNothing;
-    for k, v in pairs(G.P_BLINDS) do
+    list = list or G.P_BLINDS
+    for k, v in pairs(list) do
         if v.boss then
             if v.boss.level == nil then
                 if v.boss.showdown then
                     v.boss.level = 2
-                    v.mult = v.mult * 1.5
-                    v.dollars = 5
+                    v.tmult = v.mult * 1.5
+                    v.tdollars = 5
                 else
                     v.boss.level = 1
-                    v.dollars = 4
+                    v.tdollars = 4
                 end
             end
         end
-        afterEach(k, v)
+        afterEach(v.key, v)
     end
 end
 G.TowerApplyOverrides()
@@ -1257,7 +1298,7 @@ end
 SMODS.Blind:take_ownership('bl_cry_obsidian_orb', Tower.ObsidianOrb({
     pick = function () return G.GAME.defeated_blinds or {} end,
     debuff_text = 'cry_debuff_obsidian_orb'
-}))
+}), true)
 
 local old_poll = poll_edition
 function poll_edition(_key, _mod, _no_neg, _guaranteed, _options)

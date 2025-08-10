@@ -5,13 +5,21 @@ Tower.Shimmer["Into"] = {}
 Tower.Shimmer.OrtaConversions = Tower.ShimmerOrtaConversions;
 Tower.ShimmerOrtaConversions = nil
 
+-- omens (any not here go into the default (inversion => Tower.Shimmer.Into[inversion] => invert each item in output) which usually don't make sense)
+Tower.Shimmer.Into['c_entr_beyond'] = { 'c_entr_ward', 'c_entr_fervour' }
+Tower.Shimmer.Into['c_entr_rend'] = { 'c_entr_weld' }
+Tower.Shimmer.Into['c_entr_weld'] = { 'c_entr_rend' }
+Tower.Shimmer.Into['c_entr_ward'] = { 'c_entr_feast', 'c_entr_master' }
+Tower.Shimmer.Into['c_entr_ichor'] = { 'c_entr_dispel', 'c_entr_dispel', 'c_entr_dispel' };
+Tower.Shimmer.Into['c_entr_rejuvenate'] = { 'c_entr_regenerate' };
+Tower.Shimmer.Into['c_entr_crypt'] = { 'c_entr_statue', 'c_entr_disavow' };
+Tower.Shimmer.Into['c_entr_dispel'] = { 'c_entr_evocation' };
+Tower.Shimmer.Into['c_entr_evocation'] = { 'c_entr_dispel' };
 
 -- spectrals ( and the monolith )
-
 Tower.Shimmer.Into['c_soul'] = { 'c_tower_aether_monolith' }
 Tower.Shimmer.Into['c_tower_aether_monolith'] = { 'c_soul' }
 Tower.Shimmer.Into['c_cry_gateway'] = { 'c_soul', 'c_ankh' }
-Tower.Shimmer.Into['c_entr_beyond'] = { 'c_cry_gateway', 'c_entr_flipside' }
 Tower.Shimmer.Into['c_familiar'] = { 'c_incantation' }
 Tower.Shimmer.Into['c_incantation'] = { 'c_familiar' }
 Tower.Shimmer.Into['c_sigil'] = { 'c_ouija' }
@@ -74,7 +82,6 @@ Tower.Shimmer.Into['c_cry_seraph'] = { 'c_cry_instability' }
 Tower.Shimmer.Into['c_cry_instability'] = { 'c_cry_seraph' }
 Tower.Shimmer.Into['c_cry_eclipse'] = { 'c_sun', 'c_deja_vu' }
 
--- planets
 -- multi-planets
 Tower.Shimmer.Into['c_cry_Timantii'] = { 'c_uranus', 'c_mercury', 'c_pluto' }
 Tower.Shimmer.Into['c_cry_Klubi'] = { 'c_jupiter', 'c_saturn', 'c_venus' }
@@ -82,7 +89,7 @@ Tower.Shimmer.Into['c_cry_Sydan'] = { 'c_neptune', 'c_mars', 'c_earth' }
 Tower.Shimmer.Into['c_cry_Lapio'] = { 'c_eris', 'c_ceres', 'c_planet_x' }
 Tower.Shimmer.Into['c_cry_Kaikki'] = { 'c_cry_marsmoons', 'c_cry_void', 'c_cry_asteroidbelt' }
 Tower.Shimmer.Into['c_cry_voxel'] = { 'c_cry_declare', 'c_cry_declare', 'c_cry_declare' }
-
+-- planets
 Tower.Shimmer.Into['c_cry_asteroidbelt'] = { 'c_tower', 'c_pluto', 'c_pluto', 'c_pluto', 'c_pluto', 'c_pluto' }
 Tower.Shimmer.Into['c_cry_sunplanet'] = { 'c_planet_x', 'c_pluto' }
 Tower.Shimmer.Into['c_cry_planetlua'] = { 'c_black_hole', 'c_wheel_of_fortune' }
@@ -158,7 +165,6 @@ function Tower.PickFixed(options, exclude, amount, key)
         end
     end
     local results = {}
-    print(amount, pool)
     for i = 1, amount do
         local elem, index = pseudorandom_element(pool, pseudoseed(key .. tostring(i), "fixed_prob"))
         results[#results+1] = elem
@@ -216,12 +222,14 @@ local old_get_chip_mult = Card.get_chip_mult;
 function Card:get_chip_mult()
     if not self.ability.tower_shimmer_mult then return old_get_chip_mult(self) end
     local val = old_get_chip_mult(self);
-    val = val + self.base.nominal
+    if not self.config.center.replace_base_card then
+        return val + self.base.nominal
+    end
     return val
 end
 
 function Tower.IsTransmutedPlayingCard(card)
-    return card.ability and card.ability.tower_shimmer_mult
+    return card.ability and card.ability.tower_shimmer_mult and not (card.config.center.replace_base_card or card.config.center.key == "m_stone")
 end
 
 Tower.Shader {
@@ -233,7 +241,7 @@ Tower.DrawStep {
     key = 'transmuted_shader',
     order = 29,
     func = function(self)
-        if self.ability.tower_shimmer_mult then
+        if self.ability.tower_shimmer_mult and not (self.config.center.replace_base_card or self.config.center.key == "m_stone") then
             self.children.front:draw_shader('tower_transmuted', nil, self.ARGS.send_to_shader)
         end
     end,
@@ -254,13 +262,43 @@ Tower.Shimmer.Effect({ -- multage
     end
 })
 
+Tower.Shimmer.Effect({
+    priority = 9999999999,
+    can_use = function (self, other)
+        if other.config.center.key == 'c_entr_entropy' then
+            return true
+        end
+    end,
+    use = function (self, other)
+        local options = {}
+        for i, v in pairs(G.P_CENTERS) do
+            if v.consumeable and (not v.soul_set) then -- all non-soul consumables (all transmuted are marked as soul)
+                options[#options+1] = v;
+            end
+        end
+        for i = 1, 3 do
+            local center, remove = pseudorandom_element(options, pseudoseed('tower_entropy_shimmer'))
+            table.remove(options, remove)
+            local _card = SMODS.add_card({
+                key = center.key,
+                area = other.tower_area or other.area,
+            })
+            if (other.tower_area or other.area) == G.shop_jokers then
+                create_shop_card_ui(_card)
+            end
+        end
+        other:set_ability(pseudorandom_element(options, pseudoseed('tower_entropy_shimmer')))
+        other:set_cost()
+    end
+})
+
 Tower.Shimmer.Effect({ -- fallback for jokers (decraft into two of lower rarity or two jimbos if common)
     priority = -1,
     can_use = function (self, other)
         if other.ability.set == "Joker" and (
             Tower.TableHasElement(Tower.RarityOrder, (Tower.IndexToRarity[other.config.center.rarity] or other.config.center.rarity))
             or Tower.TableHasElement(Tower.FinalRarities, other.config.center.rarity)
-        ) and not other.config.center.key == 'j_half' then 
+        ) and other.config.center.key ~= 'j_half' then 
             return true
         end
     end,
@@ -284,9 +322,9 @@ Tower.Shimmer.Effect({ -- fallback for jokers (decraft into two of lower rarity 
         for i, center in ipairs(centers) do
             local _card = SMODS.add_card({
                 key = center.key,
-                area = area,
+                area = other.tower_area or other.area,
             })
-            if area == G.shop_jokers then
+            if (other.tower_area or other.area) == G.shop_jokers then
                 create_shop_card_ui(_card)
             end
         end
@@ -315,6 +353,56 @@ Tower.Shimmer.Effect({ -- ortalab conversions (Tower.Shimmer.OrtaConversions)
     use = function (self, other)
         other:set_ability(G.P_CENTERS[Tower.Shimmer.OrtaConversions[other.config.center.key]])
         other:set_cost()
+    end
+})
+
+Tower.Shimmer.Effect({ -- Entropy inverted consum compat
+    priority = 999999998,
+    can_use = function (self, other)
+        if not Entropy then return false end
+        if Tower.Shimmer.Into[Entropy.FlipsideInversions[other.config.center.key]] then
+            local into = Tower.Shimmer.Into[Entropy.FlipsideInversions[other.config.center.key]]
+            if type(into) ~= 'table' then
+                into = { into }
+            end
+            local filtered = {}
+            for i, v in ipairs(into) do
+                if G.P_CENTERS[Entropy.FlipsideInversions[v]] then
+                    filtered[#filtered+1] = v
+                end
+            end
+            return #filtered > 0
+        elseif other.config.center.shimmer_effect then
+            return true
+        end
+    end,
+    use = function (self, other)
+        if other.config.center.shimmer_effect then
+            other.config.center.shimmer_effect(other)
+        else
+            local into = Tower.Shimmer.Into[Entropy.FlipsideInversions[other.config.center.key]]
+            if type(into) ~= 'table' then
+                into = { into }
+            end
+            if #into == 1 then
+                other:set_ability(Entropy.FlipsideInversions[into[1]])
+                other:set_cost()
+            else
+                other:start_dissolve()
+                for i, v in ipairs(into) do
+                    local center = G.P_CENTERS[Entropy.FlipsideInversions[v]]
+                    if center ~= nil then
+                        local _card = SMODS.add_card({
+                            key = center.key,
+                            area = other.tower_area or other.area,
+                        })
+                        if (other.tower_area or other.area) == G.shop_jokers then
+                            create_shop_card_ui(_card)
+                        end
+                    end
+                end
+            end
+        end
     end
 })
 
@@ -349,16 +437,15 @@ Tower.Shimmer.Effect({ -- Generic shimmer effect
                 other:set_ability(into[1])
                 other:set_cost()
             else
-                local area = other.area;
                 other:start_dissolve()
                 for i, v in ipairs(into) do
                     local center = G.P_CENTERS[v]
                     if center ~= nil then
                         local _card = SMODS.add_card({
                             key = center.key,
-                            area = area,
+                            area = other.tower_area or other.area,
                         })
-                        if area == G.shop_jokers then
+                        if (other.tower_area or other.area) == G.shop_jokers then
                             create_shop_card_ui(_card)
                         end
                     end
@@ -367,8 +454,6 @@ Tower.Shimmer.Effect({ -- Generic shimmer effect
         end
     end
 })
-
-
 
 function Tower.Shimmer.CanApply(self, card, cards, max)
 	if max == nil then
@@ -383,7 +468,7 @@ function Tower.Shimmer.CanApply(self, card, cards, max)
 	for q = 1, #cards do
 		local is_good = false
 		for i = 1, #Tower.Shimmer.Effects do
-			if Tower.Shimmer.Effects[i].can_use and Tower.Shimmer.Effects[i].can_use(self, cards[q], card) then
+			if Tower.Shimmer.Effects[i].can_use and Tower.Shimmer.Effects[i].can_use(self, cards[q], card.area, card) then
 				is_good = true
 				break
 			end
@@ -399,10 +484,10 @@ function Tower.Shimmer.Apply(self, card, cards)
 	table.sort(Tower.Shimmer.Effects, function (a, b)
 		return a.priority > b.priority
 	end)
-	Tower.EntComp.FlipThen(cards, function(item)
+	Tower.EntComp.FlipThen(cards, function(item, area)
 		for i = 1, #Tower.Shimmer.Effects do
-			if Tower.Shimmer.Effects[i].can_use and Tower.Shimmer.Effects[i].can_use(self, item, card) then
-				Tower.Shimmer.Effects[i].use(self, item, card)
+			if Tower.Shimmer.Effects[i].can_use and Tower.Shimmer.Effects[i].can_use(self, item, area, card) then
+				Tower.Shimmer.Effects[i].use(self, item, area, card)
 				return
 			end
 		end

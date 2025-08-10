@@ -87,6 +87,18 @@ match_indent = true
 
 [[patches]]
 [patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''if specific_vars and _c.name ~= 'Stone Card' and specific_vars.nominal_chips then'''
+position = "before"
+payload = '''
+if specific_vars and _c.name ~= 'Stone Card' and (not _c.replace_base_card) and specific_vars.nominal_mult then
+    localize{type = 'other', key = 'tower_card_mult', nodes = desc_nodes, vars = {specific_vars.nominal_mult}}
+end'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
 target = "functions/UI_definitions.lua"
 pattern = '''if obj and obj.set_badges and type(obj.set_badges) == 'function' then'''
 position = "before"
@@ -95,4 +107,3 @@ if Tower.IsTransmutedPlayingCard and Tower.IsTransmutedPlayingCard(card) then
     badges[#badges+1] = create_badge(localize('k_tower_transmuted'), Tower.TransmutedGrad, nil, 1.2 )
 end'''
 match_indent = true
-

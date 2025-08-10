@@ -73,7 +73,10 @@ end
 
 local oldRemove = UIBox.remove;
 function UIBox:remove(...)
-    if G.OVERLAY_MENU == self then G.TowerSetupStep = nil end
+    if G.OVERLAY_MENU == self then 
+        G.TowerSetupStep = nil 
+        Tower.RenderedSetupSteps = nil
+    end
     return oldRemove(self, ...)
 end
 
@@ -82,6 +85,7 @@ function G.UIDEF.run_setup_option(_type)
     G.TTTY = _type
     if _type ~= 'New Run' then
         G.TowerSetupStep = nil
+        Tower.RenderedSetupSteps = nil
         return old_run_setup_option(_type);
     end
     if G.TowerSetupStep == nil then
@@ -100,13 +104,14 @@ function G.UIDEF.run_setup_option(_type)
     end
     if G.TowerSetupStep > #Tower.RenderedSetupSteps then
         G.TowerSetupStep = nil
+        Tower.RenderedSetupSteps = nil
         return nil
     end
     local playbutton = {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
         {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
-            {n=G.UIT.C, config={align = "cm", minw = 5, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.BLUE, button = (G.TowerSetupStep == #Tower.RenderedSetupSteps and "start_setup_run") or "tower_next_setup_step", shadow = true, func = (G.TowerSetupStep == #Tower.RenderedSetupSteps and 'can_start_run') or nil}, nodes={
+            {n=G.UIT.C, config={align = "cm", minw = 5, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.BLUE, button = (G.TowerSetupStep >= #Tower.RenderedSetupSteps and "start_setup_run") or "tower_next_setup_step", shadow = true, func = (G.TowerSetupStep >= #Tower.RenderedSetupSteps and 'can_start_run') or nil}, nodes={
                 {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
-                    {n=G.UIT.T, config={text = (G.TowerSetupStep == #Tower.RenderedSetupSteps and localize('b_play_cap')) or localize('b_next'), scale = 0.8, colour = G.C.UI.TEXT_LIGHT,func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
+                    {n=G.UIT.T, config={text = (G.TowerSetupStep >= #Tower.RenderedSetupSteps and localize('b_play_cap')) or localize('b_next'), scale = 0.8, colour = G.C.UI.TEXT_LIGHT,func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
                 }}
             }}
         }}

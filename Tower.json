@@ -2,7 +2,7 @@
 	"id": "Tower",
 	"name": "The Tower",
 	"display_name": "The Tower",
-	"author": ["jamirror", "pikaboy10"],
+	"author": ["jamirror", "pikaboy10", "cylink"],
 	"description": "Very hard balatro.",
 	"prefix": "tower",
 	"main_file": "Tower.lua",

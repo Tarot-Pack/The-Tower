@@ -1,8 +1,70 @@
+local old_inject = SMODS.ObjectType.inject_card;
+local old_delete = SMODS.ObjectType.delete_card;
+SMODS.ObjectType.inject_card = function (self, c)
+	if not self.tower_rarities then
+		self.tower_rarities = {}
+	end
+	local vanilla_rarities = {"Common", "Uncommon", "Rare", "Legendary"}
+	local rarity = c.rarity;
+	if vanilla_rarities[rarity] then
+		rarity = vanilla_rarities[rarity];
+	end
+	rarity = rarity or "spec_none"
+	if not self.tower_rarities[rarity] then
+		self.tower_rarities[rarity] = {};
+	end
+	local found = false;
+	for i = 1, #self.tower_rarities[rarity] do
+		if self.tower_rarities[rarity][i].key == c.key then
+			self.tower_rarities[rarity][i] = c
+			found = true
+			break
+		end
+	end
+	if not found then
+		self.tower_rarities[rarity][#self.tower_rarities[rarity] + 1] = c
+	end
+	if #self.tower_rarities[rarity] < 1 then
+		self.tower_rarities[rarity] = nil
+	end
+	return old_inject(self, c)
+end
+SMODS.ObjectType.delete_card = function (self, c)
+	if not self.tower_rarities then
+		self.tower_rarities = {}
+	end
+	local vanilla_rarities = {"Common", "Uncommon", "Rare", "Legendary"}
+	local rarity = c.rarity;
+	if vanilla_rarities[rarity] then
+		rarity = vanilla_rarities[rarity];
+	end
+	if not self.tower_rarities[rarity] then
+		self.tower_rarities[rarity] = {};
+	end
+
+	for i = 1, #self.tower_rarities[rarity] do
+		if self.tower_rarities[rarity][i].key == c.key then
+			table.remove(self.tower_rarities[rarity], i)
+			break
+		end
+	end
+	if #self.tower_rarities[rarity] < 1 then
+		self.tower_rarities[rarity] = nil
+	end
+	return old_delete(self, c)
+end
 Tower.Atlas({
 	key = "modicon",
 	path = "tower_icon.png",
 	px = 32,
 	py = 32,
+})
+
+Tower.Atlas({
+	key = "tower_squarejokers",
+	path = "tower_squarejokers.png",
+	px = 89,
+	py = 89,
 })
 
 Tower.Atlas({
@@ -98,7 +160,7 @@ Tower.Atlas({
 	key = "widejokers",
 	path = "tower_widejokers.png",
 	px = 96,
-	py = 87
+	py = 95
 })
 
 Tower.Atlas({
@@ -108,28 +170,28 @@ Tower.Atlas({
 	py = 66,
 })
 
-SMODS.Atlas({
+Tower.Atlas({
 	key = "jokers1",
 	path = "tower_jokers1.png",
     px = 71,
     py = 95
 })
 
-SMODS.Atlas({
+Tower.Atlas({
 	key = "consumables",
 	path = "tower_consumables.png",
     px = 71,
     py = 95
 })
 
-SMODS.Atlas({
+Tower.Atlas({
 	key = "description_cards",
 	path = "tower_descriptioncards.png",
     px = 71,
     py = 95
 })
 
-SMODS.Atlas({
+Tower.Atlas({
 	key = "pack",
 	path = "tower_boosters.png",
 	px = 71,
@@ -150,6 +212,24 @@ SMODS.ObjectType({
 })
 
 SMODS.ObjectType({
+	key = "Tower-pikaboy10",
+	default = "j_tower_king_slime",
+	cards = {}
+})
+
+SMODS.ObjectType({
+	key = "Tower-jamirror",
+	default = "j_tower_blank",
+	cards = {}
+})
+
+SMODS.ObjectType({
+	key = "Tower-cylink",
+	default = "j_tower_coinflip",
+	cards = {}
+})
+
+SMODS.ObjectType({
 	key = "Tower-Terra",
 	default = "j_tower_eye_of_cthulhu",
 	cards = {}
@@ -161,11 +241,23 @@ Tower.TransmutedGrad = SMODS.Gradient {
 	cycle = 1,
 }
 
+Tower.ChipMultGrad = SMODS.Gradient {
+	key = 'chipmult_grad',
+	colours = { HEX('FE5F55'), {0.8, 0.45, 0.85, 1}, HEX("009dff"), {0.8, 0.45, 0.85, 1} },
+	cycle = 5,
+}
+
 SMODS.Rarity({
 	key = "transmuted",
 	loc_txt = {},
 	badge_colour = Tower.TransmutedGrad,
 	default = "j_tower_shimmer_slime",
+})
+
+SMODS.Rarity({
+	key = "unique",
+	loc_txt = {},
+	badge_colour = HEX('333333')
 })
 
 SMODS.ConsumableType({
@@ -244,4 +336,13 @@ SMODS.DescriptionCard({
 	set_badges = function (self, card, badges)
 		badges[#badges+1] = create_badge(localize('k_tower_transmuted'), Tower.TransmutedGrad, nil, 1.2 )
 	end,
+})
+SMODS.DescriptionCard({
+	key = "unbounded_pointer",
+	atlas = "description_cards",
+	dependencies = {
+		items = {}
+	},
+	pools = {},
+	pos = { x = -1, y = 0 }
 })

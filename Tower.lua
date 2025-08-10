@@ -1,6 +1,7 @@
 if not Tower then
 	Tower = {}
 end
+Tower.FeatureWL = {}
 
 SMODS.DescriptionCard = SMODS.Center:extend({
 	set = "Description Cards",
@@ -244,11 +245,23 @@ function Tower.Object(bl)
         bl.dependencies.items[#bl.dependencies.items+1] = "set_tower_apollyon"
 	end
     if bl.rarity == "tower_transmuted" or bl.set == "tower_transmuted" then
+		bl.soul_set = 'Spectral'
+		bl.soul_rate = 0 -- don't ask.
         bl.dependencies.items[#bl.dependencies.items+1] = "set_tower_transmuted"
 	end
+    if bl.tower_credits and bl.tower_credits.idea and (Entropy or bl.object_type == "Joker" or bl.object_type == "Consumable") then
+		for i, author in pairs(bl.tower_credits.idea) do
+			bl.pools["Tower-" .. author] = true
+		end
+	end
+
 
 	if Tower._is_lib then
-		return SMODS[bl.object_type](bl)
+		local val = SMODS[bl.object_type](bl)
+		if bl.init then
+			bl.init(val)
+		end
+		return bl
 	else
 		if bl.order == nil then
 			bl.order = -999
@@ -310,7 +323,10 @@ table.sort(things, function (a, b)
 end)
 for i, v in pairs(things) do
 	for z, q in ipairs(v[2]) do
-		SMODS[q.object_type](q)
+		local val = SMODS[q.object_type](q)
+		if q.init then
+			q.init(val)
+		end
 	end
 end
 current = nil

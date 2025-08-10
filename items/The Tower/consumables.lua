@@ -51,8 +51,7 @@ Tower.Consumable({
 	end,
     tower_credits = {
 		idea = {
-			"pikaboy10",
-			"jamirror",
+			"jamirror"
 		},
 		art = {
 			"jamirror",
@@ -102,8 +101,7 @@ Tower.Consumable({
 	
     tower_credits = {
 		idea = {
-			"pikaboy10",
-			"jamirror",
+			"jamirror"
 		},
 		art = {
 			"jamirror",

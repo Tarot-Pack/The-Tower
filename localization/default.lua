@@ -12,11 +12,34 @@ return {
             },
 		},
 		["Description Cards"] = {
+			desc_tower_bullet_joker = {
+				name = "Bullet Jokers",
+				text = {
+					"Jokers that are loaded into {C:attention}Kitchen Gun{}",
+					"They cannot be moved and are auto-sorted to be besides {C:attention}Kitchen Gun{}",
+				},
+			},
+			desc_tower_attachment_joker = {
+				name = "Attachment Jokers",
+				text = {
+					"Jokers that trigger without {C:attention}Kitchen Gun{}",
+					"They do not take a Joker Slot"
+				},
+			},
 			desc_tower_mult_rank = {
 				name = "Mult Rank Card",
 				text = {
 					"A card that scores {C:mult}Mult{} equal",
 					"to its rank instead of {C:chips}Chips",
+				},
+			},
+			desc_tower_unbounded_pointer = {
+				name = "Unbounded Pointer",
+				text = {
+					"Create a card",
+					"of {C:cry_code}your choice",
+					"{C:tower_apollyon,E:1}No restrictions apply{}",
+					"{C:inactive}Multiuse: ({C:cry_code}1e300{C:inactive} remaining)"
 				},
 			},
 		},
@@ -80,6 +103,28 @@ return {
 				text = {
 					"Choose {C:attention}#1#{} of",
 					"up to {C:attention}#2# Slime Joker#<s>2#{}",
+				},
+			},
+
+			p_tower_pikaboy10_1 = {
+				name = "Pikaboy Pack",
+				text = {
+					"Choose {C:attention}#1#{} of",
+					"up to {C:attention}#2# Object#<s>2# by Pikaboy{}",
+				},
+			},			
+			p_tower_pikaboy10_2 = {
+				name = "Pikaboy Pack",
+				text = {
+					"Choose {C:attention}#1#{} of",
+					"up to {C:attention}#2# Object#<s>2# by Pikaboy{}",
+				},
+			},
+			p_tower_pikaboy10_3 = {
+				name = "Pikaboy Pack",
+				text = {
+					"Choose {C:attention}#1#{} of",
+					"up to {C:attention}#2# Object#<s>2# by Pikaboy{}",
 				},
 			},
 
@@ -1123,6 +1168,112 @@ return {
 					"Does nothing?"
 				}
 			},
+			j_tower_coinflip = {
+				name = "Coinflip",
+				text = {
+					"After a {C:attention}Joker{} is triggered, there",
+					"is a {C:green}#1# in #2#{} chance of swapping {C:chips}Chips{}",
+					"and {C:mult}Mult{} scoring for that {C:attention}Joker{}"
+				}
+			},
+			j_tower_ying_yang = {
+				name = "Ying-Yang",
+				text = {
+					"After a {C:attention}Joker{} is triggered, the {C:chips}Chips{}",
+					"and {C:mult}Mult{} scoring for that {C:attention}Joker{} is swapped"
+				}
+			},
+			j_tower_catalytic_meltdown = {
+				name = "Catalytic Meltdown",
+				text = {
+					"{C:attention}Use{} this on a {C:attention}Joker{} to swap its {C:chips}Chips{} and {C:mult}Mult{} scoring"
+				}
+			},
+			j_tower_99_percent = {
+				name = "99% OF GAMBLERS QUIT BEFORE THEY WIN!!!!!",
+				text = {
+					"{C:tower_apollyon,E:1}Instantly win all blinds{}",
+					"{C:green}1 in 20{} chance to {C:cry_cursed,E:10}instantly lose{} instead",
+					"{C:inactive}(This joker is immutable)", -- ruins the point
+					"{C:cry_cursed,E:2}Your addiction is inescapeable." -- evil town evil town
+				}
+			},
+			j_tower_die_of_fate = {
+				name = "Die of Fate",
+				text = {
+					"{C:green}12010873 in 88888888{} chance to do nothing",
+					"{C:green}17593235 in 88888888{} chance for {X:mult,C:white} X#1# {} Mult", -- 2
+					"{C:green}17457012 in 88888888{} chance for {X:chips,C:white} X#2# {} Chips", -- 2
+					"{C:green}17047819 in 88888888{} chance for {X:mult,C:white} X#3# {} Mult", -- 0.5
+					"{C:green}16989919 in 88888888{} chance for {X:chips,C:white} X#4# {} Chips", -- 0.5
+					"{C:green}3941256 in 88888888{} chance for {X:mult,C:white} X#5# {} Mult", -- 4
+					"{C:green}3758989 in 88888888{} chance for {X:chips,C:white} X#6# {} Chips", -- 4
+					"{C:green}88888 in 88888888{} chance for {X:dark_edition,C:white} ^#7# {} Chips and Mult", -- 4
+					"{C:green}888 in 88888888{} chance for {X:dark_edition,C:white} ^^#8# {} Chips and Mult", -- 4
+					"{C:green}8 in 88888888{} chance for {X:dark_edition,C:white} #9# {} Chips and Mult", -- {88888888}8
+					"{C:green}1 in 88888888{} chance to create an {C:tower_apollyon,E:1}Unbounded pointer{}",
+					"All probabilities are mutually exclusive and immutable."
+				}
+			},
+			j_tower_die_of_chaos = {
+				name = "Die of Chaos",
+				text = {
+					"{C:green}2020202 in 22222222{} chance for {X:dark_edition,C:white} ^^^^#1# {} Chips or Mult", -- ^^^^1.2
+					"{C:green}2020202 in 22222222{} chance for {X:dark_edition,C:white} ^^^#2# {} Chips or Mult", -- ^^^1.15
+					"{C:green}2020202 in 22222222{} chance for {X:dark_edition,C:white} ^^#3# {} Chips or Mult", -- ^^1.1
+					"{C:green}2020202 in 22222222{} chance for {X:dark_edition,C:white} ^#4# {} Chips or Mult", -- ^1.1
+					"{C:green}2020202 in 22222222{} chance for {X:dark_edition,C:white} X#5# {} Chips or Mult", -- X1.1
+					"{C:green}2020202 in 22222222{} chance for {C:dark_edition}+#6#{} Chips or Mult", -- +1
+					"{C:green}2020202 in 22222222{} chance for {X:dark_edition,C:white} X#7# {} Chips or Mult", -- X0.9
+					"{C:green}2020202 in 22222222{} chance for {X:dark_edition,C:white} ^#8# {} Chips or Mult", -- ^0.9
+					"{C:green}2020202 in 22222222{} chance for {X:dark_edition,C:white} ^^#9# {} Chips or Mult", -- ^^0.9
+					"{C:green}2020202 in 22222222{} chance for {X:dark_edition,C:white} ^^^#10# {} Chips or Mult", -- ^^^0.85
+					"{C:green}2020202 in 22222222{} chance for {X:dark_edition,C:white} ^^^^#11# {} Chips or Mult", -- ^^^^0.8
+					"All probabilities are mutually exclusive and immutable."
+				}
+			},
+			j_tower_die_of_will = {
+				name = "Die of Will",
+				text = {
+					"When you are about to {X:attention,C:white} die {}, there is a",
+					"{C:green}1154173 in 11111111{} chance to prevent Death if required score is at least {C:attention}90%{}",
+					"{C:green}1123492 in 11111111{} chance to prevent Death if required score is at least {C:attention}80%{}",
+					"{C:green}1103785 in 11111111{} chance to prevent Death if required score is at least {C:attention}70%{}",
+					"{C:green}1155436 in 11111111{} chance to prevent Death if required score is at least {C:attention}60%{}",
+					"{C:green}1123536 in 11111111{} chance to prevent Death if required score is at least {C:attention}50%{}",
+					"{C:green}1130573 in 11111111{} chance to prevent Death if required score is at least {C:attention}40%{}",
+					"{C:green}1114211 in 11111111{} chance to prevent Death if required score is at least {C:attention}30%{}",
+					"{C:green}1114525 in 11111111{} chance to prevent Death if required score is at least {C:attention}20%{}",
+					"{C:green}1111461 in 11111111{} chance to prevent Death if required score is at least {C:attention}10%{}",
+					"{C:green}1031570 in 11111111{} chance to prevent Death if required score is at least {C:attention}0%{}",
+					"All probabilities are mutually exclusive.",
+					"This joker is immutable."
+				}
+			},
+			j_tower_die_of_echoes = {
+				name = "Die of Echoes",
+				text = {
+					"{C:green}12121212 in 44444444{} chance to not scale",
+					"{C:green}8080808 in 44444444{} chance to scale by {X:mult,C:white} X#1# {}",
+					"{C:green}5050505 in 44444444{} chance to scale by {X:mult,C:white} X#2# {}", 
+					"{C:green}2020202 in 44444444{} chance to scale by {X:mult,C:white} X#3# {}",
+					"{C:green}1010101 in 44444444{} chance to scale by {X:mult,C:white} X#4# {}",
+					"{C:green}1010101 in 44444444{} chance to scale by {X:mult,C:white} X#5# {}",
+					"{C:green}2020202 in 44444444{} chance to scale by {X:mult,C:white} X#6# {}",
+					"{C:green}5050505 in 44444444{} chance to scale by {X:mult,C:white} X#7# {}",
+					"{C:green}8080808 in 44444444{} chance to scale by {X:mult,C:white} X#8# {}",
+
+					"{C:inactive}(Currently {C:mult}+#9#{C:inactive} Mult)",
+
+					"All probabilities are mutually exclusive and immutable."
+				}
+			},
+			j_tower_forgotten_die = {
+				name = "The Forgotten Die", -- does not show up in collection
+				text = {
+					"All {C:green}probabilities{} are fixed to either {C:green}Succeed{} or {C:red}Fail{}"
+				}
+			},
 			j_tower_king_slime = {
 				name = "King Slime",
 				text = {
@@ -1238,14 +1389,14 @@ return {
 				name = "Tanpaku",
 				text = {
 					"When a {C:attention}Consumable{} is used, create {C:attention}#1#{} copies",
-					"of {C:attention}all selected and created cards{} and {C:attention}one{} copy",
-					"of the {C:attention}Consumable{}, then increase copies by {C:attention}#2#{}" -- 1 copies increase by 1
+					"of {C:attention}all modified or created cards{} and {C:attention}one{} copy of the",
+					"{C:attention}Consumable{}, then increase copies of cards by {C:attention}#2#{}" -- 1 copies increase by 1
 				},
 			},
 			j_tower_tanjun = {
 				name = "Tanjun",
 				text = {
-					"{X:dark_edition,C:white} ^#1# Chips {} for every #1# times scored cards are triggered" -- ^2 every 2
+					"{X:dark_edition,C:white} ^#1# {} Chips for every #1# times scored cards are triggered" -- ^2 every 2
 				},
 			},
 			j_tower_mi = {
@@ -1278,11 +1429,21 @@ return {
 				text = {
 					"Select #1# ??? to use"
 				}
-			}
+			},
+			c_tower_unbounded_pointer = {
+				name = "POINTER://",
+				text = {
+					"Create a card",
+					"of {C:cry_code}your choice",
+					"{C:tower_apollyon,E:1}No restrictions apply{}"
+				},
+			},
 		}
     },
 	misc = {        
 		ranks_plural={
+			["tower_0"] = '0s',
+			["tower_1"] = "1s",
             ["10"]="10s",
             ["2"]="2s",
             ["3"]="3s",
@@ -1300,6 +1461,7 @@ return {
 		labels = {
 			k_tower_apollyon = "Apollyon",
 			k_tower_transmuted = "Transmuted",
+			k_tower_inverted = "Chips & Mult Swapped",
 			b_tower_transmuted = "Transmuted",
 
 			tower_truenegative = "True Negative",
@@ -1312,8 +1474,10 @@ return {
 
 		},
 		dictionary = {
+			b_tower_minigame = "Minigames",
 			k_tower_apollyon = "Apollyon",
 			k_tower_transmuted = "Transmuted",
+			k_tower_inverted = "Chips & Mult Swapped",
 			b_tower_transmuted = "Transmuted",
 
             k_book = "Book",
@@ -1337,6 +1501,8 @@ return {
 			tower_debuff_automaton = "Copies three random Code Blinds",
 			tower_debuff_merge = "Copies the effects of the next two blinds",
 			tower_debuff_cryfunction = "Copies the effects of the last three consumable blinds played",
+
+			tower_inverted = "Swapped!",
 
 			tower_skip_book = "Skip book selection",
 
@@ -1363,12 +1529,16 @@ return {
 			tower_hand_nil = "ERROR",
 
 			k_tower_slime_pool = "Slime Pack",
+			k_tower_pikaboy10_pack = "Pikaboy Pack",
+			k_tower_jamirror_pack = "Jamirror Pack",
+			k_tower_cylink_pack = "Cylink Pack",
 			k_tower_terra_pool = "Terra Pack",
 
 			k_tower_transmuted_ex = { 
 				"Transmuted cards are cards created by the Shimmer.",
 				"They cannot be obtained through other means."
 			},
+			tower_die_of_fate_pointer = "Nat 88888888: Unbounded Pointer",
 		},
 		v_dictionary = {
 			tower_bounce = 'Bounce!',
@@ -1398,9 +1568,13 @@ return {
 		challenge_names = {
 			c_tower_true_negative = "Negative Nancy"
 		},
+		minigame_names = {
+			mg_tower_bullet_game = "Raging Roulette"
+		},
 		v_text = {
 			ch_c_tower_true_negative = { "All Jokers, playing cards and Consumables are"},
 			ch_c_tower_true_negativel2 = { "{C:negative}True Negative{}, values given by them are negated" },
+			mg_c_tower_bullet_game = { "Balatro but bullet" },
 		},
 		achievement_names = {
 			ach_tower_clusterfuck_you = Cryptid_config.family_mode and "Cluster of Your Sins"
