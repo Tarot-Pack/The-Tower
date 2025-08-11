@@ -107,3 +107,30 @@ if Tower.IsTransmutedPlayingCard and Tower.IsTransmutedPlayingCard(card) then
     badges[#badges+1] = create_badge(localize('k_tower_transmuted'), Tower.TransmutedGrad, nil, 1.2 )
 end'''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS entr "items/jokers/exotic_jokers.lua"]'''
+pattern = '''function ReductionIndex(card, pool)'''
+position = "after"
+payload = """
+if card.config and card.config.center and ((card.config.center.set == "tower_transmuted") or (card.config.center.rarity == "tower_transmuted")) then
+    pool = "tower_transmuted"
+end
+"""
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS entr "lib/hooks.lua"]'''
+pattern = '''set_abilityref(self, G.P_CENTERS[Entropy.FlipsideInversions[center.key]] or center, f, s)'''
+position = "at"
+payload = """
+if G.TOWER_DISABLE_TWISTED then
+    set_abilityref(self, center, f, s)
+else
+    set_abilityref(self, G.P_CENTERS[Entropy.FlipsideInversions[center.key]] or center, f, s)
+end
+"""
+match_indent = true
+

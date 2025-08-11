@@ -11,28 +11,18 @@ return {
                 },
             },
 		},
+        Sleeve={
+            sleeve_tower_shimmered={
+                name="Shimmered Sleeve",
+                text={
+                    "Start run with an {C:attention}#1#{}",
+					"{C:tower_transmuted}Bottomless Shimmer Bucket{}",
+					"and a fully {C:tower_transmuted}Shimmered{} deck,",
+					"cards are randomly {C:tower_transmuted}Shimmered"
+                },
+            },
+		},
 		["Description Cards"] = {
-			desc_tower_bullet_joker = {
-				name = "Bullet Jokers",
-				text = {
-					"Jokers that are loaded into {C:attention}Kitchen Gun{}",
-					"They cannot be moved and are auto-sorted to be besides {C:attention}Kitchen Gun{}",
-				},
-			},
-			desc_tower_attachment_joker = {
-				name = "Attachment Jokers",
-				text = {
-					"Jokers that trigger without {C:attention}Kitchen Gun{}",
-					"They do not take a Joker Slot"
-				},
-			},
-			desc_tower_mult_rank = {
-				name = "Mult Rank Card",
-				text = {
-					"A card that scores {C:mult}Mult{} equal",
-					"to its rank instead of {C:chips}Chips",
-				},
-			},
 			desc_tower_unbounded_pointer = {
 				name = "Unbounded Pointer",
 				text = {
@@ -1505,6 +1495,7 @@ return {
 			tower_inverted = "Swapped!",
 
 			tower_skip_book = "Skip book selection",
+			tower_main_menu = "Main menu card",
 
 			ranks = {
 				tower_0 = '0',

@@ -1238,11 +1238,11 @@ Tower.Blind({
     name = "tower-declare",
     tower_consumable = "cry_declare",
     key = "declare",
-    pos = { x = 0, y = 9 },
-    atlas = "blinds4",
+    pos = { x = 0, y = 15 },
+    atlas = "blinds5",
     order = 1,
     mult = 2,
-    boss_colour = HEX("d125b7"),
+    boss_colour = HEX("ff7930"),
     boss = {
         level = 1
     },
@@ -1257,11 +1257,11 @@ Tower.Blind({
     name = "tower-log",
     tower_consumable = "cry_log",
     key = "log",
-    pos = { x = 0, y = 9 },
-    atlas = "blinds4",
+    pos = { x = 0, y = 16 },
+    atlas = "blinds5",
     order = 1,
     mult = 2,
-    boss_colour = HEX("d125b7"),
+    boss_colour = HEX("f0ff61"),
     boss = {
         level = 1
     },
@@ -1284,11 +1284,11 @@ Tower.Blind({
     name = "tower-quantify",
     tower_consumable = "cry_quantify",
     key = "quantify",
-    pos = { x = 0, y = 9 },
-    atlas = "blinds4",
+    pos = { x = 0, y = 17 },
+    atlas = "blinds5",
     order = 1,
     mult = 2,
-    boss_colour = HEX("d125b7"),
+    boss_colour = HEX("ff5364"),
     boss = {
         level = 1
     },

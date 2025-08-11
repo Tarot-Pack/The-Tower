@@ -15,6 +15,47 @@ Tower.Shimmer.Into['c_entr_rejuvenate'] = { 'c_entr_regenerate' };
 Tower.Shimmer.Into['c_entr_crypt'] = { 'c_entr_statue', 'c_entr_disavow' };
 Tower.Shimmer.Into['c_entr_dispel'] = { 'c_entr_evocation' };
 Tower.Shimmer.Into['c_entr_evocation'] = { 'c_entr_dispel' };
+Tower.Shimmer.Into['c_entr_entropy'] = { 'c_entr_cleanse' };
+Tower.Shimmer.Into['c_entr_cleanse'] = { 'c_entr_entropy' };
+Tower.Shimmer.Into['c_entr_fusion'] = { 'c_entr_transcend' };
+Tower.Shimmer.Into['c_entr_transcend'] = { 'c_entr_fusion' };
+Tower.Shimmer.Into['c_entr_entomb'] = { 'c_entr_fusion', 'c_entr_fusion', 'c_entr_fusion' };
+Tower.Shimmer.Into['c_entr_mimic'] = { 'c_entr_superego' };
+Tower.Shimmer.Into['c_entr_superego'] = { 'c_entr_mimic' };
+Tower.Shimmer.Into['c_entr_rift'] = { 'c_entr_entropy', 'c_entr_siphon' };
+Tower.Shimmer.Into['c_entr_engulf'] = { 'c_entr_nemesis', 'c_entr_pact' };
+Tower.Shimmer.Into['c_entr_offering'] = { 'c_entr_dagger', 'c_entr_ichor' };
+Tower.Shimmer.Into['c_entr_conduct'] = { 'c_entr_decrement', 'c_entr_engulf' };
+Tower.Shimmer.Into['c_entr_purity'] = { 'c_entr_weld', 'c_entr_regenerate' };
+
+-- commands
+Tower.Shimmer.Into['c_entr_rootkit'] = { 'c_entr_companion', 'c_entr_companion' }
+Tower.Shimmer.Into['c_entr_bootstrap'] = { 'c_entr_hotfix' }
+Tower.Shimmer.Into['c_entr_hotfix'] = { 'c_entr_bootstrap' }
+Tower.Shimmer.Into['c_entr_quickload'] = { 'c_entr_new' }
+Tower.Shimmer.Into['c_entr_new'] = { 'c_entr_break' }
+Tower.Shimmer.Into['c_entr_break'] = { 'c_entr_quickload' }
+Tower.Shimmer.Into['c_entr_constant'] = { 'c_entr_pseudorandom' }
+Tower.Shimmer.Into['c_entr_pseudorandom'] = { 'c_entr_constant' }
+Tower.Shimmer.Into['c_entr_desync'] = { 'c_entr_interference' }
+Tower.Shimmer.Into['c_entr_interference'] = { 'c_entr_desync' }
+Tower.Shimmer.Into['c_entr_detour'] = { 'c_entr_push' }
+Tower.Shimmer.Into['c_entr_push'] = { 'c_entr_fork' }
+Tower.Shimmer.Into['c_entr_fork'] = { 'c_entr_detour' }
+Tower.Shimmer.Into['c_entr_increment'] = { 'c_entr_invariant' }
+Tower.Shimmer.Into['c_entr_invariant'] = { 'c_entr_decrement' }
+Tower.Shimmer.Into['c_entr_decrement'] = { 'c_entr_increment' }
+Tower.Shimmer.Into['c_entr_inherit'] = { 'c_entr_refactor' }
+Tower.Shimmer.Into['c_entr_refactor'] = { 'c_entr_inherit' }
+Tower.Shimmer.Into['c_entr_cookies'] = { 'c_entr_multithread', 'c_judgement' }
+Tower.Shimmer.Into['c_entr_sudo'] = { 'c_entr_paras', 'c_entr_jatka', 'c_entr_rouva', 'c_entr_assa' }
+Tower.Shimmer.Into['c_entr_overflow'] = { 'c_entr_multithread' }
+Tower.Shimmer.Into['c_entr_multithread'] = { 'c_entr_overflow' }
+Tower.Shimmer.Into['c_entr_ctrl_x'] = { 'c_entr_local' }
+Tower.Shimmer.Into['c_entr_local'] = { 'c_entr_badarg' }
+Tower.Shimmer.Into['c_entr_badarg'] = { 'c_entr_ctrl_x' }
+Tower.Shimmer.Into['c_entr_mbr'] = { 'c_entr_transpile' }
+Tower.Shimmer.Into['c_entr_transpile'] = { 'c_entr_mbr' }
 
 -- spectrals ( and the monolith )
 Tower.Shimmer.Into['c_soul'] = { 'c_tower_aether_monolith' }
@@ -53,6 +94,13 @@ Tower.Shimmer.Into['c_cry_chambered'] = { 'c_cry_ctrl_v', 'c_cry_ctrl_v', 'c_cry
 Tower.Shimmer.Into['c_cry_conduit'] = { 'c_aura', 'c_aura' }
 Tower.Shimmer.Into['c_cry_source'] = { 'c_medium', 'c_cry_automaton' }
 Tower.Shimmer.Into['c_cry_pointer'] = { 'c_cry_pointer' }
+Tower.Shimmer.Into['c_entr_flipside'] = { 'c_tower_shimmer_bottle' };
+Tower.Shimmer.Into['c_tower_shimmer_bottle'] = { 'c_entr_flipside' };
+Tower.Shimmer.Into['c_entr_shatter'] = { 'c_entr_lust' };
+Tower.Shimmer.Into['c_entr_lust'] = { 'c_entr_shatter' };
+Tower.Shimmer.Into['c_entr_null'] = { 'c_entr_antithesis' };
+Tower.Shimmer.Into['c_entr_antithesis'] = { 'c_entr_null' };
+Tower.Shimmer.Into['c_entr_destiny'] = { 'c_entr_prophecy', 'c_immolate' };
 
 -- tarots
 Tower.Shimmer.Into['c_judgement'] = { 'c_fool', 'c_fool' }
@@ -68,6 +116,7 @@ Tower.Shimmer.Into['c_sun'] = { 'c_star' }
 Tower.Shimmer.Into['c_star'] = { 'c_sun' }
 Tower.Shimmer.Into['c_hermit'] = { 'c_temperance' }
 Tower.Shimmer.Into['c_temperance'] = { 'c_hermit' }
+Tower.Shimmer.Into['c_magician'] = { 'c_empress', 'c_hermit' }
 Tower.Shimmer.Into['c_chariot'] = { 'c_devil' }
 Tower.Shimmer.Into['c_devil'] = { 'c_chariot' }
 Tower.Shimmer.Into['c_tower'] = { 'c_heirophant', 'c_heirophant' }
@@ -81,6 +130,27 @@ Tower.Shimmer.Into['c_cry_automaton'] = { 'c_cry_theblessing', 'c_fool' }
 Tower.Shimmer.Into['c_cry_seraph'] = { 'c_cry_instability' }
 Tower.Shimmer.Into['c_cry_instability'] = { 'c_cry_seraph' }
 Tower.Shimmer.Into['c_cry_eclipse'] = { 'c_sun', 'c_deja_vu' }
+Tower.Shimmer.Into['c_entr_mason'] = { 'c_entr_statue', 'c_entr_statue' }
+Tower.Shimmer.Into['c_entr_oracle'] = { 'c_entr_princess' }
+Tower.Shimmer.Into['c_entr_princess'] = { 'c_entr_oracle' }
+
+Tower.Shimmer.Into['c_entr_master'] = { 'c_entr_prophecy' }
+Tower.Shimmer.Into['c_entr_prophecy'] = { 'c_entr_servant' } -- three way chain
+Tower.Shimmer.Into['c_entr_servant'] = { 'c_entr_master' }
+
+Tower.Shimmer.Into['c_entr_heretic'] = { 'c_entr_whetstone' }
+Tower.Shimmer.Into['c_entr_whetstone'] = { 'c_entr_heretic' }
+Tower.Shimmer.Into['c_entr_feud'] = { 'c_entr_scar' }
+Tower.Shimmer.Into['c_entr_scar'] = { 'c_entr_feud' }
+Tower.Shimmer.Into['c_entr_companion'] = { 'c_entr_earl' }
+Tower.Shimmer.Into['c_entr_earl'] = { 'c_entr_companion' }
+Tower.Shimmer.Into['c_entr_dagger'] = { 'c_entr_feast' }
+Tower.Shimmer.Into['c_entr_feast'] = { 'c_entr_dagger' }
+Tower.Shimmer.Into['c_entr_endurance'] = { 'c_entr_penumbra' }
+Tower.Shimmer.Into['c_entr_penumbra'] = { 'c_entr_endurance' }
+Tower.Shimmer.Into['c_entr_advisor'] = { 'c_entr_forgiveness' }
+Tower.Shimmer.Into['c_entr_forgiveness'] = { 'c_entr_advisor' }
+Tower.Shimmer.Into['c_entr_village'] = { 'c_entr_ocean', 'c_entr_forest', 'c_entr_mountain', 'c_entr_tent' }
 
 -- multi-planets
 Tower.Shimmer.Into['c_cry_Timantii'] = { 'c_uranus', 'c_mercury', 'c_pluto' }
@@ -117,8 +187,9 @@ Tower.Shimmer.Into['c_cry_nperror'] = { 'c_cry_exploit', 'c_cry_ctrl_v' }
 Tower.Shimmer.Into['c_cry_rework'] = { 'c_aura', 'c_cry_keygen' }
 Tower.Shimmer.Into['c_cry_merge'] = { 'c_fool', 'c_cry_ctrl_v' }
 Tower.Shimmer.Into['c_cry_commit'] = { 'c_judgement', 'c_hanged_man' }
-Tower.Shimmer.Into['c_cry_machinecode'] = { 'c_cry_malware', 'c_cry_blessing' }
-Tower.Shimmer.Into['c_cry_spagetti'] = { 'c_cry_commit', 'c_judgement' }
+Tower.Shimmer.Into['c_cry_machinecode'] = { 'c_cry_crash' }
+Tower.Shimmer.Into['c_cry_crash'] = { 'c_cry_machinecode' }
+Tower.Shimmer.Into['c_cry_spaghetti'] = { 'c_cry_commit', 'c_judgement' }
 Tower.Shimmer.Into['c_cry_seed'] = { 'c_cry_keygen' }
 Tower.Shimmer.Into['c_cry_keygen'] = { 'c_cry_seed' }
 Tower.Shimmer.Into['c_cry_patch'] = { 'c_cry_vacuum', 'c_cry_automaton' }
@@ -141,7 +212,7 @@ Tower.Shimmer.Into['c_cry_multiply'] = { 'c_cry_divide' }
 Tower.Shimmer.Into['c_cry_delete'] = { 'c_cry_ctrl_v' }
 Tower.Shimmer.Into['c_cry_ctrl_v'] = { 'c_cry_delete' }
 Tower.Shimmer.Into['c_cry_reboot'] = { 'c_cry_alttab' }
-Tower.Shimmer.Into['c_cry_alt_tab'] = { 'c_cry_reboot' }
+Tower.Shimmer.Into['c_cry_alttab'] = { 'c_cry_reboot' }
 
 
 
@@ -251,44 +322,12 @@ Tower.DrawStep {
 Tower.Shimmer.Effect({ -- multage
     priority = -1,
     can_use = function (self, other)
-        if not G.P_CENTERS.desc_tower_mult_rank then return end -- disabling the desc card removes the mechanic
         if other.ability.set == "Default" or other.ability.set == "Enhanced" then
             return true
         end
     end,
     use = function (self, other)
-        if not G.P_CENTERS.desc_tower_mult_rank then return end -- disabling the desc card removes the mechanic
-        other.ability.tower_shimmer_mult = not (other.ability.tower_shimmer_mult or false) -- Spades of 5
-    end
-})
-
-Tower.Shimmer.Effect({
-    priority = 9999999999,
-    can_use = function (self, other)
-        if other.config.center.key == 'c_entr_entropy' then
-            return true
-        end
-    end,
-    use = function (self, other)
-        local options = {}
-        for i, v in pairs(G.P_CENTERS) do
-            if v.consumeable and (not v.soul_set) then -- all non-soul consumables (all transmuted are marked as soul)
-                options[#options+1] = v;
-            end
-        end
-        for i = 1, 3 do
-            local center, remove = pseudorandom_element(options, pseudoseed('tower_entropy_shimmer'))
-            table.remove(options, remove)
-            local _card = SMODS.add_card({
-                key = center.key,
-                area = other.tower_area or other.area,
-            })
-            if (other.tower_area or other.area) == G.shop_jokers then
-                create_shop_card_ui(_card)
-            end
-        end
-        other:set_ability(pseudorandom_element(options, pseudoseed('tower_entropy_shimmer')))
-        other:set_cost()
+        other.ability.tower_shimmer_mult = not (other.ability.tower_shimmer_mult or false) -- Spade of 5s
     end
 })
 
@@ -485,11 +524,14 @@ function Tower.Shimmer.Apply(self, card, cards)
 		return a.priority > b.priority
 	end)
 	Tower.EntComp.FlipThen(cards, function(item, area)
+        G.TOWER_DISABLE_TWISTED = true -- prevents twisted deck and sleeve from affecting this as weird shit happens if i don't (don't totally understand it ngl)
 		for i = 1, #Tower.Shimmer.Effects do
 			if Tower.Shimmer.Effects[i].can_use and Tower.Shimmer.Effects[i].can_use(self, item, area, card) then
 				Tower.Shimmer.Effects[i].use(self, item, area, card)
+                G.TOWER_DISABLE_TWISTED = false
 				return
 			end
 		end
+        G.TOWER_DISABLE_TWISTED = false
 	end)
 end

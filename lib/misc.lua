@@ -75,7 +75,7 @@ function G.UIDEF.use_and_sell_buttons(card)
 		card.config
         and card.config.center
 	then
-        if card.config.center.use and card.config.center.set == "Joker" and card.area ~= G.pack_cards and (card.config.center.mod.id == "Tower" or Tower.FeatureWL[card.config.center.mod.id]) then -- no using in joker pack if ever in one (only select)
+        if card.config.center.use and card.config.center.set == "Joker" and (not ((card.area == G.pack_cards) or (card.area == G.hand))) and (card.config.center.mod.id == "Tower" or Tower.FeatureWL[card.config.center.mod.id]) then -- no using in joker pack if ever in one (only select)
             val.nodes[1].nodes[2].nodes[1] = {n=G.UIT.C, config={align = "cr"}, nodes={
                 {n=G.UIT.C, config={ref_table = card, align = "cr",maxw = 1.25, padding = 0.1, r=0.08, minw = 1.25, minh = 1, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'tower_use_joker', func = 'tower_can_use_joker'}, nodes={
                     {n=G.UIT.B, config = {w=0.1,h=0.6}},
@@ -176,9 +176,11 @@ end
 function Tower.CardifyJoker(j)
     G.jokers:remove_card(j)
     G.deck:emplace(j)
-    G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-    j.playing_card = G.playing_card
-    j.ability.tower_return_to_jokers = true
+    if not Entropy then
+        G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+        j.playing_card = G.playing_card
+        j.ability.tower_return_to_jokers = true
+    end
     table.insert(G.playing_cards, j)
 end
 
@@ -186,7 +188,7 @@ function Tower.UncardifyJoker(j)
     G.deck:remove_card(j)
     G.jokers:emplace(j)
     j.playing_card = nil
-    j.ability.tower_return_to_jokers = false
+    j.ability.tower_return_to_jokers = nil
     for i, v in ipairs(G.playing_cards) do
         if v == j then
             table.remove(G.playing_cards, i)

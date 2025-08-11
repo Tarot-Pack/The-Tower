@@ -1,6 +1,9 @@
 
 Tower.EntComp = {}
 function Tower.EntComp.GetHighlightedCards(cardareas, ignorecard, blacklist)
+    if Entropy then
+        return Entropy.GetHighlightedCards(cardareas, ignorecard, blacklist)
+    end
     local cards = {}
     blacklist = blacklist or {}
     for i, area in pairs(cardareas) do
@@ -20,6 +23,9 @@ function Tower.EntComp.GetHighlightedCards(cardareas, ignorecard, blacklist)
 end
 
 function Tower.EntComp.FormatArrowMult(arrows, mult)
+    if Entropy then
+        return Entropy.FormatArrowMult(arrows, mult)
+    end
     mult = type(mult) ~= "string" and number_format(mult) or mult
     if to_big(arrows) <= to_big(-2.01) then
         return "{"..arrows.."}"..mult
@@ -42,6 +48,7 @@ function Tower.EntComp.FormatArrowMult(arrows, mult)
     end
 end
 function Tower.EntComp.FlipThen(cardlist, func, before, after)
+    -- we are not including the entropy fallback here because i did add a little bit of extra functionality
     if not Talisman.config_file.disable_anims then
         for i, v in ipairs(cardlist) do
             local card = cardlist[i]

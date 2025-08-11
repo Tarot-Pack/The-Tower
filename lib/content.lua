@@ -205,6 +205,13 @@ SMODS.Atlas({
 	py = 95
 })
 
+SMODS.Atlas({
+	key = "sleeves",
+	path = "tower_sleeves.png",
+	px = 71,
+	py = 95
+})
+
 SMODS.ObjectType({
 	key = "Tower-Slime",
 	default = "j_tower_king_slime",
@@ -323,20 +330,6 @@ SMODS.ContentSet({
 	cry_order = 0,
 })
 
-SMODS.DescriptionCard({
-	key = "mult_rank",
-	atlas = "description_cards",
-	dependencies = {
-		items = {
-			"set_tower_transmuted"
-		}
-	},
-	pools = {tower_transmuted = true},
-	pos = { x = 0, y = 0 },
-	set_badges = function (self, card, badges)
-		badges[#badges+1] = create_badge(localize('k_tower_transmuted'), Tower.TransmutedGrad, nil, 1.2 )
-	end,
-})
 SMODS.DescriptionCard({
 	key = "unbounded_pointer",
 	atlas = "description_cards",

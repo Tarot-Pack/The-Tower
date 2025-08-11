@@ -920,7 +920,7 @@ Tower.Joker({
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 2, y = 0, extra = { x = 1, y = 0 } },
 	display_size = { w = 96, h = 95 },
-	pools = { ["Tower-Slime"] = true, ["Tower-Terra"] = true },
+	pools = {  },
 	config = {
 		extra = {
 			copies = 1,

@@ -16,7 +16,7 @@ Tower.PokerHand({
 		for i, card in ipairs(hand) do
 			local good = false
 			for q, match in ipairs(pool) do
-				if match == "rankless" and SMODS.has_no_rank(card) or match == card:get_id() then 
+				if (match == "rankless" and SMODS.has_no_rank(card)) or match == card:get_id() then 
 					table.remove(pool, q)
 					good = true
 					break

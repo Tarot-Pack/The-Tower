@@ -76,6 +76,12 @@ local towerConfigTab = function()
 	config = { n = G.UIT.R, config = { align = "tm", padding = 0 }, nodes = { left_settings, right_settings } }
 	tower_nodes[#tower_nodes + 1] = config
 	tower_nodes[#tower_nodes + 1] = create_toggle({
+		label = localize("tower_main_menu"),
+		active_colour = HEX("b31b41"),
+		ref_table = Tower.Config,
+		ref_value = "menu",
+	})
+	tower_nodes[#tower_nodes + 1] = create_toggle({
 		label = localize("tower_skip_book"),
 		active_colour = HEX("b31b41"),
 		ref_table = Tower.Config,
@@ -331,3 +337,49 @@ for i, v in pairs(things) do
 end
 current = nil
 Tower._is_lib = true
+
+local oldfunc = Game.main_menu
+Game.main_menu = function(change_context)
+	local ret = oldfunc(change_context)
+	if not Tower.Config.menu then return end
+	-- adds a Cryptid spectral to the main menu
+	local newcard = Card(
+		G.title_top.T.x,
+		G.title_top.T.y,
+		G.CARD_W,
+		G.CARD_H,
+		G.P_CARDS.empty,
+		G.P_CENTERS.c_tower,
+		{ bypass_discovery_center = true }
+	)
+	-- recenter the title
+	G.title_top.T.w = G.title_top.T.w * 1.7675
+	G.title_top.T.x = G.title_top.T.x - 0.8
+	G.title_top:emplace(newcard)
+	-- make the card look the same way as the title screen Ace of Spades
+	newcard.T.w = newcard.T.w * 1.1 * 1.2
+	newcard.T.h = newcard.T.h * 1.1 * 1.2
+	newcard.no_ui = true
+	newcard.states.visible = false
+
+	-- make the title screen use different background colors
+
+	G.E_MANAGER:add_event(Event({
+		trigger = "after",
+		delay = 0,
+		blockable = false,
+		blocking = false,
+		func = function()
+			if change_context == "splash" then
+				newcard.states.visible = true
+				newcard:start_materialize({ G.C.WHITE, G.C.WHITE }, true, 2.5)
+			else
+				newcard.states.visible = true
+				newcard:start_materialize({ G.C.WHITE, G.C.WHITE }, nil, 1.2)
+			end
+			return true
+		end,
+	}))
+
+	return ret
+end
