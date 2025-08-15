@@ -920,7 +920,7 @@ Tower.Joker({
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 2, y = 0, extra = { x = 1, y = 0 } },
 	display_size = { w = 96, h = 95 },
-	pools = {  },
+	pools = { },
 	config = {
 		extra = {
 			copies = 1,
@@ -1236,7 +1236,9 @@ Tower.Joker({
 			"cylink"
 		},
 		art = {
-			"jamirror",
+			"jamirror (Edited Original Sprite)",
+			"Ein13 (Sync Catalyst Art)",
+			"George The Rat (Sync Catalyst Art)",
 		},
 		code = {
 			"jamirror",
@@ -1712,7 +1714,6 @@ Tower.Joker({
 					end
 				end
 			end
-			print(item)
 			if card.ability.cry_rigged then -- eq to op = 6
 				-- rigged is explosion
 				if operand == 'mult' then
@@ -2096,3 +2097,131 @@ function Card:use_consumeable(...)
 	G.GAME.probabilities.normal = ggpn
 	return val
 end
+
+Tower.Joker({
+	name = "tower-astrageldon",
+	key = "astrageldon",
+	pos = { x = 0, y = 0 },
+	dependencies = {
+		items = {
+			"j_tower_astrum_aureus"
+		},
+	},
+	soul_pos = { x = 1, y = 0, extra = {x = 2, y = 0}},
+	pools = { ["Tower-Slime"] = true, ["Tower-Terra"] = true },
+	config = {
+		extra = {
+			every = 5,
+			count = 0,
+		}
+	},
+	display_size = {
+		w = 171,
+		h = 115
+	},
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue+1] = G.P_CENTERS.j_tower_astrum_aureus
+		return {
+			vars = {
+				card.ability.extra.every,
+				card.ability.extra.count,
+			}
+		}
+	end,
+	calculate = function(self, joker, context)
+		if context.individual and context.cardarea == G.play then
+			local card = context.other_card;
+			if (not card) or (card.edition and card.edition.cry_astral) then
+				-- either card doesn't exist (shouldn't happen but might as well)
+				-- or card already has astral (so don't count it)
+				return
+			end
+			card:set_edition("e_cry_astral", false, true)
+			joker.ability.extra.count = lenient_bignum(to_big(joker.ability.extra.count) + to_big(1)) -- this is techinally scaling but i will not use cryptid scaling api as i don't want the game to crash :(
+			if to_big(joker.ability.extra.count) >= to_big(joker.ability.extra.every) then
+				joker.ability.extra.count = lenient_bignum(to_big(joker.ability.extra.count) - to_big(joker.ability.extra.every))
+				local card = create_card(
+					"Joker",
+					G.jokers,
+					nil,
+					nil,
+					nil,
+					nil,
+					"j_tower_astrum_aureus"
+				)
+				G.jokers:emplace(card)
+
+				return {
+					message = (localize("tower_astrageldon_astrum_aureused")) .. ' ' .. tostring(joker.ability.extra.every) .. '/' .. tostring(joker.ability.extra.every)
+				}
+			end
+			return {
+				message = localize("tower_astrageldon_astraled") .. ' ' .. tostring(joker.ability.extra.count) .. '/' .. tostring(joker.ability.extra.every)
+			}
+		end
+	end,
+	rarity = "tower_apollyon",
+	cost = 156,
+	atlas = "bigslime",
+
+    tower_credits = {
+		idea = {
+			"pikaboy",
+			"jamirror"
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	}
+})
+
+Tower.Joker({
+	name = "tower-astrum_aureus",
+	key = "astrum_aureus",
+	pos = { x = 3, y = 0 },
+	soul_pos = { x = 4, y = 0, extra = {x = 5, y = 0}},
+	pools = { ["Tower-Terra"] = true },
+	display_size = {
+		w = 171,
+		h = 115
+	},
+	config = {
+		extra = {
+			amount = 1.2,
+		}
+	},
+	loc_vars = function(self, info_queue, card)
+		return {
+			vars = {
+				card.ability.extra.amount,
+			}
+		}
+	end,
+	calculate = function (self, joker, context)
+		if context.other_card and context.individual and context.cardarea == G.play then
+			return {
+				message = Tower.EntComp.FormatArrowMult(1, joker.ability.extra.amount) .. " Mult",
+				Emult_mod = joker.ability.extra.amount,
+				colour = G.C.DARK_EDITION,
+			}
+		end
+	end,
+	rarity = "cry_exotic",
+	cost = 56,
+	atlas = "bigslime",
+
+    tower_credits = {
+		idea = {
+			"pikaboy"
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	}
+})

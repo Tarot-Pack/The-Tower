@@ -74,7 +74,7 @@ Tower.Sticker{
 	badge_colour = HEX("9174e1"),
     rate = 0,
 	order = 999999,
-    calculate = function (self, card, context) -- do virus calc in batch
+    calculate = function (self, card, context)
         if context.end_of_round and context.cardarea == G.jokers then
             local center = card;
             if not Card.no(center, "immutable", true) then

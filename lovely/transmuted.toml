@@ -134,3 +134,11 @@ end
 """
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS entr "lib/hooks.lua"]'''
+pattern = '''if card_type ~= "Default" and card_type ~= "Enhanced" and self.playing_card then'''
+position = "at"
+payload = """if card_type ~= "Default" and card_type ~= "Enhanced" and card_type ~= "Sleeve" and self.playing_card then""" # grr (this doesn't even need to be here i just don't like looking at it)
+match_indent = true
+

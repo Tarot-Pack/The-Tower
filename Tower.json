@@ -2,7 +2,7 @@
 	"id": "Tower",
 	"name": "The Tower",
 	"display_name": "The Tower",
-	"author": ["jamirror", "pikaboy10", "cylink"],
+	"author": ["jamirror", "pikaboy10", "cylink", "Cryptid Discord"],
 	"description": "Very hard balatro.",
 	"prefix": "tower",
 	"main_file": "Tower.lua",
@@ -15,5 +15,8 @@
 		"Steamodded (>=1.0.0~BETA-0308a)",
 		"Talisman (>=2.2.0a)",
 		"Cryptid (>=0.5)"
+	],
+	"conflicts": [
+		"NotJustYet"
 	]
 }

@@ -383,3 +383,11 @@ Game.main_menu = function(change_context)
 
 	return ret
 end
+
+Tower.AfterAllLoaded(function ()
+	Cryptid.pointerblistifytype("rarity", "tower_apollyon")
+	Cryptid.pointerblistifytype("rarity", "tower_transmuted")
+	Cryptid.pointerblistifytype("set", "tower_transmuted")
+
+	Cryptid.pointerblistify("c_tower_aether_monolith")
+end)

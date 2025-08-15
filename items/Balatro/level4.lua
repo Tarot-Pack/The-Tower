@@ -54,7 +54,7 @@ Tower.Blind({
     end,
 	calculate = function(self, card, context)
         if G.GAME.blind.disabled then return end
-		if context.post_trigger or context.forcetrigger then
+		if context.post_trigger then
             local card = context.other_context and context.other_context.blueprint_card or context.other_card or nil;
             if card == nil then
                 -- nope

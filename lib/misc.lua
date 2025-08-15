@@ -464,8 +464,8 @@ function Tower.poll_pool_weighted(_pool_key, _rand_key)
     -- Calculate total rates of rarities
     local total_weight = 0
     local compiled = {}
-    for key, items in ipairs(available_rarities) do
-        if #items > 0 then
+    for key, items in ipairs(available_rarities) do        
+        if (key ~= 'tower_transmuted') and (#items > 0) then
             local v = {
                 key = key,
                 weight = 1

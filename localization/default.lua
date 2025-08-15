@@ -80,7 +80,7 @@ return {
 					"Choose {C:attention}#1#{} of",
 					"up to {C:attention}#2# Slime Joker#<s>2#{}",
 				},
-			},			
+			},
 			p_tower_slime_2 = {
 				name = "Slime Pack",
 				text = {
@@ -146,7 +146,15 @@ return {
                 },
             },
 
-
+			tower_sleeping_blessing = {
+				name = "Sleeping Blessing",
+				text = {
+					"When you reach 0 hands, you gain two hands", -- dont variable this bc passing ability with variable is annoying
+					"and pass this ability to the joker to the right",
+					"{C:inactive}(If there is no joker to the right, the ability will be lost)",
+					"{S:1.1,C:red,E:2}self destructs{}"
+				}
+			},
 			tower_bound = { 
 				name = "Bound",
 				text = {
@@ -1368,6 +1376,19 @@ return {
 					"{C:attention}Gold Seal{}, {C:attention}Gold{} and {C:attention}Golden{} gives {X:dark_edition,C:white} ^#1# {} dollars"
 				},
 			},
+			j_tower_astrageldon = {
+				name = "Astrageldon",
+				text = {
+					"Apply {C:dark_edition}Astral{} to all played cards and create an",
+					"{C:cry_exotic}Astrum Aureus{} for every {C:attention}#1#{} {C:inactive}[#2#]{} cards turned {C:dark_edition}Astral"
+				},
+			},
+			j_tower_astrum_aureus = {
+				name = "Astrum Aureus",
+				text = {
+					"{C:attention}Scored cards{} give {X:dark_edition,C:white} ^#1# {} Mult"
+				},
+			},
 			j_tower_shimmer_bucket = {
 				name = "Bottomless Shimmer Bucket",
 				text = {
@@ -1375,6 +1396,118 @@ return {
 					"{C:inactive}(Max uses: Infinity)"
 				},
 			},
+			j_tower_cyanprint = {
+				name = 'Cyanprint',
+                text = {
+                    "Double values of",
+                    "{C:attention}Joker{} to the right",
+                },
+			},
+			j_tower_limeprint = {
+				name = 'Limeprint',
+                text = {
+                    "Destroys {C:attention}Joker{} to the left",
+					"and retriggers {C:attention}Joker{} to the right",
+					"#1# time#<s>1#", -- 2
+                },
+			},
+			j_tower_yellowprint = {
+				name = 'Yellowprint',
+                text = {
+                    "When a new round begins, divide the",
+					"{C:attention}Joker{} to the right into {C:attention}#1# pieces{}", -- 3
+					"with values split between the copies",
+                },
+			},
+			j_tower_springprint = {
+				name = 'Springprint',
+                text = {
+                    "When a new round begins the",
+                    "{C:attention}Joker{} to the right",
+					"changes to one of the same rarity"
+                },
+			},
+			j_tower_pinkprint = {
+				name = 'Pinkprint',
+                text = {
+                    "Every other round, retrigger",
+					"{C:attention}Joker{} to the right #1# time#<s>1#,",
+					"otherwise debuff it",
+                },
+			},
+			j_tower_print = {
+				name = 'print',
+                text = {
+                    "Retrigger the {C:attention}Joker",
+					"to the right {C:attention}#1# time#<s>1#",
+					"for every empty {C:attention}Joker slot",
+					"including print",
+					"{C:inactive}(Currently #2# retrigger#<s>2#)",
+                },
+			},
+			j_tower_blue = {
+				name = 'Blue',
+                text = {
+                    "{C:tower_apollyon,E:1,S:10}Copy{}",
+                },
+			},
+			j_tower_greenprint = {
+				name = 'Greenprint',
+                text = {
+                    "{X:mult,C:white} X#1# {} Mult", -- (starting at) X1
+					"Gains {X:mult,C:white} X#2# {} Mult for",
+					"every time joker to the right has",
+					"triggered this round", -- 0.05
+                },
+			},
+			j_tower_goldprint = {
+				name = 'Goldprint',
+                text = {
+                    "Gives {C:money}$#1#{} for every joker to the right", -- 1
+					"{C:inactive}(Currently {C:money}$#2#{C:inactive})" -- total
+                },
+			},
+			j_tower_redprint = {
+				name = 'Redprint',
+                text = {
+                    "Destroys {C:attention}Joker{} to the left",
+					"and copies {C:attention}Joker{} to the right",
+					"{C:inactive}(If there is no joker to the left,",
+					"{C:inactive}will instead destroy joker to the right)",
+                },
+			},
+			j_tower_orangeprint = {
+				name = 'Orangeprint',
+                text = {
+                    "Copies {C:attention}Jokers{} 1-5, excluding Orangeprint", -- would misprinting this even makes sense
+					"{C:inactive}(Changes when triggered)"
+                },
+			},
+			j_tower_purpleprint = {
+				name = 'Purpleprint',
+                text = {
+                    "When you reach 0 hands, you gain two hands", -- dont variable this bc passing ability with variable is annoying
+					"and pass this ability to the joker to the right",
+					"{C:inactive}(If there is no joker to the right, the ability will be lost)",
+					"{S:1.1,C:red,E:2}self destructs{}"
+                },
+			},
+			j_tower_blackprint = {
+				name = 'Blackprint',
+                text = {
+                    "Will retrigger the joker to the right #1# times",
+					"{C:red}Permanently{} becomes stronger when destroyed",
+					"{S:1.1,C:red,E:2}self destructs{}"
+                },
+			},
+			j_tower_astral_alignment = {
+				name = "Astral Alignment",
+				text = {
+					"Played hand always contains the",
+					"handtype {C:attention}above{} and {C:attention}below{} in the {C:attention}handlist"
+				},
+			},
+
 			j_tower_tanpaku = {
 				name = "Tanpaku",
 				text = {
@@ -1386,7 +1519,7 @@ return {
 			j_tower_tanjun = {
 				name = "Tanjun",
 				text = {
-					"{X:dark_edition,C:white} ^#1# {} Chips for every #1# times scored cards are triggered" -- ^2 every 2
+					"{X:dark_edition,C:white} ^#1# {} Chips for every #2# time#<s>2# scored cards are triggered" -- ^2 every 2
 				},
 			},
 			j_tower_mi = {
@@ -1456,12 +1589,12 @@ return {
 
 			tower_truenegative = "True Negative",
 			tower_bound = "Bound",
+			tower_sleeping_blessing = "Sleeping Blessing",
 			tower_notrigger = "Dud",
 			tower_fuckyou = Cryptid_config.family_mode and "Your Sins" or "Fuck You",
 			tower_virus = "Infected",
 			tower_food = "Edible",
 			tower_transmuted = "Transmuted",
-
 		},
 		dictionary = {
 			b_tower_minigame = "Minigames",
@@ -1469,6 +1602,9 @@ return {
 			k_tower_transmuted = "Transmuted",
 			k_tower_inverted = "Chips & Mult Swapped",
 			b_tower_transmuted = "Transmuted",
+
+			tower_astrageldon_astraled = "Astraled",
+			tower_astrageldon_astrum_aureused = "Astrum'd",
 
             k_book = "Book",
             k_books = "Books",
@@ -1532,6 +1668,8 @@ return {
 			tower_die_of_fate_pointer = "Nat 88888888: Unbounded Pointer",
 		},
 		v_dictionary = {
+			tower_planted = "Planted!",
+			tower_stonks = "Stonks!",
 			tower_bounce = 'Bounce!',
 			tower_boring_bounce = 'Bounce',
 			tower_big_bounce = 'Big Bounce!',
@@ -1559,13 +1697,9 @@ return {
 		challenge_names = {
 			c_tower_true_negative = "Negative Nancy"
 		},
-		minigame_names = {
-			mg_tower_bullet_game = "Raging Roulette"
-		},
 		v_text = {
 			ch_c_tower_true_negative = { "All Jokers, playing cards and Consumables are"},
-			ch_c_tower_true_negativel2 = { "{C:negative}True Negative{}, values given by them are negated" },
-			mg_c_tower_bullet_game = { "Balatro but bullet" },
+			ch_c_tower_true_negativel2 = { "{C:negative}True Negative{}, values given by them are negated" }
 		},
 		achievement_names = {
 			ach_tower_clusterfuck_you = Cryptid_config.family_mode and "Cluster of Your Sins"

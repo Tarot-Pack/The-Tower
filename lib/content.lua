@@ -178,6 +178,13 @@ Tower.Atlas({
 })
 
 Tower.Atlas({
+	key = "prints",
+	path = "tower_prints.png",
+    px = 71,
+    py = 95
+})
+
+Tower.Atlas({
 	key = "consumables",
 	path = "tower_consumables.png",
     px = 71,
@@ -210,6 +217,13 @@ SMODS.Atlas({
 	path = "tower_sleeves.png",
 	px = 71,
 	py = 95
+})
+
+SMODS.Atlas({
+	key = "bigslime",
+	path = "tower_bigslime.png",
+	px = 171,
+	py = 115
 })
 
 SMODS.ObjectType({
