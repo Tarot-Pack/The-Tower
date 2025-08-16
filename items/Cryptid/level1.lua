@@ -806,8 +806,8 @@ Tower.Blind({
     end
 })
 
-
-
+-- nevermind man..
+--[[
 local vsal = Tower.ObsidianOrb({
     tower_is_code = true,
     name = "tower-crfunction",
@@ -846,7 +846,7 @@ local vsal = Tower.ObsidianOrb({
         return G.GAME.modifiers.tower_code_enabled and (#(G.GAME.tower_past_blinds or {}) ~= 0)
     end
 })
-Tower.Blind(vsal)
+Tower.Blind(vsal)]]
 
 Tower.Blind({
     tower_is_code = true,

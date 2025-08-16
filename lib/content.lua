@@ -192,6 +192,13 @@ Tower.Atlas({
 })
 
 Tower.Atlas({
+	key = "madness_core",
+	path = "tower_madness_core.png",
+    px = 71,
+    py = 95
+})
+
+Tower.Atlas({
 	key = "description_cards",
 	path = "tower_descriptioncards.png",
     px = 71,
@@ -312,6 +319,13 @@ SMODS.ContentSet({
 	atlas = "blinds",
 	pos = { x = 0, y = 15 },
 	cry_blind = true,
+	cry_order = -5,
+})
+
+SMODS.ContentSet({
+	key = "misc",
+	atlas = "jokers1",
+	pos = { x = 0, y = 2 },
 	cry_order = -4,
 })
 
@@ -353,3 +367,20 @@ SMODS.DescriptionCard({
 	pools = {},
 	pos = { x = -1, y = 0 }
 })
+
+SMODS.DescriptionCard({
+	key = "empowered",
+	atlas = "description_cards",
+	dependencies = {
+		items = {}
+	},
+	pools = {},
+	loc_vars = function()
+		return {
+			vars = {'{','}'}
+		}
+	end,
+	pos = { x = -1, y = 0 }
+})
+
+Tower.EmpoweredColour = HEX('ff0000')

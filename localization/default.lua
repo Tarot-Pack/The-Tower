@@ -32,6 +32,13 @@ return {
 					"{C:inactive}Multiuse: ({C:cry_code}1e300{C:inactive} remaining)"
 				},
 			},
+			desc_tower_empowered = {
+				name = "Empower",
+				text = {
+					"Increase gameset by 1 and",
+					"boost values by {X:dark_edition,C:white,E:1} ^2"
+				}
+			}
 		},
 		["Content Set"] = {
 			set_tower_blinds = {
@@ -153,6 +160,12 @@ return {
 					"and pass this ability to the joker to the right",
 					"{C:inactive}(If there is no joker to the right, the ability will be lost)",
 					"{S:1.1,C:red,E:2}self destructs{}"
+				}
+			},
+			tower_empowered = {
+				name = "Empowered",
+				text = {					
+					"Empowered by #1# level#<s>1#"
 				}
 			},
 			tower_bound = { 
@@ -1500,12 +1513,19 @@ return {
 					"{S:1.1,C:red,E:2}self destructs{}"
                 },
 			},
-			j_tower_astral_alignment = {
-				name = "Astral Alignment",
+			j_tower_cosmic_alignment = {
+				name = "Cosmic Alignment",
 				text = {
 					"Played hand always contains the",
 					"handtype {C:attention}above{} and {C:attention}below{} in the {C:attention}handlist"
 				},
+			},
+			j_tower_astral_projection = {
+				name = "Astral Projection",
+				text = {
+					"{C:tower_apollyon,E:1}Empower{} all Jokers",
+					"#1# time#<s>1# when round begins"
+				}
 			},
 
 			j_tower_tanpaku = {
@@ -1561,6 +1581,14 @@ return {
 					"{C:tower_apollyon,E:1}No restrictions apply{}"
 				},
 			},
+		},
+		Omen = {
+			c_tower_madness_core = {
+				name = "Madness",
+				text = {
+					"{C:tower_apollyon,E:1}Empower{} a selected joker #1# time#<s>1#"
+				}
+			},
 		}
     },
 	misc = {        
@@ -1590,6 +1618,7 @@ return {
 			tower_truenegative = "True Negative",
 			tower_bound = "Bound",
 			tower_sleeping_blessing = "Sleeping Blessing",
+			tower_empowered = "Empowered",
 			tower_notrigger = "Dud",
 			tower_fuckyou = Cryptid_config.family_mode and "Your Sins" or "Fuck You",
 			tower_virus = "Infected",
@@ -1668,6 +1697,7 @@ return {
 			tower_die_of_fate_pointer = "Nat 88888888: Unbounded Pointer",
 		},
 		v_dictionary = {
+			tower_empowered_level = "Empowered #1#",
 			tower_planted = "Planted!",
 			tower_stonks = "Stonks!",
 			tower_bounce = 'Bounce!',

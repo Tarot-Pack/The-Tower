@@ -197,3 +197,51 @@ if G.jokers.cards[j].ability.tower_forgotten_choice ~= nil then
     G.GAME.probabilities.normal = ggpn
 end'''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''functions/UI_definitions.lua'''
+pattern = '''if obj and obj.set_badges and type(obj.set_badges) == 'function' then'''
+position = "before"
+payload = '''
+if card.ability and card.ability.immutable.tower_force_gameset then
+    badges[#badges+1] = create_badge(localize('cry_gameset_' .. (card.ability.immutable.tower_force_gameset)), G.C.CRY_GREENGRADIENT, nil, 1 )
+end
+if card.ability and card.ability.immutable.tower_empowered then
+    badges[#badges+1] = create_badge(localize({ type = "variable", key = "tower_empowered_level", vars = { Tower.ToRoman(card.ability.immutable.tower_empowered) } }), Tower.EmpoweredColour, nil, 1 )
+end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS Cryptid "lib/gameset.lua"]'''
+pattern = '''if card.force_gameset then'''
+position = "before"
+payload = '''
+if card.ability and card.ability.immutable and card.ability.immutable.tower_force_gameset then
+    return card.tower_force_gameset
+end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/card_draw.lua"]'''
+pattern = '''elseif self.children.floating_sprite then'''
+position = "after"
+payload = '''
+self.children.floating_sprite:set_sprite_pos(self.config.center.soul_pos)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS entr "lib/hooks.lua"]'''
+pattern = '''if self.config.center.tsoul_pos then'''
+position = "after"
+payload = '''
+self.children.floating_sprite:set_sprite_pos(self.config.center.tsoul_pos);
+if self.config.center.tsoul_pos.extra then
+    self.children.floating_sprite2:set_sprite_pos(self.config.center.tsoul_pos.extra);
+end
+'''
+match_indent = true

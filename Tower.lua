@@ -236,7 +236,6 @@ function Tower.Object(bl)
 	if bl.tower_blind then
 		bl.dependencies.items[#bl.dependencies.items+1] = ("bl_" .. bl.tower_blind)
 	end
-
 	if bl.object_type == "Blind" then
         bl.dependencies.items[#bl.dependencies.items+1] = "set_tower_blinds"
 	end
@@ -260,7 +259,24 @@ function Tower.Object(bl)
 			bl.pools["Tower-" .. author] = true
 		end
 	end
-
+	if (#bl.dependencies.items > 0) and (bl.object_type == 'Joker' or bl.object_type == 'Consumeable') then
+		local is_good = true;
+		for k, c in pairs(SMODS.ContentSet.obj_table) do
+			if c.set == "Content Set" then
+				for i, v in ipairs(bl.dependencies.items) do
+					if v == c.key then
+						is_good = false;
+						break
+					end
+				end
+			end
+		end
+		if is_good then
+			bl.dependencies.items[#bl.dependencies.items+1] = "set_tower_misc"
+		end
+	else
+		bl.dependencies.items[#bl.dependencies.items+1] = "set_tower_misc"
+	end
 
 	if Tower._is_lib then
 		local val = SMODS[bl.object_type](bl)

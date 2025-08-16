@@ -41,7 +41,7 @@ Tower.Joker({
 			}
 		}
 	end,
-	rarity = 1,
+	rarity = 3,
 	calculate = function(self, card, context)
 		if context.joker_main then
 			if G.GAME.blind_on_deck == 'Small' then
@@ -863,6 +863,7 @@ Tower.Joker({
 	rarity = "tower_transmuted",
 	cost = 1,
 	atlas = "jokers1",
+	shimmer_into = "j_tower_astral_projection",
 	blueprint_compat = true,
 	
 	can_use = function(self, card)
@@ -2166,7 +2167,7 @@ Tower.Joker({
 
     tower_credits = {
 		idea = {
-			"pikaboy",
+			"pikaboy10",
 			"jamirror"
 		},
 		art = {
@@ -2215,7 +2216,7 @@ Tower.Joker({
 
     tower_credits = {
 		idea = {
-			"pikaboy"
+			"pikaboy10"
 		},
 		art = {
 			"jamirror",
@@ -2225,3 +2226,198 @@ Tower.Joker({
 		},
 	}
 })
+Tower.beforeCalculate(function (context)
+	if next(find_joker("tower-cosmic_alignment")) and context.scoring_name and context.poker_hands then
+		local filtered = {}
+		for i, v in pairs(G.GAME.hands) do
+			if v.visible then
+				filtered[#filtered+1] = i
+			end
+		end
+		table.sort(filtered, function (a, b)
+			return G.GAME.hands[a].order < G.GAME.hands[b].order
+		end)
+		for i = 1, #filtered do
+			if filtered[i] == context.scoring_name then
+				if not (filtered[i-1]) then
+					context.poker_hands[filtered[#filtered]] = context.poker_hands[context.scoring_name]
+				else
+					context.poker_hands[filtered[i-1]] = context.poker_hands[context.scoring_name]
+				end
+				if not (filtered[i+1]) then
+					context.poker_hands[filtered[1]] = context.poker_hands[context.scoring_name]
+				else
+					context.poker_hands[filtered[i+1]] = context.poker_hands[context.scoring_name]
+				end
+			end
+		end
+	end
+end)
+
+Tower.Joker({
+	name = "tower-cosmic_alignment",
+	key = "cosmic_alignment",
+	pos = { x = 0, y = 2 },
+	pools = { },
+	config = {},
+	loc_vars = function(self, info_queue, card)
+		return {
+			vars = {}
+		}
+	end,
+	rarity = 2,
+	cost = 3,
+	atlas = "jokers1",
+
+    tower_credits = {
+		idea = {
+			"jamirror"
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	}
+})
+
+
+Tower.Joker({
+	name = "tower-astral_projection",
+	key = "astral_projection",
+	pos = { x = 1, y = 2 },
+	soul_pos = { x = 3, y = 2, extra = {x = 2, y = 2}},
+	config = {
+		extra = {
+			amount = 1
+		}
+	},
+
+	shimmer_into = "j_tower_shimmer_bucket",
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue+1] = G.P_CENTERS.desc_tower_empowered
+		return {
+			vars = {
+				card.ability.extra.amount
+			}
+		}
+	end,
+	
+	calculate = function (self, card, context)
+		if context.setting_blind then
+			for i = 1, #G.jokers.cards do
+				Tower.ApplyEmpowered(G.jokers.cards[i], 1)
+			end
+		end
+	end,
+
+	rarity = "tower_apollyon",
+	cost = 111,
+	atlas = "jokers1",
+
+    tower_credits = {
+		idea = {
+			"jamirror"
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	}
+})
+
+
+function Tower.ApplyEmpowered(card, key)
+	if key == 0 then
+		key = nil;
+	end
+	if key == false then
+		key = nil
+	end
+	if (key ~= nil) and (type(key) ~= 'number') then
+		key = to_big(1)
+	end
+	if key == nil then
+		key = -(to_big(card.ability.immutable.tower_empowered) or to_big(0));
+	end
+	if to_big(key) ~= to_big(0) then
+		card.ability.immutable.tower_empowered = to_big(card.ability.immutable.tower_empowered or 0) + to_big(key)
+		if card.ability.immutable.tower_empowered <= to_big(0) then
+			card.ability.immutable.tower_empowered = nil
+		end
+		if card.ability.immutable.tower_empowered ~= nil then
+			local old_gameset = Cryptid.gameset(card);
+			if old_gameset == 'modest' or old_gameset == "exp_modest" then
+				Tower.SetGameset(card, 'mainline')
+			elseif old_gameset == 'mainline' or old_gameset == "exp_mainline" or old_gameset == 'exp' then
+				Tower.SetGameset(card, 'madness')
+			end
+		else
+			card.ability.immutable.tower_force_gameset = nil
+		end
+		if not Card.no(card, "immutable", true) then
+			Cryptid.manipulate(card, { 
+				type = "hyper", 
+				value = {
+					arrows = 1,
+					height = to_big(2):pow(key)
+				},
+			})
+		end
+	end
+end
+
+function Tower.SetGameset(card, new_gameset)
+	local center = card.config and card.config.center or card.effect and card.effect.center or card;
+	local old_gameset = card.ability.immutable.tower_force_gameset or (Cryptid.gameset(card));
+	if Cryptid_config.experimental and center.extra_gamesets then
+		local found = false;
+		local trying_to_find = 'exp_' .. new_gameset;
+		for i = 1, #center.extra_gamesets do
+			if center.extra_gamesets[i] == trying_to_find then
+				card.ability.immutable.tower_force_gameset = trying_to_find
+				found = true
+				break
+			end
+		end
+		if not found then
+			card.ability.immutable.tower_force_gameset = new_gameset
+		end
+	else
+		card.ability.immutable.tower_force_gameset = new_gameset
+	end
+	local old_config = (center.gameset_config or {})[old_gameset] or center.config or {};
+	local new_config = (center.gameset_config or {})[new_gameset] or center.config or {};
+	Tower.TransformValues(card.ability, old_config, new_config)
+	if new_config.cost then
+		card.base_cost = new_config.cost
+	end
+end
+function Tower.TransformValues(table, ref_tableA, ref_tableB)
+	-- note this does not ignore immutable lmao
+	ref_tableA = ref_tableA or {}
+	ref_tableB = ref_tableB or {}
+	table = table or {}
+	for i, v in pairs(table) do
+		print(v, ref_tableA[i], ref_tableB[i])
+		if type(v) == 'table' then
+			Tower.TransformValues(v, ref_tableA[i], ref_tableB[i])
+		elseif is_number(v) and (ref_tableA[i] and ref_tableB[i])  then
+			if type(v) == 'number' then
+				table[i] = v * (ref_tableB[i] / ref_tableA[i])
+				if table[i] > 1e300 then
+					table[i] = 1e300
+				elseif table[i] < -1e300 then
+					table[i] = -1e300
+				end
+			else
+				table[i] = v * (to_big(ref_tableB[i]) / to_big(ref_tableA[i]))
+			end
+		else
+			table[i] = ref_tableB[i] or table[i]
+		end
+	end
+end
