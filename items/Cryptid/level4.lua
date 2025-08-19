@@ -365,14 +365,16 @@ Tower.Blind({
     
     set_blind = function (self)
         if G.GAME.blind.disabled then return end
-        G.GAME.tower_ritual = true
+        for i, v in pairs(G.consumeables.cards) do
+            v:set_edition("e_tower_truenegative", nil, true)
+        end
+		for i, v in pairs(G.jokers.cards) do
+            v:set_edition("e_tower_truenegative", nil, true)
+        end
+		for i, v in pairs(G.playing_cards) do
+            v:set_edition("e_tower_truenegative", nil, true)
+        end
     end,
-    disable = function (self)
-        G.GAME.tower_ritual = nil
-    end,
-    defeat = function (self)
-        G.GAME.tower_ritual = nil
-    end
 })
 
 Tower.Blind({

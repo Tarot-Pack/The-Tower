@@ -586,7 +586,6 @@ end
 
 local old_toggle_shop = G.FUNCS.toggle_shop
 G.FUNCS.toggle_shop = function(e)
-    print('this code started working because of this print statement so i\'m not removing it')
     if G.GAME.tower_run_spend_all then
         if G.GAME.dollars >= to_big(0) then
             return

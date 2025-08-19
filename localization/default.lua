@@ -1141,9 +1141,8 @@ return {
 			bl_tower_ritual = {
 				name = "The Ritual",
 				text = {
-					"All triggered playing cards, jokers",
-					"and consumables have the effect",
-					"of true-negative"
+					"All playing cards, jokers",
+					"and consumables become true-negative"
 				}
 			},
 			bl_tower_adversary = {

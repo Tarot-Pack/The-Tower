@@ -488,8 +488,10 @@ function Tower.poll_pool_weighted(_pool_key, _rand_key)
                 v.mod = 1;
             end
             v.weight = v.weight*v.mod
-            total_weight = total_weight + v.weight
-            compiled[#compiled+1] = v
+            if v.weight > 0 then
+                total_weight = total_weight + v.weight
+                compiled[#compiled+1] = v
+            end
         else
             available_rarities[key] = nil
         end

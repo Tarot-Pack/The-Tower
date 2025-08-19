@@ -241,7 +241,7 @@ SMODS.ObjectType({
 
 SMODS.ObjectType({
 	key = "Tower-pikaboy10",
-	default = "j_tower_king_slime",
+	default = "j_tower_queen_slime",
 	cards = {}
 })
 
@@ -302,15 +302,32 @@ SMODS.ConsumableType({
 	no_collection = true
 })
 
+Tower.ApollyonGrad = SMODS.Gradient {
+	key = 'apollyon_grad',
+	colours = { HEX('ff0000'), HEX('e4a92e'), HEX('2ec4df'), HEX('2f52f2'), HEX('ec2fa5') },
+	cycle = 1,
+}
+Tower.ReverseApollyonGrad = SMODS.Gradient {
+	key = "reverse_apollyon_gradient",
+	colours = {
+		Tower.ApollyonGrad,
+		HEX("FF00FF"),
+		HEX("FF0000"),
+	}
+}
+
 SMODS.Rarity({
 	key = "apollyon",
 	loc_txt = {},
-	badge_colour = SMODS.Gradient {
-        key = 'apollyon_grad',
-        colours = { HEX('ff0000'), HEX('e4a92e'), HEX('2ec4df'), HEX('2f52f2'), HEX('ec2fa5') },
-        cycle = 1,
-    },
+	badge_colour = Tower.ApollyonGrad,
 	default = "j_tower_pinky",
+})
+
+SMODS.Rarity({
+	key = "reverse_apollyon",
+	loc_txt = {},
+	badge_colour = Tower.ReverseApollyonGrad,
+	default = "j_tower_herobrine",
 })
 
 

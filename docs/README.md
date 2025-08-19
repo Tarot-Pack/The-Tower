@@ -7,6 +7,7 @@ This mod is a counter-balance to Cryptid's madness gameset. It adds 10 difficult
 ## Additions
 ![Collection 1](image.png)
 ![Collection 2](image-1.png)
+* 1 Rarity (Apollyon)
 
 ## How to install?
 
