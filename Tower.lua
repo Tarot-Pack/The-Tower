@@ -3,7 +3,7 @@ if not Tower then
 end
 Tower.FeatureWL = {}
 
-SMODS.DescriptionCard = SMODS.Center:extend({
+Tower.DescriptionCard = SMODS.Center:extend({
 	set = "Description Cards",
 	pos = { x = 0, y = 0 },
 	config = {},
@@ -86,6 +86,12 @@ local towerConfigTab = function()
 		active_colour = HEX("b31b41"),
 		ref_table = Tower.Config,
 		ref_value = "disable_book",
+	})
+	tower_nodes[#tower_nodes + 1] = create_toggle({
+		label = localize("tower_show_banned"),
+		active_colour = HEX("b31b41"),
+		ref_table = Tower.Config,
+		ref_value = "show_banned",
 	})
 	return {
 		n = G.UIT.ROOT,
@@ -174,7 +180,7 @@ function SMODS.create_mod_badges(obj, badges)
 						n = G.UIT.R,
 						config = {
 							align = "cm",
-							colour = HEX("a58547"),
+							colour = HEX("3f0e8b"),
 							r = 0.1,
 							minw = 2 / min_scale_fac,
 							minh = 0.36,
@@ -212,7 +218,7 @@ function SMODS.create_mod_badges(obj, badges)
 				return true
 			end
 			for i = 1, #badges do
-				if eq_col(badges[i].nodes[1].config.colour, HEX("a58547")) then
+				if eq_col(badges[i].nodes[1].config.colour, HEX("3f0e8b")) then
 					badges[i].nodes[1].nodes[2].config.object:remove()
 					badges[i] = cry_badge
 					break
@@ -274,7 +280,7 @@ function Tower.Object(bl)
 		if is_good then
 			bl.dependencies.items[#bl.dependencies.items+1] = "set_tower_misc"
 		end
-	else
+	elseif bl.object_type == 'Joker' or bl.object_type == 'Consumeable' then
 		bl.dependencies.items[#bl.dependencies.items+1] = "set_tower_misc"
 	end
 
@@ -294,7 +300,7 @@ function Tower.Object(bl)
 		Tower.object_queue[bl.order][#(Tower.object_queue[bl.order])+1] = bl
 	end
 end
-for i, v in pairs({ --[["Achievement",]] "Atlas", "Blind", "Center", "Back", "Booster", "Consumable", "Edition", "Enhancement", "Joker", "Voucher", "Challenge", "DeckSkin", "DrawStep", "Gradient", "Keybind", "Language", "ObjectType", "PokerHand", "Rank", "Suit", "Rarity", "Seal", "Sound", "Stake", "Sticker", "Tag", "Shader", "DescriptionCard" }) do
+for i, v in pairs({ --[["Achievement",]] "Atlas", "Blind", "Center", "Back", "Booster", "Consumable", "Edition", "Enhancement", "Joker", "Voucher", "Challenge", "DeckSkin", "DrawStep", "Gradient", "Keybind", "Language", "ObjectType", "PokerHand", "Rank", "Suit", "Rarity", "Seal", "Sound", "Stake", "Sticker", "Tag", "Shader" }) do
 	Tower[v] = function (bl)
 		bl.object_type = v
 		return Tower.Object(bl)
@@ -357,8 +363,8 @@ Tower._is_lib = true
 local oldfunc = Game.main_menu
 Game.main_menu = function(change_context)
 	local ret = oldfunc(change_context)
-	if not Tower.Config.menu then return end
-	-- adds a Cryptid spectral to the main menu
+	if not Tower.Config.menu then return ret end
+	-- adds a Tower Tarot to the main menu
 	local newcard = Card(
 		G.title_top.T.x,
 		G.title_top.T.y,
@@ -377,8 +383,6 @@ Game.main_menu = function(change_context)
 	newcard.T.h = newcard.T.h * 1.1 * 1.2
 	newcard.no_ui = true
 	newcard.states.visible = false
-
-	-- make the title screen use different background colors
 
 	G.E_MANAGER:add_event(Event({
 		trigger = "after",

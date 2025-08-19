@@ -205,7 +205,7 @@ pattern = '''if obj and obj.set_badges and type(obj.set_badges) == 'function' th
 position = "before"
 payload = '''
 if card.ability and card.ability.immutable.tower_force_gameset then
-    badges[#badges+1] = create_badge(localize('cry_gameset_' .. (card.ability.immutable.tower_force_gameset)), G.C.CRY_GREENGRADIENT, nil, 1 )
+    badges[#badges+1] = create_badge(localize('cry_gameset_' .. (card.ability.immutable.tower_force_gameset)), G.C.CRY_GREENGRADIENT, nil, 1.2 )
 end
 if card.ability and card.ability.immutable.tower_empowered then
     badges[#badges+1] = create_badge(localize({ type = "variable", key = "tower_empowered_level", vars = { Tower.ToRoman(card.ability.immutable.tower_empowered) } }), Tower.EmpoweredColour, nil, 1 )
@@ -242,6 +242,44 @@ payload = '''
 self.children.floating_sprite:set_sprite_pos(self.config.center.tsoul_pos);
 if self.config.center.tsoul_pos.extra then
     self.children.floating_sprite2:set_sprite_pos(self.config.center.tsoul_pos.extra);
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/game_object.lua"]'''
+pattern = '''if not card then'''
+position = "before"
+payload = '''local TOWER_IS_FAKE_CARD = not card'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''functions/common_events.lua'''
+pattern = "local info_queue = {}"
+position = "after"
+payload = '''
+if G.GAME and G.GAME.banned_keys and G.GAME.banned_keys[_c.key] and Tower.Config.show_banned then
+    if desc_nodes == full_UI_table.main and not full_UI_table.name then
+        info_queue[#info_queue+1] = G.P_CENTERS.desc_tower_banned_card
+    else
+        G.TOWER_BANNED_OVERRIDE_DESC = true
+    end
+end'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = "function localize(args, misc_cat)"
+position = "after"
+payload = '''
+if G.TOWER_BANNED_OVERRIDE_DESC and args.type == "descriptions" then
+    G.TOWER_BANNED_OVERRIDE_DESC = false
+    args.set = G.P_CENTERS.desc_tower_banned_card.set
+    args.key = G.P_CENTERS.desc_tower_banned_card.key
 end
 '''
 match_indent = true

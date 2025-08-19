@@ -10,6 +10,15 @@ return {
 					"cards are randomly {C:tower_transmuted}Shimmered"
                 },
             },
+            b_tower_curated={
+                name="Curated Deck",
+                text={
+                    "Start run with an {C:attention}#1#{}",
+					"{C:dark_edition}negative{} {C:attention}#2#{}",
+					"Only {C:attention}10{} random jokers {C:inactive}(or less){} of",
+					"each rarity are allowed to spawn"
+                },
+            },
 		},
         Sleeve={
             sleeve_tower_shimmered={
@@ -38,9 +47,22 @@ return {
 					"Increase gameset by 1 and",
 					"boost values by {X:dark_edition,C:white,E:1} ^2"
 				}
+			},
+			desc_tower_banned_card = {
+				name = "Banned",
+				text = {
+					"This card is {C:red}Banned{} and",
+					"cannot appear normally"
+				}
 			}
 		},
 		["Content Set"] = {
+			set_tower_misc = {
+				name = "Misc. Items",
+				text = {
+					"Items that belong in no other catagory",
+				},
+			},
 			set_tower_blinds = {
 				name = "Blinds",
 				text = {
@@ -1660,6 +1682,7 @@ return {
 			tower_inverted = "Swapped!",
 
 			tower_skip_book = "Skip book selection",
+			tower_show_banned = "Show when cards are Banned",
 			tower_main_menu = "Main menu card",
 
 			ranks = {

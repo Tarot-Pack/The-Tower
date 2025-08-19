@@ -118,3 +118,59 @@ function new_round(...)
     G.GAME.shimmer_chance = G.GAME.tower_random_shimmer
     return old_new_round(...)
 end
+
+Tower.Back({
+    key = "curated",
+    name = "tower-Curated Deck",
+    atlas = "decks",
+    pos = {x = 2, y = 0}, 
+    dependencies = {
+        items = {
+            "set_tower_misc"
+        }
+    },
+    loc_vars = function ()
+        return {
+            vars = { 
+                Tower.getLocalization(Tower.Eternal()).name,
+                Tower.getLocalization(G.P_CENTERS.j_ring_master).name
+            }
+        }
+    end,
+    config = {},
+    apply = function(self)
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                G.GAME.banned_keys = G.GAME.banned_keys or {}
+                local showman = SMODS.add_card({
+                    key = 'j_ring_master',
+                    area = G.jokers,
+                })
+		        showman:set_edition({ negative = true }, true)
+                Tower.Eternal():apply(showman, true)
+
+                for i, v in pairs(G.P_JOKER_RARITY_POOLS) do
+                    local indexes = {}
+                    for q = 1, #v do
+                        indexes[#indexes+1] = q
+                    end
+                    local allowed = {}
+                    local amount = 10;
+                    for q = 1, math.min(amount, #indexes) do
+                        local index, remove = pseudorandom_element(indexes, pseudoseed('tower_curated_deck'))
+                        table.remove(indexes, remove);
+                        allowed[index] = true
+                    end
+                    for i = 1, #v do
+                        if not allowed[i] then
+                            G.GAME.banned_keys[v[i].key] = true
+                        end
+                    end
+                end
+
+                return true
+            end
+        }))
+    end,
+})
+

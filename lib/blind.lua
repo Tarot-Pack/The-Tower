@@ -410,7 +410,6 @@ function get_new_boss(level)
             end
             local _, boss = pseudorandom_element(eligible_bosses, pseudoseed('boss'))
             G.GAME.bosses_used[boss] = (G.GAME.bosses_used[boss] or 0) + 1
-            print(boss, #eligible_bosses)
             
             return boss
         end
@@ -523,7 +522,7 @@ function Tower.Eternal() -- get strongest eternal-like sticker
     return SMODS.Stickers.eternal
 end
 function Tower.getLocalization(item)
-    if item.set == "Sticker" then
+    if G.localization.descriptions[item.set] == nil then
         return G.localization.descriptions.Other[item.key]
     else
         return G.localization.descriptions[item.set][item.key]

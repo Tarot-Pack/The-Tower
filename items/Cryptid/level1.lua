@@ -107,17 +107,22 @@ Tower.Blind({
         local options = {};
         local lvl = nil;
         for i, v in pairs(G.GAME.hands) do
-            if lvl == nil then
-                lvl = v.level;
-            end
-            if v.level == lvl then
-                options[#options+1] = i
-            elseif v.level < lvl then
-                lvl = v.level
-                options = { i }
+            if v.visible then
+                if lvl == nil then
+                    lvl = v.level;
+                end
+                if v.level == lvl then
+                    options[#options+1] = i
+                elseif v.level < lvl then
+                    lvl = v.level
+                    options = { i }
+                end
             end
         end
-        Tower.forceExploit(pseudorandom_element(options, pseudoseed('tower_exploit')))
+        table.sort(options, function (a, b)
+            return (to_big(G.GAME.hands[a].mult) + to_big(G.GAME.hands[a].chips)) < (to_big(G.GAME.hands[b].mult) + to_big(G.GAME.hands[b].chips))
+        end)
+        Tower.forceExploit(options[1])
     end,
     disable = function ()
         Tower.forceExploit(nil)
@@ -130,17 +135,22 @@ Tower.Blind({
         local options = {};
         local lvl = nil;
         for i, v in pairs(G.GAME.hands) do
-            if lvl == nil then
-                lvl = v.level;
-            end
-            if v.level == lvl then
-                options[#options+1] = i
-            elseif v.level < lvl then
-                lvl = v.level
-                options = { i }
+            if v.visible then
+                if lvl == nil then
+                    lvl = v.level;
+                end
+                if v.level == lvl then
+                    options[#options+1] = i
+                elseif v.level < lvl then
+                    lvl = v.level
+                    options = { i }
+                end
             end
         end
-        Tower.forceExploit(pseudorandom_element(options, pseudoseed('tower_exploit')))
+        table.sort(options, function (a, b)
+            return (to_big(G.GAME.hands[a].mult) + to_big(G.GAME.hands[a].chips)) < (to_big(G.GAME.hands[b].mult) + to_big(G.GAME.hands[b].chips))
+        end)
+        Tower.forceExploit(options[1])
     end,
 
     TowerInPool = function ()

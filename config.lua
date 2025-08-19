@@ -1,4 +1,5 @@
 return {
     disable_book = false,
-    menu = true
+    menu = true,
+    show_banned = true
 }

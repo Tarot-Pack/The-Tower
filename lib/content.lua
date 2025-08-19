@@ -56,8 +56,8 @@ end
 Tower.Atlas({
 	key = "modicon",
 	path = "tower_icon.png",
-	px = 32,
-	py = 32,
+	px = 42,
+	py = 42,
 })
 
 Tower.Atlas({
@@ -358,7 +358,7 @@ SMODS.ContentSet({
 	cry_order = 0,
 })
 
-SMODS.DescriptionCard({
+Tower.DescriptionCard({
 	key = "unbounded_pointer",
 	atlas = "description_cards",
 	dependencies = {
@@ -368,7 +368,7 @@ SMODS.DescriptionCard({
 	pos = { x = -1, y = 0 }
 })
 
-SMODS.DescriptionCard({
+Tower.DescriptionCard({
 	key = "empowered",
 	atlas = "description_cards",
 	dependencies = {
@@ -380,6 +380,18 @@ SMODS.DescriptionCard({
 			vars = {'{','}'}
 		}
 	end,
+	pos = { x = -1, y = 0 }
+})
+
+
+Tower.DescriptionCard({
+	key = "banned_card",
+	atlas = "description_cards",
+	dependencies = {
+		items = {}
+	},
+	pools = {},
+	loc_vars = function() end,
 	pos = { x = -1, y = 0 }
 })
 

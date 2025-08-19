@@ -2402,7 +2402,6 @@ function Tower.TransformValues(table, ref_tableA, ref_tableB)
 	ref_tableB = ref_tableB or {}
 	table = table or {}
 	for i, v in pairs(table) do
-		print(v, ref_tableA[i], ref_tableB[i])
 		if type(v) == 'table' then
 			Tower.TransformValues(v, ref_tableA[i], ref_tableB[i])
 		elseif is_number(v) and (ref_tableA[i] and ref_tableB[i])  then

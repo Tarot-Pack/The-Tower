@@ -721,7 +721,7 @@ local old_ease_hands_played = ease_hands_played;
 function ease_hands_played(mod, instant)
     if ((mod + G.GAME.current_round.hands_left) <= 0) and G.jokers then
         for i = 1, #G.jokers.cards do
-            if (not card.ability.eternal) and ((G.jokers.cards[i].ability.name == 'tower-purpleprint') or (G.jokers.cards[i].ability.tower_sleeping_blessing)) then
+            if (not G.jokers.cards[i].ability.eternal) and ((G.jokers.cards[i].ability.name == 'tower-purpleprint') or (G.jokers.cards[i].ability.tower_sleeping_blessing)) then
                 if (G.jokers.cards[i].ability.name == 'tower-purpleprint') and (G.jokers.cards[i].ability.tower_sleeping_blessing) then -- special behaviour for purpleprint having sleeping blessing
                     G.jokers.cards[i].ability.tower_sleeping_blessing = nil; -- remove sleeping blessing and do not delete joker
                 else
