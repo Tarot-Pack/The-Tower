@@ -10,7 +10,7 @@
 	"priority": 9999,
 	"badge_colour": "3f0e8b",
 	"badge_text_colour": "ffffff",
-	"version": "0.0.1",
+	"version": "0.0.1-a",
 	"dependencies": [
 		"Steamodded (>=1.0.0~BETA-0711a)",
 		"Talisman (>=2.2.0a)",
