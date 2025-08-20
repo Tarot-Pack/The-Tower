@@ -15,7 +15,7 @@ Tower.Blind({
     set_blind = function(self, reset, silent)
         if reset then return end
 		for i, v in pairs(G.jokers.cards) do
-            if not G.jokers.cards[i].ability.eternal then
+            if not SMODS.is_eternal(G.jokers.cards[i]) then
                 local _card = create_card("Joker", G.jokers, nil, nil, nil, nil, "j_cry_canvas"); --create_card("Joker", G.jokers, nil, "cry_cursed", nil, nil, nil, "tower_summoning")
                 G.jokers.cards[i]:start_dissolve()
                 _card:add_to_deck()
@@ -328,7 +328,7 @@ Tower.Blind({
 
         local add = 0
         for i = 1, #G.jokers.cards do
-			if not G.jokers.cards[i].ability.eternal and G.jokers.cards[i] ~= immune then
+			if not SMODS.is_eternal(G.jokers.cards[i]) and G.jokers.cards[i] ~= immune then
 				local _card = create_card("Joker", G.jokers, nil, "cry_cursed", nil, nil, nil, "oppaggangmastyle")
 				G.jokers.cards[i]:start_dissolve()
 				_card:add_to_deck()

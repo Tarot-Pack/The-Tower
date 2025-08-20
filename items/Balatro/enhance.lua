@@ -48,7 +48,7 @@ SMODS.Enhancement({
 		return 0 -- no
 	end,
     calculate = function(self, card, context)
-        if context.destroy_card and context.cardarea == G.play and context.destroy_card == card and pseudorandom('crystal') < G.GAME.probabilities.normal/card.ability.extra then
+        if context.destroy_card and context.cardarea == G.play and context.destroy_card == card and SMODS.pseudorandom_probability(card, 'crystal', 1, card.ability.extra, 'crystal') then
             card:set_ability(G.P_CENTERS.c_base, true, nil)
         end
     end

@@ -371,7 +371,7 @@ Tower.Blind({
 	cry_before_play = function () -- i copied this from cryptid's commit.. what is going on here????
         local candidates = {}
         for i, v in ipairs(G.jokers.cards) do
-            if not v.ability.eternal then
+            if not SMODS.is_eternal(v) then
                 candidates[#candidates+1] = v
             end
         end
@@ -780,8 +780,7 @@ Tower.Blind({
     loc_vars = function ()
         return {
             vars = {
-                3 * (G.GAME.probabilities.normal or 1),
-                4
+                SMODS.get_probability_vars(nil, 3, 4, "tower_revert")
             }
         }
     end,
@@ -794,7 +793,7 @@ Tower.Blind({
         }
     end,
 	cry_before_play = function (self)
-        if pseudorandom(pseudoseed("tower_seed")) < ((3 * (G.GAME.probabilities.normal or 1)) / 4) then
+        if SMODS.pseudorandom_probability(nil, 'tower_revert', 3, 4, 'tower_revert') then
             G.E_MANAGER:add_event(
                 Event({
                     trigger = "after",
@@ -1102,8 +1101,7 @@ Tower.Blind({
     loc_vars = function ()
         return {
             vars = {
-                G.GAME.probabilities.normal or 1,
-                4
+                SMODS.get_probability_vars(nil, 1, 4, "tower_alttab")
             }
         }
     end,
@@ -1118,17 +1116,17 @@ Tower.Blind({
 
 
 	set_blind = function (self)
-        if pseudorandom(pseudoseed("tower_seed")) > (((G.GAME.probabilities.normal or 1)) / 4) then
+        if SMODS.pseudorandom_probability(nil, 'tower_alttab', 1, 4, 'tower_alttab') then
             return
         end
 		G.E_MANAGER:add_event(Event({
 			trigger = "after",
 			delay = 0.2,
 			func = function()
-				for j = 1, 1e10 do
+				local type = G.GAME.blind:get_type()
+				for j = 1, 1e10 do -- evil gang evil gang
 					play_sound("tarot1")
 					local tag = nil
-					local type = G.GAME.blind:get_type()
 					if next(SMODS.find_card("j_cry_kittyprinter")) then
 						tag = Tag("tag_cry_cat")
 					elseif type == "Boss" then
@@ -1194,8 +1192,7 @@ Tower.Blind({
     loc_vars = function ()
         return {
             vars = {
-                G.GAME.probabilities.normal,
-                2
+                SMODS.get_probability_vars(nil, 1, 2, "tower_reboot")
             }
         }
     end,
@@ -1209,7 +1206,7 @@ Tower.Blind({
     end,
 
 	cry_after_play = function (self)
-        if pseudorandom(pseudoseed("tower_seed")) > (((G.GAME.probabilities.normal or 1)) / 2) then
+        if SMODS.pseudorandom_probability(nil, 'tower_reboot', 1, 2, 'tower_reboot') then
             return
         end
 

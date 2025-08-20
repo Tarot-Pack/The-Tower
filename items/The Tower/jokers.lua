@@ -447,7 +447,7 @@ Tower.Joker({
 		elseif context.destroy_card and context.cardarea == G.play then
 			card.ability.extra.xchips = lenient_bignum(to_big(card.ability.extra.xchips) + to_big(card.ability.extra.xchips_mod))
 			return {
-				remove = not context.destroy_card.ability.eternal
+				remove = not SMODS.is_eternal(context.destroy_card)
 			}
 		end
 	end,
@@ -1085,7 +1085,7 @@ Tower.Joker({
             local other_card = context.other_context and context.other_context.blueprint_card or context.other_card or nil;
             if other_card == nil or other_card.ability.set ~= 'Joker' then
                 -- nope
-            elseif pseudorandom(pseudoseed("coinflip")) < ((G.GAME.probabilities.normal * card.ability.extra.one) / card.ability.extra.two) then
+            elseif SMODS.pseudorandom_probability(card, 'coinflip', card.ability.extra.one, card.ability.extra.two, 'tower_coinflip') then
                 -- yipe
 				return {
 					message = localize('tower_inverted'),
@@ -1100,8 +1100,8 @@ Tower.Joker({
 				}
             end
         elseif context.forcetrigger then -- globally flip
-			if pseudorandom(pseudoseed("coinflip")) < ((G.GAME.probabilities.normal * card.ability.extra.one) / card.ability.extra.two) then
-				return {
+        	if SMODS.pseudorandom_probability(nil, 'coinflip', 1, 4, 'tower_coinflip') then
+        		return {
 					message = localize('tower_inverted'),
 					func = function ()
 						G.GAME.tower_global_joker_invert = not (G.GAME.tower_global_joker_invert or false)

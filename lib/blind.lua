@@ -1042,7 +1042,7 @@ function Tower.ObsidianOrb(info)
                 if area == G.hand then
                     if
                         s.name == "The Wheel"
-                        and pseudorandom(pseudoseed("ObsidianOrb")) < G.GAME.probabilities.normal / 7
+                        and SMODS.pseudorandom_probability(nil, 'ObsidianOrb', 1, 7, 'ObsidianOrb')
                     then
                         return true
                     end

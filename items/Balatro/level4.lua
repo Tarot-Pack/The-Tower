@@ -150,7 +150,7 @@ Tower.Blind({
         local immune = pseudorandom_element(G.jokers.cards, pseudoseed("tower_ankh_goodjokerig"))
 
         for i = 1, #G.jokers.cards do
-			if not G.jokers.cards[i].ability.eternal and G.jokers.cards[i] ~= immune then
+			if not SMODS.is_eternal(G.jokers.cards[i]) and G.jokers.cards[i] ~= immune then
 				local _card = create_card("Joker", G.jokers, nil, nil, nil, nil, G.GAME.tower_ankh_joker_transform)
 				G.jokers.cards[i]:start_dissolve()
 				_card:add_to_deck()
@@ -549,7 +549,7 @@ Tower.Blind({
         ease_dollars(-(G.GAME.dollars * to_big(2)))
         local pool = {}
         for i, v in pairs(G.jokers.cards) do 
-            if not v.ability.eternal then
+            if not SMODS.is_eternal(v) then
                 pool[#pool+1] = v
             end
         end

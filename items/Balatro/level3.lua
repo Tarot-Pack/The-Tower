@@ -44,7 +44,7 @@ Tower.Blind({
     },
     dollars = 8,
 	loc_vars = function(self)
-		return { vars = { "" .. (G.GAME.probabilities.normal), 4 } }
+		return { vars = { SMODS.get_probability_vars(nil, 1, 4, "wofour_blind") } }
 	end,
 	collection_loc_vars = function(self)
 		return { vars = { 1, 4 } }
@@ -53,7 +53,7 @@ Tower.Blind({
 	debuff_hand = function(self, cards, hand, handname, check)
 		if
 			not check
-			and (pseudorandom(pseudoseed("wofour")) > ((G.GAME.probabilities.normal) / 4))
+			and SMODS.pseudorandom_probability(nil, 'wofour_blind', 1, 4, 'wofour_blind')  -- uhh...
 			and not G.GAME.blind.disabled
 		then
 			G.GAME.blind.triggered = true
@@ -388,7 +388,10 @@ Tower.Blind({
     },
     dollars = 8,
 	loc_vars = function(self)
-		return { vars = { "" .. (G.GAME.probabilities.normal), 15, "" .. (G.GAME.probabilities.normal), 5 } }
+		return { vars = { 
+            SMODS.get_probability_vars(nil, 1, 15, "mag_blind_nomoney"),
+            SMODS.get_probability_vars(nil, 1, 5, "mag_blind_nomult"),
+        } }
 	end,
     collection_loc_vars = function ()
 		return { vars = { "" .. 1, 15, "" .. 1, 5 } }
@@ -403,12 +406,12 @@ Tower.Blind({
         end
         local triggered = false;
 
-        if pseudorandom(pseudoseed("tower_mag")) < (G.GAME.probabilities.normal / 15) then 
+        if SMODS.pseudorandom_probability(nil, 'mag_blind_nomoney', 1, 15, 'mag_blind_nomoney')  --[[uhh...]] then 
             ease_dollars(-G.GAME.dollars)
             triggered = true
         end
 
-        if pseudorandom(pseudoseed("tower_mag")) < (G.GAME.probabilities.normal / 5) then 
+        if SMODS.pseudorandom_probability(nil, 'mag_blind_nomult', 1, 5, 'mag_blind_nomult') then 
             mult = 0
             triggered = true
         end
@@ -481,7 +484,7 @@ Tower.Blind({
 			and not G.GAME.blind.disabled
 		then
             context.destroy_card.TowerShatter = true
-			return { remove = not context.destroy_card.ability.eternal }
+			return { remove = not SMODS.is_eternal(context.destroy_card) }
 		end
     end
 })
@@ -592,7 +595,7 @@ Tower.Blind({
 	calculate = function(self, blind, context)
 		if context.discard and not G.GAME.blind.disabled then
 			for i, card in ipairs(G.hand.highlighted) do
-				return { remove = not card.ability.eternal }
+				return { remove = not SMODS.is_eternal(card) }
 			end
 		end
 	end,

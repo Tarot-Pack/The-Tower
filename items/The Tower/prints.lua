@@ -721,7 +721,7 @@ local old_ease_hands_played = ease_hands_played;
 function ease_hands_played(mod, instant)
     if ((mod + G.GAME.current_round.hands_left) <= 0) and G.jokers then
         for i = 1, #G.jokers.cards do
-            if (not G.jokers.cards[i].ability.eternal) and ((G.jokers.cards[i].ability.name == 'tower-purpleprint') or (G.jokers.cards[i].ability.tower_sleeping_blessing)) then
+            if (not SMODS.is_eternal(G.jokers.cards[i])) and ((G.jokers.cards[i].ability.name == 'tower-purpleprint') or (G.jokers.cards[i].ability.tower_sleeping_blessing)) then
                 if (G.jokers.cards[i].ability.name == 'tower-purpleprint') and (G.jokers.cards[i].ability.tower_sleeping_blessing) then -- special behaviour for purpleprint having sleeping blessing
                     G.jokers.cards[i].ability.tower_sleeping_blessing = nil; -- remove sleeping blessing and do not delete joker
                 else
@@ -768,7 +768,7 @@ Tower.Joker({
             for i = 1, #G.jokers.cards do
                 if (G.jokers.cards[i] == card) -- this is us
                 and (context.other_card == G.jokers.cards[i + 1]) then -- the retriggered joker is to the right of us
-                    if not card.ability.eternal then
+                    if not SMODS.is_eternal(card) then
                         card.ability.immutable.destroy_flag = true -- can keep forever but no scaling... (note that eternal compat is off so eternal would have to be applied from a spectral)
                     end
                     return {
