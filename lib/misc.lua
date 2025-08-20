@@ -182,14 +182,41 @@ function Tower.MergeCards(card, other)
 end
 
 function Tower.CardifyJoker(j)
-    G.jokers:remove_card(j)
-    G.deck:emplace(j)
-    if not Entropy then
+    if Entropy then
+        local card = Tower.create_playing_card({ front = "nilsuit_nilrank" })
+        card:set_ability(j.config.center)
+        card.ability = copy_table(j.ability)        
+        card:set_edition(j.edition or {}, nil, true)
+        for k,v in pairs(j.edition or {}) do
+            if type(v) == 'table' then
+                card.edition[k] = copy_table(v)
+            else
+                card.edition[k] = v
+            end
+        end
+        card:set_seal(j.seal, true)
+        if j.seal then
+            local safe_seal = type(j.ability.seal) == "table" and j.ability.seal or {}
+            for k, v in pairs(safe_seal) do
+                if type(v) == 'table' then
+                    card.ability.seal[k] = copy_table(v)
+                else
+                    card.ability.seal[k] = v
+                end
+            end
+        end
+        card.debuff = j.debuff
+        card.pinned = j.pinned
+
+        j:remove()
+    else
+        G.jokers:remove_card(j)
+        G.deck:emplace(j)
         G.playing_card = (G.playing_card and G.playing_card + 1) or 1
         j.playing_card = G.playing_card
         j.ability.tower_return_to_jokers = true
+        table.insert(G.playing_cards, j)
     end
-    table.insert(G.playing_cards, j)
 end
 
 function Tower.UncardifyJoker(j)
