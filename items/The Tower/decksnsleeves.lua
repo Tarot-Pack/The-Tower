@@ -22,18 +22,21 @@ Tower.Back({
     apply = function(self)
         G.E_MANAGER:add_event(Event({
             func = function()
-                G.GAME.tower_random_shimmer = G.GAME.tower_random_shimmer or 0;
+                local old =  G.GAME.tower_random_shimmer
+                 G.GAME.tower_random_shimmer = nil
+                local bucket = SMODS.add_card({
+                    key = 'j_tower_shimmer_bucket',
+                    area = G.jokers,
+                })
+                Tower.Eternal():apply(bucket, true)
+                G.GAME.tower_random_shimmer = old or 0
+
                 G.GAME.tower_random_shimmer = G.GAME.tower_random_shimmer + 0.5;
                 G.GAME.tower_shimmered_decrease = 0.001
                 for k, v in pairs(G.playing_cards) do
                     v.ability.tower_shimmer_mult = true
                 end
                 
-                local bucket = SMODS.add_card({
-                    key = 'j_tower_shimmer_bucket',
-                    area = G.jokers,
-                })
-                Tower.Eternal():apply(bucket, true)
 
                 return true
             end
@@ -64,18 +67,19 @@ if CardSleeves then
         apply = function(self)
             G.E_MANAGER:add_event(Event({
                 func = function()
-                    G.GAME.tower_random_shimmer = G.GAME.tower_random_shimmer or 0;
-                    G.GAME.tower_random_shimmer = G.GAME.tower_random_shimmer + 0.5;
-                    G.GAME.tower_shimmered_decrease = 0.001
-                    for k, v in pairs(G.playing_cards) do
-                        v.ability.tower_shimmer_mult = true
-                    end
                     if self.get_current_deck_key() ~= "b_tower_shimmered" then
                         local bucket = SMODS.add_card({
                             key = 'j_tower_shimmer_bucket',
                             area = G.jokers,
                         })
                         Tower.Eternal():apply(bucket, true)
+                    end
+
+                    G.GAME.tower_random_shimmer = G.GAME.tower_random_shimmer or 0;
+                    G.GAME.tower_random_shimmer = G.GAME.tower_random_shimmer + 0.5;
+                    G.GAME.tower_shimmered_decrease = 0.001
+                    for k, v in pairs(G.playing_cards) do
+                        v.ability.tower_shimmer_mult = true
                     end
 
                     return true

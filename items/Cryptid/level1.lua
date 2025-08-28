@@ -428,30 +428,6 @@ Tower.Blind({
     },
     dollars = G.tower_unknown,
 
-	loc_vars = function(self, info_queue, center)
-		return {
-            main_start = {
-                Cryptid.randomchar(codechars6),
-                Cryptid.randomchar(codechars6),
-                Cryptid.randomchar(codechars6),
-                Cryptid.randomchar(codechars6),
-                Cryptid.randomchar(codechars6),
-                Cryptid.randomchar(codechars6)
-            }
-		}
-	end,
-	collection_loc_vars = function(self, info_queue, center)
-		return {
-            main_start = {
-                Cryptid.randomchar(codechars6),
-                Cryptid.randomchar(codechars6),
-                Cryptid.randomchar(codechars6),
-                Cryptid.randomchar(codechars6),
-                Cryptid.randomchar(codechars6),
-                Cryptid.randomchar(codechars6)
-            }
-		}
-	end,
     TowerBeforeBlindSet = function (self, blind, reset, silent)
         G.GAME.tower_machinecode_old_ante = G.GAME.round_resets.ante
         local value = G.GAME.round_resets.ante;

@@ -35,21 +35,23 @@ SMODS.ObjectType.delete_card = function (self, c)
 	end
 	local vanilla_rarities = {"Common", "Uncommon", "Rare", "Legendary"}
 	local rarity = c.rarity;
-	if vanilla_rarities[rarity] then
-		rarity = vanilla_rarities[rarity];
-	end
-	if not self.tower_rarities[rarity] then
-		self.tower_rarities[rarity] = {};
-	end
-
-	for i = 1, #self.tower_rarities[rarity] do
-		if self.tower_rarities[rarity][i].key == c.key then
-			table.remove(self.tower_rarities[rarity], i)
-			break
+	if rarity ~= nil then
+		if vanilla_rarities[rarity] then
+			rarity = vanilla_rarities[rarity];
 		end
-	end
-	if #self.tower_rarities[rarity] < 1 then
-		self.tower_rarities[rarity] = nil
+		if not self.tower_rarities[rarity] then
+			self.tower_rarities[rarity] = {};
+		end
+
+		for i = 1, #self.tower_rarities[rarity] do
+			if self.tower_rarities[rarity][i].key == c.key then
+				table.remove(self.tower_rarities[rarity], i)
+				break
+			end
+		end
+		if #self.tower_rarities[rarity] < 1 then
+			self.tower_rarities[rarity] = nil
+		end
 	end
 	return old_delete(self, c)
 end
@@ -138,6 +140,13 @@ Tower.Atlas({
 Tower.Atlas({
 	key = "enhance",
 	path = "tower_enhance.png",
+	px = 71,
+	py = 95
+})
+
+Tower.Atlas({
+	key = "fortunes",
+	path = "tower_fortunes.png",
 	px = 71,
 	py = 95
 })
@@ -322,7 +331,11 @@ SMODS.Rarity({
 	badge_colour = Tower.ApollyonGrad,
 	default = "j_tower_pinky",
 })
-
+if Entropy then
+	Entropy.SegFaultBlacklist.tower_apollyon = true
+	Entropy.RarityPoints.tower_apollyon = Entropy.RarityPoints.entr_entropic
+	Entropy.RarityDiminishers.tower_apollyon = Entropy.RarityDiminishers.entr_entropic
+end
 SMODS.Rarity({
 	key = "reverse_apollyon",
 	loc_txt = {},
@@ -413,3 +426,10 @@ Tower.DescriptionCard({
 })
 
 Tower.EmpoweredColour = HEX('ff0000')
+
+Tower.ProbabilityJoker = SMODS.ObjectType({
+	object_type = "ObjectType",
+	key = "ProbabilityJoker",
+	default = "j_8_ball",
+	cards = {},
+})

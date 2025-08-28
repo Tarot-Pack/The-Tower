@@ -236,7 +236,7 @@ Tower.Blind({
                 G.hand:change_size(math.floor(size - (G.hand.config.real_card_limit or G.hand.config.card_limit)))
                 if (G.hand.config.real_card_limit or G.hand.config.card_limit) <= 0 then
                     G.STATE = G.STATES.GAME_OVER; 
-                    G.STATE_COMPLETE = false -- lose instantly if hand size < 0 (ignoring cryptid)
+                    G.STATE_COMPLETE = false -- lose instantly if hand size <= 0 (ignoring cryptid)
                     return
                 end
 			end

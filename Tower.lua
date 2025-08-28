@@ -2,7 +2,7 @@ if not Tower then
 	Tower = {}
 end
 Tower.FeatureWL = {}
-
+Tower.Meta = SMODS.current_mod;
 Tower.DescriptionCard = SMODS.Center:extend({
 	set = "Description Cards",
 	pos = { x = 0, y = 0 },
@@ -11,6 +11,7 @@ Tower.DescriptionCard = SMODS.Center:extend({
 	required_params = {
 		"key",
 	},
+	no_doe = true,
 	inject = function(self)
 		if not G.P_CENTER_POOLS[self.set] then
 			G.P_CENTER_POOLS[self.set] = {}
@@ -35,33 +36,31 @@ SMODS.current_mod.optional_features = {
 	}
 }
 
-
 Cryptid.mod_whitelist["Tower"] = true
 if not Cryptid.mod_gameset_whitelist then Cryptid.mod_gameset_whitelist = {} end
 Cryptid.mod_gameset_whitelist["tower"] = true
 Cryptid.mod_gameset_whitelist["Tower"] = true
 
 local towerConfigTab = function()
-	tower_nodes = {
-		{
-			n = G.UIT.R,
-			config = { align = "cm" },
-			nodes = {
-				{
-					n = G.UIT.O,
-					config = {
-						object = DynaText({
-							string = localize("cry_set_enable_features"),
-							colours = { G.C.WHITE },
-							shadow = true,
-							scale = 0.4,
-						}),
-					},
+	tower_nodes = {}
+	tower_nodes[#tower_nodes + 1] = {
+		n = G.UIT.R,
+		config = { align = "cm" },
+		nodes = {
+			{
+				n = G.UIT.O,
+				config = {
+					object = DynaText({
+						string = localize("cry_set_enable_features"),
+						colours = { G.C.WHITE },
+						shadow = true,
+						scale = 0.4,
+					}),
 				},
 			},
 		},
 	}
-    tower_nodes[#tower_nodes + 1] = UIBox_button({
+	tower_nodes[#tower_nodes + 1] = UIBox_button({
 		colour = G.C.CRY_GREENGRADIENT,
 		button = "your_collection_content_sets",
 		label = { localize("b_content_sets") },
@@ -180,7 +179,7 @@ function SMODS.create_mod_badges(obj, badges)
 						n = G.UIT.R,
 						config = {
 							align = "cm",
-							colour = HEX("3f0e8b"),
+							colour = Tower.Meta.badge_colour,
 							r = 0.1,
 							minw = 2 / min_scale_fac,
 							minh = 0.36,
@@ -218,7 +217,7 @@ function SMODS.create_mod_badges(obj, badges)
 				return true
 			end
 			for i = 1, #badges do
-				if eq_col(badges[i].nodes[1].config.colour, HEX("3f0e8b")) then
+				if eq_col(badges[i].nodes[1].config.colour, Tower.Meta.badge_colour) then
 					badges[i].nodes[1].nodes[2].config.object:remove()
 					badges[i] = cry_badge
 					break
@@ -235,15 +234,24 @@ function Tower.Object(bl)
     if not bl.dependencies.items then
         bl.dependencies.items = {}
     end
-
-	if bl.tower_consumable then
-		bl.dependencies.items[#bl.dependencies.items+1] = ("c_" .. bl.tower_consumable)
-	end
 	if bl.tower_blind then
 		bl.dependencies.items[#bl.dependencies.items+1] = ("bl_" .. bl.tower_blind)
 	end
 	if bl.object_type == "Blind" then
         bl.dependencies.items[#bl.dependencies.items+1] = "set_tower_blinds"
+	end
+	if bl.tower_consumable then
+		local index = string.find(bl.tower_consumable, '_')
+		local prefix = string.sub(bl.tower_consumable,1,index-1)
+		local modTable = {
+			tower = "Tower",
+			cry = 'Cryptid',
+			entr = 'entr'
+		}
+		print(prefix)
+		if modTable[prefix] and (not ((SMODS.Mods[modTable[prefix]] or {}).can_load)) then
+			return
+		end
 	end
 	bl.pools = bl.pools or {}
     if bl.pools['Tower-Slime'] then
@@ -258,6 +266,7 @@ function Tower.Object(bl)
     if bl.rarity == "tower_transmuted" or bl.set == "tower_transmuted" then
 		bl.soul_set = 'Spectral'
 		bl.soul_rate = 0 -- don't ask.
+		bl.hidden = true;
         bl.dependencies.items[#bl.dependencies.items+1] = "set_tower_transmuted"
 	end
     if bl.tower_credits and bl.tower_credits.idea and (Entropy or bl.object_type == "Joker" or bl.object_type == "Consumable") then
@@ -405,9 +414,62 @@ Game.main_menu = function(change_context)
 end
 
 Tower.AfterAllLoaded(function ()
-	Cryptid.pointerblistifytype("rarity", "tower_apollyon")
-	Cryptid.pointerblistifytype("rarity", "tower_transmuted")
-	Cryptid.pointerblistifytype("set", "tower_transmuted")
+	if Cryptid and Cryptid.pointerblistifytype then
+		Cryptid.pointerblistifytype("rarity", "tower_apollyon")
+		Cryptid.pointerblistifytype("rarity", "tower_transmuted")
+		Cryptid.pointerblistifytype("set", "tower_transmuted")
 
-	Cryptid.pointerblistify("c_tower_aether_monolith")
+		Cryptid.pointerblistify("c_tower_aether_monolith")
+	end
+
+	-- horrible
+	local tempCard = {
+		ability = {
+			extra = {},
+			immutable = {}
+		}
+	}
+	local fake = false;
+	if not G.GAME then
+		G.GAME = {
+			modifiers = {
+				
+			}
+		}
+		fake = true
+	end
+	local old = SMODS.get_probability_vars
+	local flagged = {
+		j_space = true,
+		j_8_ball = true,
+		j_gros_michel = true,
+		j_business = true,
+		j_bloodstone = true,
+		j_cavendish = true,
+		j_reserved_parking = true,
+		j_hallucination = true,
+		j_oops = true,
+		j_tower_forgotten_die = true,
+		j_ortalab_woo_all_1 = true
+	}
+	for i, v in ipairs(G.P_CENTER_POOLS["Joker"]) do
+		if (v.pools and v.pools['Dice'])
+		or (flagged[v.key]) then
+			Tower.ProbabilityJoker:inject_card(v)
+		elseif v.loc_vars then
+			local flag = false;
+			SMODS.get_probability_vars = function (...)
+				if not flag then
+					Tower.ProbabilityJoker:inject_card(v)
+					flag = true
+				end
+				return 1, 1
+			end
+			pcall(v.loc_vars, v, {}, tempCard) -- bad bad bad
+		end
+	end
+	SMODS.get_probability_vars = old
+	if fake then
+		G.GAME = nil
+	end
 end)

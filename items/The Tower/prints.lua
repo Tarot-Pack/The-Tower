@@ -60,7 +60,7 @@ Tower.Joker({
 	key = "cyanprint",
 	pos = { x = 1, y = 0 },
     blueprint_compat = true,
-	pools = { },
+	pools = { ["Print"] = true },
 	rarity = 3,
 	cost = 8,
 	atlas = "prints",
@@ -83,7 +83,7 @@ Tower.Joker({
 	key = "limeprint",
 	pos = { x = 2, y = 0 },
     blueprint_compat = true,
-	pools = { },
+	pools = { ["Print"] = true },
     config = {
         extra = {
             retriggers = 2
@@ -98,7 +98,7 @@ Tower.Joker({
         }}
     end,
     calculate = function(self, card, context)
-        if context.retrigger_joker_check and not context.retrigger_joker and context.other_card ~= card then
+        if context.retrigger_joker_check and context.other_card ~= card then
             for i = 1, #G.jokers.cards do
                 if (G.jokers.cards[i] == card) -- this is us
                 and (context.other_card == G.jokers.cards[i + 1]) -- the retriggered joker is to the right of us
@@ -133,7 +133,7 @@ Tower.Joker({
 	name = "tower-yellowprint",
 	key = "yellowprint",
 	pos = { x = 3, y = 0 },
-	pools = { },
+	pools = { ["Print"] = true },
     blueprint_compat = true,
     config = {
         extra = {
@@ -200,7 +200,7 @@ Tower.Joker({
 	name = "tower-springprint",
 	key = "springprint",
 	pos = { x = 4, y = 0 },
-	pools = { },
+	pools = { ["Print"] = true },
 	rarity = 2,
 	cost = 8,
 	atlas = "prints",
@@ -274,7 +274,7 @@ Tower.Joker({
 	name = "tower-pinkprint",
 	key = "pinkprint",
 	pos = { x = 5, y = 0 },
-	pools = { },
+	pools = { ["Print"] = true },
 	rarity = 2,
 	cost = 8,
 	atlas = "prints",
@@ -301,7 +301,7 @@ Tower.Joker({
                     G.jokers.cards[i + 1]:set_debuff(true)
                 end
             end
-        elseif (context.retrigger_joker_check and not context.retrigger_joker and context.other_card ~= card) and (not context.other_card.debuff)  then
+        elseif (context.retrigger_joker_check and context.other_card ~= card) and (not context.other_card.debuff)  then
             for i = 1, #G.jokers.cards do
                 if (G.jokers.cards[i] == card) -- this is us
                 and (context.other_card == G.jokers.cards[i + 1]) then -- the retriggered joker is to the right of us
@@ -335,7 +335,7 @@ Tower.Joker({
 	name = "tower-print",
 	key = "print",
 	pos = { x = 6, y = 0 },
-	pools = { },
+	pools = { ["Print"] = true },
 	rarity = 3,
 	cost = 8,
 	atlas = "prints",
@@ -352,7 +352,7 @@ Tower.Joker({
         }}
     end,
     calculate = function(self, card, context)
-        if (context.retrigger_joker_check and not context.retrigger_joker and context.other_card ~= card) and (not context.other_card.debuff)  then
+        if (context.retrigger_joker_check and context.other_card ~= card) and (not context.other_card.debuff)  then
             for i = 1, #G.jokers.cards do
                 if (G.jokers.cards[i] == card) -- this is us
                 and (context.other_card == G.jokers.cards[i + 1]) then -- the retriggered joker is to the right of us
@@ -386,13 +386,13 @@ Tower.Joker({
 	name = "tower-blue",
 	key = "blue",
 	pos = { x = 7, y = 0 },
-	pools = { },
+	pools = { ["Print"] = true },
 	rarity = "tower_apollyon",
 	cost = 8,
 	atlas = "prints",
     blueprint_compat = true,
     calculate = function(self, card, context)
-        if (context.retrigger_joker_check and not context.retrigger_joker and context.other_card ~= card) then
+        if (context.retrigger_joker_check and context.other_card ~= card) then
             G.E_MANAGER:add_event(Event({
                 func = function()
                     local insert = copy_card(context.other_card, nil)
@@ -427,7 +427,7 @@ Tower.Joker({
 	name = "tower-greenprint",
 	key = "greenprint",
 	pos = { x = 0, y = 1 },
-	pools = { },
+	pools = { ["Print"] = true },
 	rarity = 2,
 	cost = 8,
 	atlas = "prints",
@@ -455,16 +455,12 @@ Tower.Joker({
             if not other_card then return end
             if other_card == card then return end
             if (card.T.x + (card.T.w / 2)) < (other_card.T.x + (other_card.T.w / 2)) then
-                local old = card.ability.extra.count;
-
-                card.ability.extra.count =
-                    lenient_bignum(to_big(card.ability.extra.count) + to_big(card.ability.extra.gains))
-
-                Cryptid.apply_scale_mod(card, card.ability.extra.gains, old, card.ability.extra.count, {
-                    base = { { "extra", "count" } },
-                    scaler = { { "extra", "gains" } },
-                    scaler_base = { card.ability.extra.gains },
-                })
+				SMODS.scale_card(card, {
+					ref_table = card.ability,
+					ref_value = "count",
+					scalar_value = "gains",
+					no_message = true
+				})
 
                 return {
 					message = localize({ type = "variable", key = "tower_planted" }),
@@ -498,7 +494,7 @@ Tower.Joker({
 	name = "tower-goldprint",
 	key = "goldprint",
 	pos = { x = 1, y = 1 },
-	pools = { },
+	pools = { ["Print"] = true },
 	rarity = 3,
 	cost = 8,
 	atlas = "prints",
@@ -556,7 +552,7 @@ Tower.Joker({
 	name = "tower-redprint",
 	key = "redprint",
 	pos = { x = 2, y = 1 },
-	pools = { },
+	pools = { ["Print"] = true },
     config = {
         extra = {
             retriggers = 2
@@ -627,7 +623,7 @@ Tower.Joker({
 	name = "tower-orangeprint",
 	key = "orangeprint",
 	pos = { x = 3, y = 1 },
-	pools = { },
+	pools = { ["Print"] = true },
 	rarity = 2,
 	cost = 8,
 	atlas = "prints",
@@ -669,7 +665,7 @@ Tower.Joker({
 	name = "tower-purpleprint",
 	key = "purpleprint",
 	pos = { x = 4, y = 1 },
-	pools = { },
+	pools = { ["Print"] = true },
 	rarity = 3,
 	cost = 8,
 	atlas = "prints",
@@ -745,7 +741,7 @@ Tower.Joker({
 	key = "blackprint",
 	pos = { x = 5, y = 1 },
     blueprint_compat = true,
-	pools = { },
+	pools = { ["Print"] = true },
     config = {
         extra = {
             retriggers = 1
@@ -764,7 +760,7 @@ Tower.Joker({
 		card.ability.extra.retriggers = lenient_bignum((G.GAME and G.GAME.tower_blackprint_retriggers) or 1)
 	end,
     calculate = function(self, card, context)
-        if context.retrigger_joker_check and not context.retrigger_joker and context.other_card ~= card then
+        if context.retrigger_joker_check and context.other_card ~= card then
             for i = 1, #G.jokers.cards do
                 if (G.jokers.cards[i] == card) -- this is us
                 and (context.other_card == G.jokers.cards[i + 1]) then -- the retriggered joker is to the right of us

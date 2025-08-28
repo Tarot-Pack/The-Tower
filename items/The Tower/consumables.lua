@@ -115,6 +115,8 @@ Tower.Consumable({
 if Entropy then
 	Entropy.FlipsideInversions.c_tower_madness_core = 'c_tower_shimmer_bottle'
 	Entropy.FlipsideInversions.c_tower_shimmer_bottle = 'c_tower_madness_core'
+	Entropy.FlipsideInversions['tower-madness_core'] = 'c_tower_shimmer_bottle'
+	Entropy.FlipsideInversions['tower-shimmer_bottle'] = 'c_tower_madness_core'
 	Tower.Consumable({
 		set = "Omen",
 		name = "tower-madness_core",

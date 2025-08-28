@@ -492,7 +492,13 @@ function Tower.find_card(key, count_debuffed)
 end
 
 function Tower.poll_pool_weighted(_pool_key, _rand_key)
-    local rarity_poll = pseudorandom(pseudoseed(_rand_key or ('rarity'..G.GAME.round_resets.ante))) -- Generate the poll value
+    local is_soul = false;
+    local rarity_poll = nil
+    if pseudorandom('soul_'..(_rand_key or _pool_key)..G.GAME.round_resets.ante) > 0.997 then
+        is_soul = true
+    else
+        rarity_poll = pseudorandom(pseudoseed(_rand_key or ('rarity'..G.GAME.round_resets.ante))) -- Generate the poll value
+    end
     local available_rarities = SMODS.ObjectTypes[_pool_key].tower_rarities or {} -- Table containing a list of rarities and their rates
     local vanilla_rarities = {["Common"] = 1, ["Uncommon"] = 2, ["Rare"] = 3, ["Legendary"] = 4}
     if #available_rarities == 0 then return nil end
@@ -503,19 +509,23 @@ function Tower.poll_pool_weighted(_pool_key, _rand_key)
         if (key ~= 'tower_transmuted') and (#items > 0) then
             local v = {
                 key = key,
-                weight = 1
+                weight = 1,
+                mod = 1
             }
             if v.key ~= "spec_none" then
                 v.mod = G.GAME[tostring(v.key):lower().."_mod"] or 1
                 -- Should this fully override the v.weight calcs?
                 if SMODS.Rarities[v.key] and SMODS.Rarities[v.key].get_weight and type(SMODS.Rarities[v.key].get_weight) == "function" then
                     v.weight = SMODS.Rarities[v.key]:get_weight(v.weight, SMODS.ObjectTypes[_pool_key])
+                else
+                    v.weight = 0
                 end
             else
                 v.mod = 1;
             end
             v.weight = v.weight*v.mod
-            if v.weight > 0 then
+            if (is_soul and (v.weight <= 0)) 
+            or ((not is_soul) and (v.weight > 0)) then
                 total_weight = total_weight + v.weight
                 compiled[#compiled+1] = v
             end
@@ -525,20 +535,29 @@ function Tower.poll_pool_weighted(_pool_key, _rand_key)
     end
     -- recalculate rarities to account for v.mod
     for _, v in ipairs(compiled) do
-        v.weight = v.weight / total_weight
+        if (v.weight > 0) and (total_weight > 0) then
+            v.weight = v.weight / total_weight
+        end
     end
 
     -- Calculate selected rarity
     local weight_i = 0
     local selected_rarity;
-    for _, v in ipairs(compiled) do
-        weight_i = weight_i + v.weight
-        if rarity_poll < weight_i then
-            selected_rarity = v.key
+    if is_soul then
+        if #compiled == 0 then
+            return nil
         end
-    end
-    if selected_rarity == nil then
-        return nil
+        selected_rarity = pseudorandom_element(compiled, (_rand_key or _pool_key) .. "soul_rarity")
+    else
+        for _, v in ipairs(compiled) do
+            weight_i = weight_i + v.weight
+            if rarity_poll < weight_i then
+                selected_rarity = v.key
+            end
+        end
+        if selected_rarity == nil then
+            return nil
+        end
     end
     local pool = available_rarities[selected_rarity];
     local new_pool = {};
@@ -663,9 +682,24 @@ function Tower.Joker(object)
         if object.pools['Tower-Slime'] then
             object.order = object.order + (poolOrder.slime + 100)
         end
+    end    
+    if object.rarity == "cry_cursed" then
+        if not ((SMODS.Mods['Cryptid'] or {}).can_load) then
+            return
+        end
+    end
+
+    if object.rarity == "cry_epic" then
+        if not ((SMODS.Mods['Cryptid'] or {}).can_load) then
+            object.rarity = 3
+        end
     end
     if object.rarity == "cry_exotic" then
-        object.tower_orig_rarity = object.rarity
+        if (SMODS.Mods['Cryptid'] or {}).can_load then
+            object.tower_orig_rarity = object.rarity
+        else
+            object.rarity = "tower_apollyon"
+        end
     end
 
     return old_tower_joker(object)
@@ -826,4 +860,11 @@ function Tower.ToRoman(num)
         return str
     end
     return result
+end
+local old_is_eternal = SMODS.is_eternal;
+function SMODS.is_eternal(card, trigger)
+    if card.config and card.config.center and card.config.center.tower_inescapeable then
+        return true
+    end
+    return old_is_eternal(card, trigger)
 end

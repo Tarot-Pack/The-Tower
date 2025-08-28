@@ -5,7 +5,61 @@ Tower.Shimmer["Into"] = {}
 Tower.Shimmer.OrtaConversions = Tower.ShimmerOrtaConversions;
 Tower.ShimmerOrtaConversions = nil
 
--- omens (any not here go into the default (inversion => Tower.Shimmer.Into[inversion] => invert each item in output) which usually don't make sense)
+-- pacts
+Tower.Shimmer.Into['c_entr_decay'] = { 'c_entr_strength' }
+Tower.Shimmer.Into['c_entr_strength'] = { 'c_entr_decay' }
+Tower.Shimmer.Into['c_entr_thorns'] = { 'c_entr_ice' }
+Tower.Shimmer.Into['c_entr_ice'] = { 'c_entr_denial' }
+Tower.Shimmer.Into['c_entr_denial'] = { 'c_entr_thorns' }
+Tower.Shimmer.Into['c_entr_youth'] = { 'c_entr_rebirth' }
+Tower.Shimmer.Into['c_entr_rebirth'] = { 'c_entr_youth' }
+Tower.Shimmer.Into['c_entr_rage'] = { 'c_entr_shards' }
+Tower.Shimmer.Into['c_entr_shards'] = { 'c_entr_rage' }
+Tower.Shimmer.Into['c_entr_gluttony'] = { 'c_entr_desire' }
+Tower.Shimmer.Into['c_entr_desire'] = { 'c_entr_gluttony' }
+Tower.Shimmer.Into['c_entr_avarice'] = { 'c_entr_envy' }
+Tower.Shimmer.Into['c_entr_envy'] = { 'c_entr_avarice' }
+Tower.Shimmer.Into['c_entr_chains'] = { 'c_entr_eternity' }
+Tower.Shimmer.Into['c_entr_eternity'] = { 'c_entr_chains' }
+Tower.Shimmer.Into['c_entr_loyalty'] = { 'c_entr_freedom' }
+Tower.Shimmer.Into['c_entr_freedom'] = { 'c_entr_loyalty' }
+Tower.Shimmer.Into['c_entr_darkness'] = { 'c_entr_awakening' }
+Tower.Shimmer.Into['c_entr_awakening'] = { 'c_entr_darkness' }
+Tower.Shimmer.Into['c_entr_despair'] = { 'c_entr_dreams' }
+Tower.Shimmer.Into['c_entr_dreams'] = { 'c_entr_despair' }
+Tower.Shimmer.Into['c_entr_blood'] = { 'c_entr_energy' }
+Tower.Shimmer.Into['c_entr_energy'] = { 'c_entr_blood' }
+Tower.Shimmer.Into['c_entr_brimstone'] = { 'c_entr_blood', 'c_entr_blood' }
+
+-- runes
+Tower.Shimmer.Into['c_entr_fehu'] = { 'c_entr_othila' }
+Tower.Shimmer.Into['c_entr_othila'] = { 'c_entr_fehu' }
+Tower.Shimmer.Into['c_entr_algiz'] = { 'c_entr_uruz' }
+Tower.Shimmer.Into['c_entr_uruz'] = { 'c_entr_algiz' }
+Tower.Shimmer.Into['c_entr_thurisaz'] = { 'c_entr_ansuz' }
+Tower.Shimmer.Into['c_entr_ansuz'] = { 'c_entr_thurisaz' }
+Tower.Shimmer.Into['c_entr_kaunan'] = { 'c_entr_haglaz' }
+Tower.Shimmer.Into['c_entr_haglaz'] = { 'c_entr_kaunan' }
+Tower.Shimmer.Into['c_entr_gebo'] = { 'c_entr_naudiz' }
+Tower.Shimmer.Into['c_entr_naudiz'] = { 'c_entr_gebo' }
+Tower.Shimmer.Into['c_entr_jera'] = { 'c_entr_wunjo' }
+Tower.Shimmer.Into['c_entr_wunjo'] = { 'c_entr_jera' }
+Tower.Shimmer.Into['c_entr_isaz'] = { 'c_entr_raido' }
+Tower.Shimmer.Into['c_entr_raido'] = { 'c_entr_isaz' }
+Tower.Shimmer.Into['c_entr_sowilo'] = { 'c_entr_berkano' }
+Tower.Shimmer.Into['c_entr_berkano'] = { 'c_entr_sowilo' }
+Tower.Shimmer.Into['c_entr_sowilo'] = { 'c_entr_berkano' }
+Tower.Shimmer.Into['c_entr_berkano'] = { 'c_entr_sowilo' }
+Tower.Shimmer.Into['c_entr_mannas'] = { 'c_entr_dagaz' }
+Tower.Shimmer.Into['c_entr_dagas'] = { 'c_entr_mannaz' }
+Tower.Shimmer.Into['c_entr_ithwaz'] = { 'c_entr_tiwaz' }
+Tower.Shimmer.Into['c_entr_tiwaz'] = { 'c_entr_ihwaz' }
+Tower.Shimmer.Into['c_entr_ehwaz'] = { 'c_entr_laguz' }
+Tower.Shimmer.Into['c_entr_laguz'] = { 'c_entr_ehwaz' }
+Tower.Shimmer.Into['c_entr_ingwas'] = { 'c_entr_perthro' }
+Tower.Shimmer.Into['c_entr_perthro'] = { 'c_entr_ingwaz' }
+
+-- omens
 Tower.Shimmer.Into['c_entr_beyond'] = { 'c_entr_ward', 'c_entr_fervour' }
 Tower.Shimmer.Into['c_entr_rend'] = { 'c_entr_weld' }
 Tower.Shimmer.Into['c_entr_weld'] = { 'c_entr_rend' }
@@ -27,6 +81,8 @@ Tower.Shimmer.Into['c_entr_engulf'] = { 'c_entr_nemesis', 'c_entr_pact' };
 Tower.Shimmer.Into['c_entr_offering'] = { 'c_entr_dagger', 'c_entr_ichor' };
 Tower.Shimmer.Into['c_entr_conduct'] = { 'c_entr_decrement', 'c_entr_engulf' };
 Tower.Shimmer.Into['c_entr_purity'] = { 'c_entr_weld', 'c_entr_regenerate' };
+Tower.Shimmer.Into['c_entr_malediction'] = { 'c_entr_purity', 'c_entr_weld' };
+Tower.Shimmer.Into['c_entr_serpents'] = { 'c_entr_malediction', 'c_entr_malediction', 'c_entr_desire' };
 
 -- commands
 Tower.Shimmer.Into['c_entr_rootkit'] = { 'c_entr_companion', 'c_entr_companion' }
@@ -56,6 +112,8 @@ Tower.Shimmer.Into['c_entr_local'] = { 'c_entr_badarg' }
 Tower.Shimmer.Into['c_entr_badarg'] = { 'c_entr_ctrl_x' }
 Tower.Shimmer.Into['c_entr_mbr'] = { 'c_entr_transpile' }
 Tower.Shimmer.Into['c_entr_transpile'] = { 'c_entr_mbr' }
+Tower.Shimmer.Into['c_entr_overload'] = { 'c_entr_mallet', 'c_entr_paras', 'c_entr_jatka', 'c_entr_rouva', 'c_entr_assa', 'c_entr_kivi' }
+Tower.Shimmer.Into['c_entr_echo'] = { 'c_deja_vu', 'c_death' }
 
 -- spectrals ( and the monolith )
 Tower.Shimmer.Into['c_soul'] = { 'c_tower_aether_monolith' }
@@ -101,6 +159,8 @@ Tower.Shimmer.Into['c_entr_lust'] = { 'c_entr_shatter' };
 Tower.Shimmer.Into['c_entr_null'] = { 'c_entr_antithesis' };
 Tower.Shimmer.Into['c_entr_antithesis'] = { 'c_entr_null' };
 Tower.Shimmer.Into['c_entr_destiny'] = { 'c_entr_prophecy', 'c_immolate' };
+Tower.Shimmer.Into['c_entr_enchant'] = { 'c_entr_destiny', 'c_entr_shatter' };
+Tower.Shimmer.Into['c_entr_oss'] = { 'c_entr_enchant', 'c_entr_enchant', 'c_entr_mannaz' };
 
 -- tarots
 Tower.Shimmer.Into['c_judgement'] = { 'c_fool', 'c_fool' }
@@ -178,6 +238,8 @@ Tower.Shimmer.Into['c_planet_x'] = { 'c_mars', 'c_pluto' }
 Tower.Shimmer.Into['c_mars'] = { 'c_venus', 'c_pluto' }
 Tower.Shimmer.Into['c_venus'] = { 'c_mercury', 'c_pluto' }
 Tower.Shimmer.Into['c_mercury'] = { 'c_pluto', 'c_pluto' }
+Tower.Shimmer.Into['c_entr_wormhole'] = { 'c_cry_nibiru' };
+Tower.Shimmer.Into['c_cry_nibiru'] = { 'c_entr_wormhole' };
 
 -- code cards
 Tower.Shimmer.Into['c_cry_exploit'] = { 'c_cry_Timantii', 'c_cry_Klubi', 'c_cry_Lapio', 'c_cry_Kaikki', 'c_cry_voxel', 'c_cry_sunplanet', 'c_cry_sunplanet' }
@@ -251,7 +313,7 @@ Tower.RarityToIndex = {
     Legendary = 4
 }
 Tower.RarityOrder = {'Common', 'Uncommon', 'Rare', 'cry_epic', 'Legendary'}
-Tower.FinalRarities = {'cry_exotic', 'entr_entropic', 'tower_apollyon'}
+Tower.FinalRarities = {'entr_reverse_legendary', 'cry_exotic', 'entr_entropic', 'entr_zenith', 'tower_apollyon'}
 
 function Tower.TableHasElement(table, elem)
     for i, v in ipairs(table) do

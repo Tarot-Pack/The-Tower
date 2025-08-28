@@ -1014,13 +1014,13 @@ Tower.Joker({
 							end
 						end
 					end
-					local old = lenient_bignum(card.ability.extra.copies)
-					card.ability.extra.copies = lenient_bignum(to_big(card.ability.extra.copies) + to_big(card.ability.extra.copies_mod))
-					Cryptid.apply_scale_mod(card, card.ability.extra.copies_mod, old, card.ability.extra.copies, {
-						base = { { "extra", "copies" } },
-						scaler = { { "extra", "copies_mod" } },
-						scaler_base = { card.ability.extra.copies_mod },
+					SMODS.scale_card(card, {
+						ref_table = card.ability,
+						ref_value = "copies",
+						scalar_value = "copies_mod",
+						no_message = true
 					})
+
 
 
 					G.E_MANAGER:add_event(Event({
@@ -1060,7 +1060,7 @@ Tower.Joker({
 	name = "tower-coinflip",
 	key = "coinflip",
 	pos = { x = 7, y = 1 },
-	pools = { ["Tower-Gambler"] = true },
+	pools = { ["ProbabilityJoker"] = true },
 	config = {
 		extra = {
 			one = 1,
@@ -1070,8 +1070,7 @@ Tower.Joker({
 	loc_vars = function(self, info_queue, card)
 		return {
 			vars = {
-				card.ability.extra.one,
-				card.ability.extra.two,
+				SMODS.get_probability_vars(card, card.ability.extra.one, card.ability.extra.two, 'tower-coinflip'),
 			}
 		}
 	end,
@@ -1255,7 +1254,7 @@ Tower.Joker({
 	name = "tower-99_percent",
 	key = "99_percent",
 	pos = { x = 10, y = 1 },
-	pools = { ["Tower-Gambler"] = true, ["Meme"] = true },
+	pools = { ["ProbabilityJoker"] = true, ["Meme"] = true },
 	config = {},
 	loc_vars = function(self, info_queue, card)
 		return {
@@ -1280,16 +1279,6 @@ Tower.Joker({
 	}
 })
 
-local old_remove = Card.remove;
-function Card:remove(...)
-	if G.SETTINGS.paused then
-		return old_remove(self, ...)
-	end
-	if self.config and self.config.center and self.config.center.tower_inescapeable then
-		return false
-	end
-	return old_remove(self, ...)
-end
 local old_start_dissolve = Card.start_dissolve;
 function Card:start_dissolve(...)
 	if self.config and self.config.center and self.config.center.tower_inescapeable then
@@ -1493,7 +1482,18 @@ Tower.Joker({
 					hypermult_mod = {card.ability.extra.line_nine_arrows, card.ability.extra.line_nine_number},
 					colour = G.C.DARK_EDITION
 				}
-			elseif item == 11 and G.P_CENTERS.c_tower_unbounded_pointer then -- UNBOUNDED POINTER
+			elseif item == 11 and (G.P_CENTERS.c_tower_unbounded_pointer or G.P_CENTERS.c_tower_aether_monolith) then -- UNBOUNDED POINTER
+				local key = "c_tower_unbounded_pointer"
+				local lockey = "tower_die_of_fate_pointer"
+				if not (G.P_CENTERS.c_tower_unbounded_pointer) then
+					if not G.P_CENTERS.c_tower_aether_monolith then
+						key = "c_soul"
+						lockey = "tower_die_of_fate_soul"
+					else
+						key = "c_tower_aether_monolith"
+						lockey = "tower_die_of_fate_aether"
+					end
+				end
 				local _card = create_card(
 					"Consumeables",
 					G.consumeables,
@@ -1501,13 +1501,13 @@ Tower.Joker({
 					nil,
 					nil,
 					nil,
-					"c_tower_unbounded_pointer",
+					key,
 					"die_of_fate"
 				)
 				_card:add_to_deck()
 				G.consumeables:emplace(_card)				
 				return {
-					message = localize("tower_die_of_fate_pointer"),
+					message = localize(lockey),
 					colour = G.C.RARITY.tower_apollyon
 				}
 			end
@@ -1515,7 +1515,7 @@ Tower.Joker({
 	end,
 
 	display_size = { w = 89, h = 89 },
-	pools = { ["Tower-Gambler"] = true },
+	pools = { ["ProbabilityJoker"] = true },
 	config = {
 		extra = {
 			line_one = 2,
@@ -1537,7 +1537,18 @@ Tower.Joker({
 		if card.ability.extra.line_nine_arrows_changed ~= 1 then -- variable to check if changed
 			value = Tower.EntComp.FormatArrowMult(card.ability.extra.line_nine_arrows, card.ability.extra.line_nine_number)
 		end
-		info_queue[#info_queue+1] = G.P_CENTERS.desc_tower_unbounded_pointer
+		local key = 'j_tower_die_of_fate';
+		if not G.P_CENTERS.c_tower_unbounded_pointer then
+			if not G.P_CENTERS.c_tower_aether_monolith then
+				key = key .. "_tf"
+				info_queue[#info_queue+1] = G.P_CENTERS.c_soul
+			else
+				key = key .. "_nocry"
+				info_queue[#info_queue+1] = G.P_CENTERS.c_tower_aether_monolith
+			end
+		else
+			info_queue[#info_queue+1] = G.P_CENTERS.desc_tower_unbounded_pointer
+		end
 		return {
 			vars = {
 				card.ability.extra.line_one,
@@ -1549,7 +1560,8 @@ Tower.Joker({
 				card.ability.extra.line_seven,
 				card.ability.extra.line_eight,
 				value
-			}
+			},
+			key = key
 		}
 	end,
 	
@@ -1570,106 +1582,109 @@ Tower.Joker({
 	}
 })
 
-Tower.Consumable({ -- unbounded pointer
-	cry_credits = {
-		idea = {
-			"HexaCryonic",
+if (SMODS.Mods['Cryptid'] or {}).can_load then
+	Tower.Consumable({ -- unbounded pointer
+		cry_credits = {
+			idea = {
+				"HexaCryonic",
+			},
+			art = {
+				"HexaCryonic",
+			},
+			code = {
+				"Math",
+			},
 		},
-		art = {
-			"HexaCryonic",
+		dependencies = {
+			items = {
+				"c_cry_pointer"
+			},
 		},
-		code = {
-			"Math",
-		},
-	},
-	dependencies = {
-		items = {
-			"c_cry_pointer"
-		},
-	},
-	config = {cry_multiuse = 1e300},
-	object_type = "Consumable",
-	set = "Spectral",
-	name = "cry-Pointer",
-	key = "unbounded_pointer",
-	pos = { x = 11, y = 3 },
-	hidden = true,
-	no_collection = true,
-	order = 20001,
-	atlas = "cry_atlasnotjokers",
-	prefix_config = { atlas = false, key = true },
-	can_use = function(self, card)
-		return G.P_CENTERS.c_cry_pointer.can_use(self, card)
-	end,
-	use = function(self, card, area, copier)
-		card.ability.cry_multiuse = 1e300;
-		G.GAME.USING_CODE = true
-		G.E_MANAGER:add_event(Event({
-			func = function()
-				G.GAME.USING_POINTER = true
-				G.GAME.TOWER_POINTER_UNBOUNDED = true
-				G.FUNCS.overlay_menu({ definition = create_UIBox_your_collection() })
-				return true
-			end,
-		}))
-		G.GAME.POINTER_SUBMENU = nil
-	end
-})
-
-local old_upt = Game.update
-function Game:update(dt)
-	old_upt(self, dt)
-	local anim_timer = self.TIMERS.REAL * 1.5
-	local p = 0.5 * (math.sin(anim_timer) + 1)
-	if G.P_CENTERS and G.P_CENTERS.c_tower_unbounded_pointer and cry_pointer_dt > 0.5 then
-		cry_pointer_dt = 0
-		local pointerobj = G.P_CENTERS.c_tower_unbounded_pointer
-		pointerobj.pos.x = (pointerobj.pos.x == 11) and 12 or 11
-	end
-end
-
-
-local old_exit_overlay_menu_code = G.FUNCS.exit_overlay_menu_code;
-function G.FUNCS.exit_overlay_menu_code(...)
-    if G.GAME.TOWER_POINTER_UNBOUNDED then
-		G.GAME.TOWER_POINTER_UNBOUNDED = nil
-	end
-    return old_exit_overlay_menu_code(...)
-end
-
-Tower.AfterAllLoaded(function()
-	Cryptid.pointerblistify('c_tower_unbounded_pointer')
-	local ref = Cryptid.pointergetblist
-	function Cryptid.pointergetblist(target)
-		target = Cryptid.pointergetalias(target) or target
-		if target == "c_tower_unbounded_pointer" then
-			return {false, false, false} -- *****NO***** privilege escalation in my house
-			-- continuing: there are some modded consumables that 'unbound' pointer like i do
-			-- but still have some minor restrictions. these could be bypassed if i don't
-			-- manually block it (as well as adding it to the regular blist) because my
-			-- pointer can spawn any card, aside from blinds, meaning if a pointer spawns 
-			-- this it 'privilege escalates' and is able to do more than originally intented
+		config = {cry_multiuse = 1e300},
+		object_type = "Consumable",
+		set = "Spectral",
+		name = "cry-Pointer",
+		key = "unbounded_pointer",
+		pos = { x = 11, y = 3 },
+		hidden = true,
+		no_collection = true,
+		order = 20001,
+		atlas = "cry_atlasnotjokers",
+		prefix_config = { atlas = false, key = true },
+		can_use = function(self, card)
+			return G.P_CENTERS.c_cry_pointer.can_use(self, card)
+		end,
+		use = function(self, card, area, copier)
+			card.ability.cry_multiuse = 1e300;
+			G.GAME.USING_CODE = true
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					G.GAME.USING_POINTER = true
+					G.GAME.TOWER_POINTER_UNBOUNDED = true
+					G.FUNCS.overlay_menu({ definition = create_UIBox_your_collection() })
+					return true
+				end,
+			}))
+			G.GAME.POINTER_SUBMENU = nil
 		end
+	})
+
+	local old_upt = Game.update
+	function Game:update(dt)
+		old_upt(self, dt)
+		local anim_timer = self.TIMERS.REAL * 1.5
+		local p = 0.5 * (math.sin(anim_timer) + 1)
+		if G.P_CENTERS and G.P_CENTERS.c_tower_unbounded_pointer and cry_pointer_dt > 0.5 then
+			cry_pointer_dt = 0
+			local pointerobj = G.P_CENTERS.c_tower_unbounded_pointer
+			pointerobj.pos.x = (pointerobj.pos.x == 11) and 12 or 11
+		end
+	end
+
+
+	local old_exit_overlay_menu_code = G.FUNCS.exit_overlay_menu_code;
+	function G.FUNCS.exit_overlay_menu_code(...)
 		if G.GAME.TOWER_POINTER_UNBOUNDED then
-			local old_a = Cryptid.pointerblisttype;
-			local old_b = Cryptid.pointerblist
-			Cryptid.pointerblisttype = {}
-			local blist = {}
-			for i, v in pairs(Cryptid.pointerblist) do
-				if G.P_BLINDS[v] then
-					blist[#blist + 1] = v
-				end
-			end
-			Cryptid.pointerblist = blist
-			local val = ref(target)
-			Cryptid.pointerblisttype = old_a
-			Cryptid.pointerblist = old_b
-			return val
+			G.GAME.TOWER_POINTER_UNBOUNDED = nil
 		end
-		return ref(target)
+		return old_exit_overlay_menu_code(...)
 	end
-end)
 
+	Tower.AfterAllLoaded(function()
+		if Cryptid and Cryptid.pointerblistify then
+			Cryptid.pointerblistify('c_tower_unbounded_pointer')
+			local ref = Cryptid.pointergetblist
+			function Cryptid.pointergetblist(target)
+				target = Cryptid.pointergetalias(target) or target
+				if target == "c_tower_unbounded_pointer" then
+					return {false, false, false} -- *****NO***** privilege escalation in my house
+					-- continuing: there are some modded consumables that 'unbound' pointer like i do
+					-- but still have some minor restrictions. these could be bypassed if i don't
+					-- manually block it (as well as adding it to the regular blist) because my
+					-- pointer can spawn any card, aside from blinds, meaning if a pointer spawns 
+					-- this it 'privilege escalates' and is able to do more than originally intented
+				end
+				if G.GAME.TOWER_POINTER_UNBOUNDED then
+					local old_a = Cryptid.pointerblisttype;
+					local old_b = Cryptid.pointerblist
+					Cryptid.pointerblisttype = {}
+					local blist = {}
+					for i, v in pairs(Cryptid.pointerblist) do
+						if G.P_BLINDS[v] then
+							blist[#blist + 1] = v
+						end
+					end
+					Cryptid.pointerblist = blist
+					local val = ref(target)
+					Cryptid.pointerblisttype = old_a
+					Cryptid.pointerblist = old_b
+					return val
+				end
+				return ref(target)
+			end
+		end
+	end)
+end
 Tower.Joker({
 	name = "tower-die_of_chaos",
 	key = "die_of_chaos",
@@ -1792,7 +1807,7 @@ Tower.Joker({
 	end,
 
 	display_size = { w = 89, h = 89 },
-	pools = { ["Tower-Gambler"] = true },
+	pools = { ["ProbabilityJoker"] = true },
 	config = {
 		extra = {
 			1.2,	-- ^^^^1.2
@@ -1903,7 +1918,7 @@ Tower.Joker({
 	end,
 
 	display_size = { w = 89, h = 89 },
-	pools = { ["Tower-Gambler"] = true },
+	pools = { ["ProbabilityJoker"] = true },
 	config = {
 		extra = {}
 	},
@@ -1974,15 +1989,14 @@ Tower.Joker({
 			if item == 5 or card.ability.cry_rigged then -- Nope!
 				message = localize('k_nope_ex');
 			else -- XMult
-				card.ability.extra.amount = lenient_bignum(to_big(card.ability.extra.amount) * to_big(card.ability.extra[item]))
-				message = Tower.EntComp.FormatArrowMult(0, card.ability.extra[item])
-			end
-			if item ~= 5 then
-				Cryptid.apply_scale_mod(card, card.ability.extra[item], old, card.ability.extra.amount, {
-					base = { { "extra", "amount" } },
-					scaler = { { "extra", item } },
-					scaler_base = { card.ability.extra[item] },
+				SMODS.scale_card(card, {
+					ref_table = card.ability,
+					ref_value = "amount",
+					scalar_value = item,
+					operation = "X",
+					no_message = true
 				})
+				message = Tower.EntComp.FormatArrowMult(0, card.ability.extra[item])
 			end
 			return {
 				message = number .. ": "  .. localize({ type = "variable", key = "a_mult", vars = { card.ability.extra.amount } }) .. ' (' .. message .. ')',
@@ -1993,7 +2007,7 @@ Tower.Joker({
 	end,
 
 	display_size = { w = 89, h = 89 },
-	pools = { ["Tower-Gambler"] = true },
+	pools = { ["ProbabilityJoker"] = true },
 	config = {
 		extra = {
 			0,
@@ -2048,7 +2062,7 @@ Tower.Joker({
 	pos = { x = 4, y = 0 },
 
 	display_size = { w = 89, h = 89 },
-	pools = { ["Tower-Gambler"] = true },
+	pools = { ["ProbabilityJoker"] = true },
 	config = {
 		extra = {}
 	},
@@ -2070,10 +2084,25 @@ Tower.Joker({
 	}
 })
 
+Tower.AfterAllLoaded(function()
+	local get_prob_vars_ref = SMODS.get_probability_vars
+	function SMODS.get_probability_vars(trigger_obj, base_numerator, base_denominator, identifier, from_roll)
+		local forgot_choice = trigger_obj and trigger_obj.ability and trigger_obj.ability.tower_forgotten_choice
+		if (forgot_choice ~= nil) and (not (trigger_obj and trigger_obj.ability and trigger_obj.ability.cry_rigged)) then
+			if forgot_choice then
+				base_numerator = base_denominator
+			else
+				base_numerator = 0
+			end
+		end 
+		return get_prob_vars_ref(trigger_obj, base_numerator, base_denominator, identifier, from_roll)
+	end
+end)
+
 local Card_update = Card.update
 function Card:update(...)
 	if next(find_joker('tower-forgotten_die')) and (self.ability.tower_forgotten_choice == nil) then
-		self.ability.tower_forgotten_choice = pseudorandom(pseudoseed('forgotten_die')) > 0.5
+		self.ability.tower_forgotten_choice = pseudorandom(pseudoseed('forgotten_die'.. tostring(self.unique_val))) > 0.5
 	elseif not (next(find_joker('tower-forgotten_die'))) then
 		self.ability.tower_forgotten_choice = nil
 	end
@@ -2081,21 +2110,12 @@ function Card:update(...)
 end
 local Card_use_consumeable = Card.use_consumeable
 function Card:use_consumeable(...)
-	local ggpn = G.GAME.probabilities.normal;
 	if next(find_joker('tower-forgotten_die')) and (self.ability.tower_forgotten_choice == nil) then
-		self.ability.tower_forgotten_choice = pseudorandom(pseudoseed('forgotten_die')) > 0.5
+		self.ability.tower_forgotten_choice = pseudorandom(pseudoseed('forgotten_die' .. tostring(self.unique_val))) > 0.5
 	elseif not (next(find_joker('tower-forgotten_die'))) then
 		self.ability.tower_forgotten_choice = nil
 	end
-	if self.ability.tower_forgotten_choice ~= nil then
-		if self.ability.tower_forgotten_choice then
-			G.GAME.probabilities.normal = 1e9
-		else
-			G.GAME.probabilities.normal = 0
-		end
-	end
 	local val = Card_use_consumeable(self, ...)
-	G.GAME.probabilities.normal = ggpn
 	return val
 end
 
@@ -2329,6 +2349,201 @@ Tower.Joker({
 	}
 })
 
+Tower.Joker({
+	name = "tower-snake_eyes",
+	key = "snake_eyes",
+	pos = { x = 5, y = 0 },
+	shimmer_into = "j_tower_fair_odds",
+
+	calculate = function(self, card, context)
+		if context.mod_probability then
+			return {
+				numerator = context.numerator / 2
+			}
+		end
+	end,
+
+	display_size = { w = 89, h = 89 },
+	pools = { ["ProbabilityJoker"] = true },
+
+	rarity = 3,
+	cost = 8,
+	atlas = "tower_squarejokers",
+
+    tower_credits = {
+		idea = {
+			"cylink"
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	}
+})
+
+Tower.Joker({
+	name = "tower-fair_odds",
+	key = "fair_odds",
+	pos = { x = 6, y = 0 },
+	shimmer_into = "j_tower_snake_eyes",
+
+	calculate = function(self, card, context)
+		if context.fix_probability then
+			return {
+				numerator = 1,
+				denominator = 2,
+			}
+		end
+	end,
+
+	display_size = { w = 89, h = 89 },
+	pools = { ["ProbabilityJoker"] = true },
+
+	rarity = "tower_transmuted",
+	cost = 8,
+	atlas = "tower_squarejokers",
+
+	init = function ()
+		local cgi_ref = Card.get_id
+		override_maximized = false
+		function Card:get_id()
+			local id = cgi_ref(self)
+			if next(find_joker("tower-fair_odds")) and not override_maximized then
+				id = 14
+			end
+			return id
+		end
+		local gui_vd = G.UIDEF.view_deck
+		function G.UIDEF.view_deck(unplayed_only)
+			override_maximized = true
+			local ret_value = gui_vd(unplayed_only)
+			override_maximized = false
+			return ret_value
+		end
+		local is_suit_old = Card.is_suit
+		function Card:is_suit(...)
+			if next(find_joker("tower-fair_odds")) then
+				return true
+			end
+			return is_suit_old(self, ...)
+		end
+		Tower.AfterAllLoaded(function ()
+			for i, rarity in pairs(SMODS.Rarities) do
+				local old_get_weight = rarity.get_weight;
+				function rarity.get_weight(...)
+					if next(find_joker("tower-fair_odds")) then
+						return 1
+					end
+					if old_get_weight == nil then
+						return rarity.default_weight
+					end
+					return old_get_weight(...)
+				end
+			end
+		end)
+		local old_create_card = create_card;
+		function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
+			if (not forced_key) and (_type == "Joker") and (next(find_joker("tower-fair_odds"))) then
+				local options = {}
+				local pools = {}
+				for i, v in pairs(G.P_JOKER_RARITY_POOLS) do
+					if #v > 0 then
+						local filtered = {};
+						for q = 1, #v do
+							if not (v[q].no_doe) then
+								filtered[#filtered+1] = v[q]
+							end
+						end
+						if #filtered > 0 then
+							options[#options+1] = i
+							pools[i] = filtered
+						end
+					end
+				end
+				print(options)
+				local rarity = pools[pseudorandom_element(options, pseudoseed((key_append or 'fair_odds').."_random_rarity"))];
+				print(rarity)
+				forced_key = pseudorandom_element(rarity, pseudoseed((key_append or 'fair_odds').."_random_key")).key;
+			end
+			return old_create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
+		end
+	end,
+	add_to_deck = function(self)
+		for k, v in pairs(G.P_CENTERS) do
+			if not (v.tower_old_soul_rate or v.tower_old_soul_set or (v.tower_old_hidden ~= nil)) then
+				v.tower_old_soul_rate = v.soul_rate;
+				v.tower_old_soul_set = v.soul_set;
+				v.tower_old_hidden = v.hidden;
+				v.hidden = nil;
+				v.soul_set = nil;
+				v.soul_rate = nil;
+			end
+		end
+	end,
+	load = function(self)
+		for k, v in pairs(G.P_CENTERS) do
+			if not (v.tower_old_soul_rate or v.tower_old_soul_set or (v.tower_old_hidden ~= nil)) then
+				v.tower_old_soul_rate = v.soul_rate;
+				v.tower_old_soul_set = v.soul_set;
+				v.tower_old_hidden = v.hidden;
+				v.hidden = nil;
+				v.soul_set = nil;
+				v.soul_rate = nil;
+			end
+		end
+	end,
+	remove_from_deck = function(self)
+		for k, v in pairs(G.P_CENTERS) do
+			if (v.tower_old_soul_rate or v.tower_old_soul_set or (v.tower_old_hidden ~= nil)) then
+				v.hidden = v.tower_old_hidden;
+				v.soul_set = v.tower_old_soul_set;
+				v.soul_rate = v.tower_old_soul_rate;
+				v.tower_old_hidden = nil;
+				v.tower_old_soul_set = nil;
+				v.tower_old_soul_rate = nil;
+			end
+		end
+	end,
+
+    tower_credits = {
+		idea = {
+			"cylink"
+		},
+		art = {
+			"jamirror",
+		},
+		code = {
+			"jamirror",
+		},
+	}
+})
+
+local old_mod_chips = mod_chips;
+function mod_chips(mod)
+	local amount = #find_joker('tower-snake_eyes');
+	if (amount > 0) and hand_chips then
+		local amount = to_big(2):pow(to_big(amount))
+		local divved = to_big(mod) - to_big(hand_chips)
+		if divved > to_big(0) then
+			mod = (divved * amount) + to_big(hand_chips)
+		end
+	end
+	return old_mod_chips(mod)
+end
+local old_mod_mult = mod_mult;
+function mod_mult(mod)
+	local amount = #find_joker('tower-snake_eyes');
+	if (amount > 0) and mult then
+		local amount = to_big(2):pow(to_big(amount))
+		local divved = to_big(mod) - to_big(mult)
+		if divved > to_big(0) then
+			mod = (divved * amount) + to_big(mult)
+		end
+	end
+	return old_mod_mult(mod)
+end
 
 function Tower.ApplyEmpowered(card, key)
 	if key == 0 then

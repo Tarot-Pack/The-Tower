@@ -6,6 +6,7 @@ Tower.Blind({
 	atlas = "blinds3",
 	order = 3,
     mult = 4,
+    tower_consumable = "cry_eclipse",
     boss_colour = HEX("4f00bf"),
     boss = {
         level = 3
@@ -36,6 +37,7 @@ Tower.Blind({
 	atlas = "blinds3",
 	order = 3,
     mult = 4,
+    tower_consumable = "cry_seraph",
     boss_colour = HEX("fff3ae"),
     boss = {
         level = 3
@@ -89,6 +91,7 @@ Tower.Blind({
 	atlas = "blinds3",
 	order = 3,
     mult = 4,
+    tower_consumable = "cry_instability",
     boss_colour = HEX("292929"),
     boss = {
         level = 3
@@ -128,6 +131,7 @@ Tower.Blind({
 	order = 3,
     mult = 4,
     boss_colour = HEX("00ffb2"),
+    tower_consumable = "cry_blessing",
     boss = {
         level = 3
     },
@@ -153,6 +157,7 @@ Tower.Blind(Tower.ObsidianOrb({
 	order = 3,
     mult = 4,
     boss_colour = HEX("b6ff00"),
+    tower_consumable = "cry_blessing",
     boss = {
         level = 3
     },

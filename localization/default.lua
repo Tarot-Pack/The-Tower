@@ -31,6 +31,86 @@ return {
                 },
             },
 		},
+		Fortune = {
+			fortune_tower_jack_secondary = {
+				name = "The Jack's Fortune",
+				text =  {
+					"All {C:attention}print{} jokers retrigger any",
+					"joker they target #1# more time"
+				}
+			},
+			fortune_tower_jack = {
+				name = "The Jack",
+				text = {
+					{
+						"All {C:attention}print{} jokers retrigger any",
+						"joker they target #1# more time"
+					},
+					{
+						"All {C:attention}print{} jokers have",
+						"a {C:green}#2# in #3#{} chance to appear in each shop slot"
+					}
+				}
+			},
+			fortune_tower_egg_secondary = {
+				name = "The Eggs's Fortune",
+				text = {
+					"All {C:attention}Egg{} jokers double scaling when scaled",
+					"{C:inactive}(ex: +3, +6, +12, +24)"
+				}
+			},
+			fortune_tower_egg = {
+				name = "The Egg",
+				text = {
+					{
+						"All {C:attention}Egg{} jokers double scaling when scaled",
+						"{C:inactive}(ex: +3, +6, +12, +24)"
+					},
+					{
+						"All {C:attention}Egg{} jokers have",
+						"a {C:green}#1# in #2#{} chance to appear in each shop slot"
+					}
+				}
+			},
+			fortune_tower_lucky_secondary = {
+				name = "The Lucky's Fortune",
+				text = {
+					"{X:green,C:white} X#1# {} Numerator, increase by {C:green}#2#{} for",
+					"every {C:green}succeeded{} probability roll" -- X1, increase by 0.1
+				}
+			},
+			fortune_tower_lucky = {
+				name = "The Lucky",
+				text = {
+					{
+						"{X:green,C:white} X#1# {} Numerator, increase by {C:green}#2#{} for",
+						"every {C:green}succeeded{} probability roll" -- X1, increase by 0.1
+					},
+					{
+						"All {C:attention}chance{} jokers have",
+						"a {C:green}#3# in #4#{} chance to appear in each shop slot"
+					}
+				}
+			},
+			fortune_tower_holy_secondary = {
+				name = "The Holy's Fortune",
+				text = {
+					"All {C:attention}Ascended Consumables{} give {C:attention}double{} the effect"
+				}
+			},
+			fortune_tower_holy = {
+				name = "The Holy",
+				text = {
+					{
+						"All {C:attention}Ascended Consumables{} give {C:attention}double{} the effect"
+					},
+					{
+						"All {C:attention}Ascended Consumables{} have",
+						"a {C:green}#3# in #4#{} chance to appear in each shop slot"
+					}
+				}
+			},
+		},
 		["Description Cards"] = {
 			desc_tower_unbounded_pointer = {
 				name = "Unbounded Pointer",
@@ -1247,6 +1327,40 @@ return {
 					"All probabilities are mutually exclusive and immutable."
 				}
 			},
+			j_tower_die_of_fate_nocry = {
+				name = "Die of Fate",
+				text = {
+					"{C:green}12010873 in 88888888{} chance to do nothing",
+					"{C:green}17593235 in 88888888{} chance for {X:mult,C:white} X#1# {} Mult", -- 2
+					"{C:green}17457012 in 88888888{} chance for {X:chips,C:white} X#2# {} Chips", -- 2
+					"{C:green}17047819 in 88888888{} chance for {X:mult,C:white} X#3# {} Mult", -- 0.5
+					"{C:green}16989919 in 88888888{} chance for {X:chips,C:white} X#4# {} Chips", -- 0.5
+					"{C:green}3941256 in 88888888{} chance for {X:mult,C:white} X#5# {} Mult", -- 4
+					"{C:green}3758989 in 88888888{} chance for {X:chips,C:white} X#6# {} Chips", -- 4
+					"{C:green}88888 in 88888888{} chance for {X:dark_edition,C:white} ^#7# {} Chips and Mult", -- 4
+					"{C:green}888 in 88888888{} chance for {X:dark_edition,C:white} ^^#8# {} Chips and Mult", -- 4
+					"{C:green}8 in 88888888{} chance for {X:dark_edition,C:white} #9# {} Chips and Mult", -- {88888888}8
+					"{C:green}1 in 88888888{} chance to create an {C:tower_apollyon,E:1}Aether Monolith{}",
+					"All probabilities are mutually exclusive and immutable."
+				}
+			},
+			j_tower_die_of_fate_tf = {
+				name = "Die of Fate",
+				text = {
+					"{C:green}12010873 in 88888888{} chance to do nothing",
+					"{C:green}17593235 in 88888888{} chance for {X:mult,C:white} X#1# {} Mult", -- 2
+					"{C:green}17457012 in 88888888{} chance for {X:chips,C:white} X#2# {} Chips", -- 2
+					"{C:green}17047819 in 88888888{} chance for {X:mult,C:white} X#3# {} Mult", -- 0.5
+					"{C:green}16989919 in 88888888{} chance for {X:chips,C:white} X#4# {} Chips", -- 0.5
+					"{C:green}3941256 in 88888888{} chance for {X:mult,C:white} X#5# {} Mult", -- 4
+					"{C:green}3758989 in 88888888{} chance for {X:chips,C:white} X#6# {} Chips", -- 4
+					"{C:green}88888 in 88888888{} chance for {X:dark_edition,C:white} ^#7# {} Chips and Mult", -- 4
+					"{C:green}888 in 88888888{} chance for {X:dark_edition,C:white} ^^#8# {} Chips and Mult", -- 4
+					"{C:green}8 in 88888888{} chance for {X:dark_edition,C:white} #9# {} Chips and Mult", -- {88888888}8
+					"{C:green}1 in 88888888{} chance to create {C:legendary,E:1}The Soul{}",
+					"All probabilities are mutually exclusive and immutable."
+				}
+			},
 			j_tower_die_of_chaos = {
 				name = "Die of Chaos",
 				text = {
@@ -1304,6 +1418,25 @@ return {
 				name = "The Forgotten Die", -- does not show up in collection
 				text = {
 					"All {C:green}probabilities{} are fixed to either {C:green}Succeed{} or {C:red}Fail{}"
+				}
+			},
+			j_tower_snake_eyes = {
+				name = "Snake Eyes",
+				text = {
+					"{C:red}Halves{} all probabilities",
+					"and {C:attention}Doubles{} all changes to {C:chips}Chips{} and {C:mult}Mult"
+				}
+			},
+			j_tower_fair_odds = {
+				name = "Fair Odds",
+				text = {
+					"All cards are considered {C:attention}Aces",
+					"All suits count as all suits",
+					"All rarities have an equal chance of appearing",
+					"All consumables of a set have an",
+					"equal chance of appearing",
+					"All odds are {C:green}1 in 2",
+					"{C:inactive}(This joker is immutable)"
 				}
 			},
 			j_tower_king_slime = {
@@ -1717,6 +1850,8 @@ return {
 				"They cannot be obtained through other means."
 			},
 			tower_die_of_fate_pointer = "Nat 88888888: Unbounded Pointer",
+			tower_die_of_fate_aether = "Nat 88888888: Aether Monolith",
+			tower_die_of_fate_soul = "Nat 88888888: The Soul"
 		},
 		v_dictionary = {
 			tower_empowered_level = "Empowered #1#",

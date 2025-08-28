@@ -233,7 +233,7 @@ function Tower.getBlinds(f, amount, seed)
     local ret = {}
     amount = amount or 1
     for i, v in pairs(G.P_BLINDS) do 
-        if f(v) then pool[#pool+1] = v end
+        if ((not (G and G.GAME and G.GAME.banned_keys[i])) and f(v)) then pool[#pool+1] = v end
     end
     if #pool == 0 then
         for i = 1, amount do
@@ -688,6 +688,7 @@ function Tower.ObsidianOrb(info)
     return {
         name = info.name,
         key = info.key,
+        tower_consumable = info.tower_consumable,
         pos = info.pos,
         dollars = info.dollars,
         boss = info.boss,
