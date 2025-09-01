@@ -127,12 +127,7 @@ Tower.Back({
     key = "curated",
     name = "tower-Curated Deck",
     atlas = "decks",
-    pos = {x = 2, y = 0}, 
-    dependencies = {
-        items = {
-            "set_tower_misc"
-        }
-    },
+    pos = {x = 2, y = 0},
     loc_vars = function ()
         return {
             vars = { 

@@ -59,7 +59,7 @@ target = '''functions/UI_definitions.lua'''
 pattern = '''if obj and obj.set_badges and type(obj.set_badges) == 'function' then'''
 position = "before"
 payload = '''
-if card.ability and card.ability.immutable.tower_force_gameset then
+if card.ability and card.ability.immutable and card.ability.immutable.tower_force_gameset then
     badges[#badges+1] = create_badge(localize('cry_gameset_' .. (card.ability.immutable.tower_force_gameset)), G.C.CRY_GREENGRADIENT, nil, 1.2 )
 end
 if card.ability and card.ability.immutable.tower_empowered then

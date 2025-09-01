@@ -360,24 +360,30 @@ SMODS.ContentSet({
 })
 
 SMODS.ContentSet({
+	key = "prints",
+	atlas = "prints",
+	pos = { x = 6, y = 0 },
+	cry_order = -3,
+}) 
+SMODS.ContentSet({
 	key = "slime",
 	atlas = "jokers1",
 	pos = { x = 2, y = 0 },
-	cry_order = -3,
+	cry_order = -2,
 })
 
 SMODS.ContentSet({
 	key = "terraria",
 	atlas = "jokers1",
 	pos = { x = 2, y = 1 },
-	cry_order = -2,
+	cry_order = -1,
 })
 
 SMODS.ContentSet({
 	key = "transmuted",
 	atlas = "consumables",
 	pos = { x = 3, y = 0 },
-	cry_order = -1,
+	cry_order = 0,
 })
 
 SMODS.ContentSet({
@@ -385,7 +391,7 @@ SMODS.ContentSet({
 	atlas = "jokers1",
 	pos = { x = 5, y = 0 },
 	soul_pos = { x = 6, y = 0, extra = { x = 7, y = 0 } },
-	cry_order = 0,
+	cry_order = 1,
 })
 
 Tower.DescriptionCard({

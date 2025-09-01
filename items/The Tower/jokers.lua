@@ -2546,6 +2546,9 @@ function mod_mult(mod)
 end
 
 function Tower.ApplyEmpowered(card, key)
+	if not card.ability.immutable then
+		card.ability.immutable = {}
+	end
 	if key == 0 then
 		key = nil;
 	end
@@ -2574,12 +2577,10 @@ function Tower.ApplyEmpowered(card, key)
 			card.ability.immutable.tower_force_gameset = nil
 		end
 		if not Card.no(card, "immutable", true) then
+			print(card.ability.name)
 			Cryptid.manipulate(card, { 
-				type = "hyper", 
-				value = {
-					arrows = 1,
-					height = to_big(2):pow(key)
-				},
+				type = "^", 
+				value = to_big(2):pow(key)
 			})
 		end
 	end

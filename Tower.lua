@@ -260,6 +260,9 @@ function Tower.Object(bl)
     if bl.pools['Tower-Terra'] then
         bl.dependencies.items[#bl.dependencies.items+1] = "set_tower_terraria"
 	end
+    if bl.pools['Print'] then
+        bl.dependencies.items[#bl.dependencies.items+1] = "set_tower_prints"
+	end
     if bl.rarity == "tower_apollyon" then
         bl.dependencies.items[#bl.dependencies.items+1] = "set_tower_apollyon"
 	end

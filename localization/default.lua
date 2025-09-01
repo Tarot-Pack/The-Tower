@@ -110,6 +110,26 @@ return {
 					}
 				}
 			},
+			fortune_tower_jolly_secondary = {
+				name = "The Jolly's Fortune",
+				text = {
+					"{C:green}#1# in #2#{} chance to level up",
+					"{C:attention}Pair{} once for every {C:attention}two M Jokers{}"
+				},
+			},
+			fortune_tower_jolly = {
+				name = "The Jolly",
+				text = {
+					{
+						"{C:green}#1# in #2#{} chance to level up",
+						"{C:attention}Pair{} once for every {C:attention}two M Jokers{}"
+					},
+					{
+						"All {C:attention}M Jokers{} have",
+						"a {C:green}#3# in #4#{} chance to appear in each shop slot"
+					}
+				}
+			},
 		},
 		["Description Cards"] = {
 			desc_tower_unbounded_pointer = {
@@ -141,6 +161,12 @@ return {
 				name = "Misc. Items",
 				text = {
 					"Items that belong in no other catagory",
+				},
+			},
+			set_tower_prints = {
+				name = "Print Jokers",
+				text = {
+					"Jokers themed after {C:attention}Blueprint{}",
 				},
 			},
 			set_tower_blinds = {
