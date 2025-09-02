@@ -62,7 +62,7 @@ payload = '''
 if card.ability and card.ability.immutable and card.ability.immutable.tower_force_gameset then
     badges[#badges+1] = create_badge(localize('cry_gameset_' .. (card.ability.immutable.tower_force_gameset)), G.C.CRY_GREENGRADIENT, nil, 1.2 )
 end
-if card.ability and card.ability.immutable card.ability.immutable.tower_empowered then
+if card.ability and card.ability.immutable and card.ability.immutable.tower_empowered then
     badges[#badges+1] = create_badge(localize({ type = "variable", key = "tower_empowered_level", vars = { Tower.ToRoman(card.ability.immutable.tower_empowered) } }), Tower.EmpoweredColour, nil, 1 )
 end'''
 match_indent = true
